@@ -22,26 +22,27 @@ public class GameRenderer {
         shapeRenderer = new ShapeRenderer();
         shapeRenderer.setProjectionMatrix(cam.combined);
         
-        
 	}
 	
 	public void render(){
-		
-//		 Gdx.app.log("GameRenderer", "render");
+
 		
 		 Gdx.gl.glClearColor(0,0,0,1);
 		 Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		 
+		 // draw player 1
 		 shapeRenderer.begin(ShapeType.Filled);
 		 shapeRenderer.setColor(87 / 255.0f, 225 / 255.0f, 120 / 255.0f, 1);
 		 shapeRenderer.circle(myWorld.getPlayer1().getPosition().x, myWorld.getPlayer1().getPosition().y,5);
 		 shapeRenderer.end();
 		 
+		 // draw player 2
 		 shapeRenderer.begin(ShapeType.Filled);
 		 shapeRenderer.setColor(87 / 255.0f, 225 / 255.0f, 120 / 255.0f, 1);
 		 shapeRenderer.circle(myWorld.getPlayer2().getPosition().x, myWorld.getPlayer2().getPosition().y,5);
 		 shapeRenderer.end();
 		 
+		 // draw the grid
 		 drawHLine(20); drawVLine(20);
 		 drawHLine(40);	drawVLine(40);
 		 drawHLine(60); drawVLine(60);
@@ -51,6 +52,7 @@ public class GameRenderer {
 		 drawHLine(140);
 		 drawHLine(160); 
 		 
+		 //draw bullet
 		 shapeRenderer.begin(ShapeType.Filled);
 		 shapeRenderer.setColor(87 / 255.0f, 225 / 255.0f, 120 / 255.0f, 1);
 		 shapeRenderer.circle(myWorld.getBullet().getPosition().x, myWorld.getBullet().getPosition().y, 3);

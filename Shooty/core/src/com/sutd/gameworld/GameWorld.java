@@ -2,8 +2,11 @@ package com.sutd.gameworld;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Circle;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.sutd.helpers.MoveHandler;
 import com.sutd.object.Bullet;
 import com.sutd.object.Button;
+import com.sutd.object.MoveDisplay;
 import com.sutd.object.Player;
 
 public class GameWorld {
@@ -15,64 +18,79 @@ public class GameWorld {
 
 	private Player player1;
 	private Player player2;
-	private int getX;
-	private int getY;
 	private Bullet bullet;
-	private int originX;
-	private int originY;
+	private MoveHandler moveHandler;
+	private MoveDisplay moveDisplay;
+	
+	private Stage stage;
+	
+	private Button buttonF;
+	private Button buttonFR;
+	private Button buttonFL;
+	private Button buttonB;
+	private Button buttonReset;
+	
 
-	public GameWorld() {
+	public GameWorld(Stage stage) {
 		player1 = new Player(10, 10);
 		player2 = new Player(126, 130);
 		bullet = new Bullet(player1.getY(), player1.getX(), player1);
+		moveHandler = new MoveHandler(this);
+		this.moveDisplay = new MoveDisplay(stage);
+		this.stage = stage;
+		buttonF = new Button(45, 35, this, "F", stage, moveDisplay);
+		buttonFR = new Button(85, 35, this, "F&R", stage, moveDisplay);
+		buttonFL = new Button(125, 35, this, "F&L", stage,	moveDisplay);
+		buttonB = new Button(165, 35, this, "B", stage, moveDisplay);
+		buttonReset = new Button(210, 35, this, "RESET", stage,moveDisplay);
+
+	}
+	// constantly call this method
+	public void update(float delta) {
+		// constantly display "Player input"
+		moveDisplay.render(delta);
+		// if there are 4 moves input execute the moves
+		if (moveDisplay.isExecute()) {
+			Gdx.app.log("GameWorld", player1.getIsMoveX() + "");
+			for (String s : moveDisplay.getMoves()) {
+				// change the coordinates
+				moveHandler.executeMove(delta, s);		
+				// draw the player
+				moveHandler.render(delta);
+			}
+			// reset the arraylist for moves
+			moveDisplay.reset();
+		}
+		
+	}
+	// getters
+
+	public Stage getStage() {
+		return stage;
 	}
 
-	public void update(float delta) {
-		// Gdx.app.log("GameWorldX", player1.getX()+"");
-		// Gdx.app.log("GameWorldY", player1.getY()+"");
-		player1.update(delta);
-		originX = (int) player1.getPosition().x;
-		originY = (int) player1.getPosition().y;
-		if (player1.getIsMoveX() || player1.getIsMoveY()) {
-//			while (player1.getPosition().x < (originX + player1.getMoveX())) {
-//				player1.update(delta);
-//			}
-				Gdx.app.log("GameWorld", "moveX");
-				player1.getPosition().add(player1.getMoveX(),0);
-				Gdx.app.log("GameWorld", "satisfy");
-				player1.resetX();
-				getX = (int) player1.getPosition().x;
+	public Button getButtonF() {
+		return buttonF;
+	}
 
-				Gdx.app.log("GameWorld", getX + "");
-				// if (player1.getIsMoveY()) {
-				// if (player1.getPosition().y == (player1.getPosition().y +
-				// player1
-				// .getMoveY())) {
-				player1.getPosition().add(0, player1.getMoveY());
-				player1.resetY();
-				getY = (int) player1.getPosition().y;
-				// } else
-				// player1.update(delta);
-				// }
-			
-			
-			player1.reset();
+	public Button getButtonFR() {
+		return buttonFR;
+	}
 
-			bullet.getPosition().x = player1.getPosition().x;
-			bullet.getPosition().y = player1.getPosition().y;
-			Gdx.app.log("GameWorld", getX + "");
+	public Button getButtonFL() {
+		return buttonFL;
+	}
 
-			bullet.setShoot(true);
-		}
-		if (bullet.isShoot()) {
-			if (bullet.getPosition().y > getY+80 || bullet.getPosition().y>160) {
-				bullet.setShoot(false);
-				bullet.reset(getX, getY);
-			} else {
-				bullet.shoot(delta);
-			}
-		}
+	public Button getButtonB() {
+		return buttonB;
+	}
 
+	public Button getButtonReset() {
+		return buttonReset;
+	}	
+
+	public MoveDisplay getMoveDisplay() {
+		return moveDisplay;
 	}
 
 	public Bullet getBullet() {
