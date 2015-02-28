@@ -1,13 +1,17 @@
 package com.sutd.gameworld;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.sutd.shootyHelper.AssetLoader;
 
+/**
+ * @author PT
+ * render all the game objects in the gameworld
+ */
 public class GameRenderer {
 	
 	private ShapeRenderer shapeRenderer;
@@ -16,48 +20,32 @@ public class GameRenderer {
 	private SpriteBatch batcher;
 	
 	public GameRenderer(GameWorld world){
-		myWorld = world;
+		myWorld = world; 
         cam = new OrthographicCamera();
         cam.setToOrtho(true, 136, 204);
         shapeRenderer = new ShapeRenderer();
         shapeRenderer.setProjectionMatrix(cam.combined);
+        batcher = new SpriteBatch();
+        batcher.setProjectionMatrix(cam.combined);
         
 	}
 	
 	public void render(){
 
 		
-		 Gdx.gl.glClearColor(0,0,0,1);
+		 Gdx.gl.glClearColor(10/255.0f, 15/255.0f, 230/255.0f, 1f);
 		 Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		 
-		 // draw player 1
-		 shapeRenderer.begin(ShapeType.Filled);
-		 shapeRenderer.setColor(87 / 255.0f, 225 / 255.0f, 120 / 255.0f, 1);
-		 shapeRenderer.circle(myWorld.getPlayer1().getPosition().x, myWorld.getPlayer1().getPosition().y,5);
-		 shapeRenderer.end();
+		 myWorld.getStage().act();
+		 myWorld.getStage().draw();
 		 
-		 // draw player 2
-		 shapeRenderer.begin(ShapeType.Filled);
-		 shapeRenderer.setColor(87 / 255.0f, 225 / 255.0f, 120 / 255.0f, 1);
-		 shapeRenderer.circle(myWorld.getPlayer2().getPosition().x, myWorld.getPlayer2().getPosition().y,5);
-		 shapeRenderer.end();
+		 batcher.begin();
+		 // render time and moves
+		 AssetLoader.white.draw(batcher, myWorld.getTimeStatus()+Integer.toString(myWorld.getTime()), 110, 0);
+		 AssetLoader.white.draw(batcher, myWorld.getOut(), 0, 0);
+		 batcher.end();
+	 
 		 
-		 // draw the grid
-		 drawHLine(20); drawVLine(20);
-		 drawHLine(40);	drawVLine(40);
-		 drawHLine(60); drawVLine(60);
-		 drawHLine(80); drawVLine(80);
-		 drawHLine(100); drawVLine(100);
-		 drawHLine(120); drawVLine(120);
-		 drawHLine(140);
-		 drawHLine(160); 
-		 
-		 //draw bullet
-		 shapeRenderer.begin(ShapeType.Filled);
-		 shapeRenderer.setColor(87 / 255.0f, 225 / 255.0f, 120 / 255.0f, 1);
-		 shapeRenderer.circle(myWorld.getBullet().getPosition().x, myWorld.getBullet().getPosition().y, 3);
-		 
-		 shapeRenderer.end();
 	}
 	public void drawVLine(int x) {
 		shapeRenderer.begin(ShapeType.Filled);

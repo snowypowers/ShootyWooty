@@ -1,108 +1,116 @@
 package com.sutd.gameworld;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.sutd.helpers.MoveHandler;
-import com.sutd.object.Bullet;
 import com.sutd.object.Button;
-import com.sutd.object.MoveDisplay;
 import com.sutd.object.Player;
+import com.sutd.object.Timer;
 
+/**
+ * @author PT
+ * handles all the object in game
+ * feed update to gameScreen
+ */
 public class GameWorld {
-
-	// private Rectangle button1 = new Rectangle(2+18,182,20,20);
-	// private Rectangle button2 = new Rectangle(27+18,182,20,20);
-	// private Rectangle button3 = new Rectangle(52+18,182,20,20);
-	// private Rectangle button4 = new Rectangle(77+18,182,20,20);
-
-	private Player player1;
-	private Player player2;
-	private Bullet bullet;
-	private MoveHandler moveHandler;
-	private MoveDisplay moveDisplay;
-	
 	private Stage stage;
-	
-	private Button buttonF;
-	private Button buttonFR;
-	private Button buttonFL;
-	private Button buttonB;
-	private Button buttonReset;
-	
+
+	private Button button0;
+	private Button button1;
+	private Button button2;
+	private Button button3;
+
+	private String[] moves = { "0B0", "0B0", "0B0", "0B0" };
+	private String out;
+	private int time;
+	private Timer timer;
+	private String timeStatus;
 
 	public GameWorld(Stage stage) {
-		player1 = new Player(10, 10);
-		player2 = new Player(126, 130);
-		bullet = new Bullet(player1.getY(), player1.getX(), player1);
-		moveHandler = new MoveHandler(this);
-		this.moveDisplay = new MoveDisplay(stage);
 		this.stage = stage;
-		buttonF = new Button(45, 35, this, "F", stage, moveDisplay);
-		buttonFR = new Button(85, 35, this, "F&R", stage, moveDisplay);
-		buttonFL = new Button(125, 35, this, "F&L", stage,	moveDisplay);
-		buttonB = new Button(165, 35, this, "B", stage, moveDisplay);
-		buttonReset = new Button(210, 35, this, "RESET", stage,moveDisplay);
-
+		button0 = new Button(320, 350, stage);
+		button1 = new Button(320, 240, stage);
+		button2 = new Button(320, 130, stage);
+		button3 = new Button(320, 20, stage);
+		timer = new Timer(0); 
+		timer.start(); // start timer
 	}
+
 	// constantly call this method
 	public void update(float delta) {
-		// constantly display "Player input"
-		moveDisplay.render(delta);
-		// if there are 4 moves input execute the moves
-		if (moveDisplay.isExecute()) {
-			Gdx.app.log("GameWorld", player1.getIsMoveX() + "");
-			for (String s : moveDisplay.getMoves()) {
-				// change the coordinates
-				moveHandler.executeMove(delta, s);		
-				// draw the player
-				moveHandler.render(delta);
-			}
-			// reset the arraylist for moves
-			moveDisplay.reset();
+
+		// always get move from button even if no change
+		moves[0] = button0.getMoves();
+		moves[1] = button1.getMoves();
+		moves[2] = button2.getMoves();
+		moves[3] = button3.getMoves();
+
+		out = "Player deciding...";
+		if (time == 30) {
+			
+			out = moves[0] + moves[1] + moves[2] + moves[3]; // this out stores player inputs
+			Gdx.app.log("GameWorld", out);
+			
+			button0.setLock(true); // lock the button from being pressed while executing moves
+			button1.setLock(true);
+			button2.setLock(true);
+			button3.setLock(true);
+			
+			button0.resetButton(); // reset the button display
+			button1.resetButton();
+			button2.resetButton();
+			button3.resetButton();
+
+		}
+		if (time == 0) {
+			
+			button0.setLock(false); // release the lock
+			button1.setLock(false);
+			button2.setLock(false);
+			button3.setLock(false);
+			
+			button0.resetMoves(); // reset the moves to "0B0"
+			button1.resetMoves();
+			button2.resetMoves();
+			button3.resetMoves();
+
 		}
 		
+		time = timer.getTime(); // get time from time thread
+		timeStatus = timer.getTimeStatus();
+
 	}
-	// getters
+
+	// getters for renderer
+
+	public String getOut() {
+		return out;
+	}
+
+	public int getTime() {
+		return time;
+	}
 
 	public Stage getStage() {
 		return stage;
 	}
 
-	public Button getButtonF() {
-		return buttonF;
+	public Button getButton1() {
+		return button1;
 	}
 
-	public Button getButtonFR() {
-		return buttonFR;
+	public Button getButton2() {
+		return button2;
 	}
 
-	public Button getButtonFL() {
-		return buttonFL;
+	public Button getButton3() {
+		return button3;
 	}
 
-	public Button getButtonB() {
-		return buttonB;
+	public Button getButton0() {
+		return button0;
 	}
-
-	public Button getButtonReset() {
-		return buttonReset;
-	}	
-
-	public MoveDisplay getMoveDisplay() {
-		return moveDisplay;
-	}
-
-	public Bullet getBullet() {
-		return bullet;
-	}
-
-	public Player getPlayer1() {
-		return player1;
-	}
-
-	public Player getPlayer2() {
-		return player2;
+	public String getTimeStatus() {
+		return timeStatus;
 	}
 
 }

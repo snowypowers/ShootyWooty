@@ -1,142 +1,233 @@
 package com.sutd.object;
 
-import com.badlogic.gdx.Game;
+import java.util.ArrayList;
+
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton.ImageButtonStyle;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
-import com.sutd.gameworld.GameRenderer;
-import com.sutd.gameworld.GameWorld;
-import com.sutd.helpers.MoveHandler;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.sutd.shootyHelper.AssetLoader;
 
+/**
+ * @author PT
+ * contains 3 buttons, bullet-move-bullet
+ * listen to user input and change the command
+ * string accordingly
+ */
 public class Button {
-	
+
 	private int x;
 	private int y;
 
-	private boolean isclick;
-	
-	private GameWorld world;
-	
 	private Stage stage;
-	private TextureAtlas atlas;
 	private Skin skin;
 	private Table table;
-	private ImageButton buttonRelease;
-	private BitmapFont white, green;
-	private Label heading;
+	private ImageButton moveButton, bulletButtonL,bulletButtonR;
+
+	private ArrayList<Drawable> buttonUP,buttonDOWN,bullet;
+
+
+	String moves;
+	private char movements[] = { 'B', 'F', 'R', 'D', 'L' };
+
+	ImageButtonStyle imageButtonSytle,imageButtonSytle2,imageButtonSytle3;
+	private boolean lock;
 	
-	private String label;
-	
-	private MoveDisplay moveDisplay;
-	
-	public Button(int x, int y, GameWorld world, 
-			String label,Stage stage, MoveDisplay moveDisplay) {
-		this.x = x;
-		this.y = y;
-		this.world=world;
-		this.label = label;
+	private int nMove;
+	private int nbulletL;
+	private int nbulletR;
+
+	public Button(int x, int y, Stage stage) {
+		this.x = x; // x coordinate to set table location
+		this.y = y; // y coordinate to set table location
 		this.stage = stage;
-		this.moveDisplay = moveDisplay;
+		this.moves = "0B"; // default move
+		lock = false; // lock for when moves are being execute
+
+		skin = AssetLoader.skin; 
+		table = new Table(skin);
 		
-		isclick=false;
+		buttonUP = new ArrayList<Drawable>(); // array containing drawables for buttonMove when not pressed
+		buttonDOWN = new ArrayList<Drawable>(); // array containing drawables for buttonMove when pressed
+		bullet = new ArrayList<Drawable>(); // array containing drawables for bulletButton
+
+		imageButtonSytle = new ImageButtonStyle(); // imageButtonSytle for buttonMove
+		imageButtonSytle2 = new ImageButtonStyle(); // imageButtonSytle for bulletButtonR
+		imageButtonSytle3 = new ImageButtonStyle(); // imageButtonSytle for bulletButtonF
 		
-		atlas = new TextureAtlas(Gdx.files.internal("ui/button.pack"));
-		skin = new Skin(atlas);
-		table = new Table(skin);	
-		
+		nMove = 1; // buttonMove control
+		nbulletL = 0; // bulletButtonL control
+		nbulletR = 0; // bulletButtonR control
 	}
 
-	// display the button
-	public void show(){
+	
+	public void show() {
 		Gdx.app.log("GameScreen", "show called");
-		// set fonts
-		white = new BitmapFont(Gdx.files.internal("white.fnt"),false);
-		green = new BitmapFont(Gdx.files.internal("font.fnt"),false);
-		white.setScale(.3f,.3f);
-		green.setScale(.5f, .5f);		
-		// table that holds the button
-		table.setBounds(x, y, 20, 20);
-		// set button style: image when pressed up and down
-		ImageButtonStyle imageButtonSytle = new ImageButtonStyle();
-		imageButtonSytle.up = skin.getDrawable("button.up");
-		imageButtonSytle.down = skin.getDrawable("button.down");
-		// create a button
-		buttonRelease = new ImageButton(imageButtonSytle);
-		buttonRelease.pad(15);
-		// add button listener
-		buttonRelease.addListener(new ChangeListener() {
-			
+		
+		table.setBounds(x, y, 20, 20); // table that holds the button
+		
+		buttonInitializer(); // initialize button styles
+		bulletInitializer();		
+		
+		moveButton = new ImageButton(imageButtonSytle); // create a buttons
+		moveButton.pad(10);
+		bulletButtonL = new ImageButton(imageButtonSytle2);
+		bulletButtonL.pad(10);
+		bulletButtonR = new ImageButton(imageButtonSytle3);
+		bulletButtonR.pad(10);
+		
+		setButtonstyle(); // add button styles to array
+		setBulletStyle();
+		
+		
+		// Buttons listener
+		moveButton.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				// TODO Auto-generated method stub
 				Gdx.app.log("GameScreen", "button click");
-				if(label.contentEquals("RESET")){
-					world.getPlayer1().reset();
-					world.getPlayer1().getPosition().x=10;
-					world.getPlayer1().getPosition().y=10;
-					world.getBullet().getPosition().x=10;
-					world.getBullet().getPosition().y=10;
-					Gdx.app.log("Button", "----");
-				}
-				else{
-					if(moveDisplay.getMoves().size()<4) {
-						if(moveDisplay.getMoves().size()==3) moveDisplay.setExecute();
-						moveDisplay.addMove(label);
+				if (!lock) { // record input when not locked
+					imageButtonSytle.up = buttonUP.get(nMove);
+					imageButtonSytle.down = buttonDOWN.get(nMove);
+					Gdx.app.log("Button", moves.substring(0, 1));
+					moves = moves.substring(0, 1) + movements[nMove] + moves.substring(2, 3);
+					Gdx.app.log("Button", moves + " after");
+					if (nMove == buttonUP.size() - 1) {
+						nMove = 0;
+					} else {
+						nMove += 1;
 					}
-				
 				}
 				
 			}
 		});
-		// create button label
-		LabelStyle labelStyle = new LabelStyle(green, null);
-		heading = new Label(label, labelStyle);
-
-		// add heading and button to table
-		table.add(heading);
+		bulletButtonL.addListener(new ChangeListener(){
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				Gdx.app.log("GameScreen", "bullet click");
+				if (!lock) {
+					imageButtonSytle2.up = bullet.get(nbulletL);
+					imageButtonSytle2.down = bullet.get(nbulletL);
+										
+					Gdx.app.log("Button", moves);
+					if (nbulletL == 1) {
+						moves = "0" + moves.substring(1,3);
+						nbulletL = 0;
+					} else {
+						moves = "1" + moves.substring(1,3);
+						nbulletL += 1;
+					}
+				}
+			}
+			
+		});	
+		bulletButtonR.addListener(new ChangeListener(){
+			
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				Gdx.app.log("GameScreen", "bullet click");
+				if (!lock) {
+					imageButtonSytle3.up = bullet.get(nbulletR);
+					imageButtonSytle3.down = bullet.get(nbulletR);					
+					if (nbulletR == 1) {
+						moves = moves.substring(0, 2) + "0";
+						nbulletR = 0;
+						Gdx.app.log("Button", moves);
+					} else {
+						moves = moves.substring(0, 2) + "1";
+						nbulletR += 1;
+						Gdx.app.log("Button", moves);
+					}
+				}
+			}
+			
+		});			
+		
 		table.row();
-		table.add(buttonRelease);
-		// add table to stage
+		table.add(bulletButtonL);
+		table.add(moveButton);		
+		table.add(bulletButtonR);
 		stage.addActor(table);
 
+	}
+	// buttons methods
+	public void buttonInitializer(){
+		imageButtonSytle.up = skin.getDrawable("buttonBlank.up");
+		imageButtonSytle.down = skin.getDrawable("buttonBlank.down");
+		imageButtonSytle.up.setMinWidth(20);
+	}
+	public void bulletInitializer() {
+		imageButtonSytle2.up = AssetLoader.skin.getDrawable("bullet");
+		imageButtonSytle2.down = AssetLoader.skin.getDrawable("bullet");
+		imageButtonSytle3.up = AssetLoader.skin.getDrawable("bullet");
+		imageButtonSytle3.down = AssetLoader.skin.getDrawable("bullet");
+	}
+	// bullets methods
+	public void setBulletStyle(){
+		bullet.add(skin.getDrawable("bulletChosen"));
+		bullet.add(skin.getDrawable("bullet"));
 		
+	}
+	
+	public void setButtonstyle(){
+		buttonUP.add(skin.getDrawable("buttonBlank.up"));
+		buttonDOWN.add(skin.getDrawable("buttonBlank.down"));
+		buttonUP.add(skin.getDrawable("buttonF.up"));
+		buttonDOWN.add(skin.getDrawable("buttonF.down"));
+		buttonUP.add(skin.getDrawable("buttonR.up"));
+		buttonDOWN.add(skin.getDrawable("buttonR.down"));
+		buttonUP.add(skin.getDrawable("buttonD.up"));
+		buttonDOWN.add(skin.getDrawable("buttonD.down"));
+		buttonUP.add(skin.getDrawable("buttonL.up"));
+		buttonDOWN.add(skin.getDrawable("buttonL.down"));
 		
 	}
-	// supporting listener methods
-	public void onClick(){
-		Gdx.app.log("Button", "click");
-		isclick=true;
+	
+	public void resetButton() {
+		imageButtonSytle.up = skin.getDrawable("buttonBlank.up");
+		imageButtonSytle.down = skin.getDrawable("buttonBlank.down");
+		imageButtonSytle2.up = AssetLoader.skin.getDrawable("bullet");
+		imageButtonSytle2.down = AssetLoader.skin.getDrawable("bullet");
+		imageButtonSytle3.up = AssetLoader.skin.getDrawable("bullet");
+		imageButtonSytle3.down = AssetLoader.skin.getDrawable("bullet");
+		
 	}
-	public boolean isIsclick() {
-		return isclick;
+
+	public void resetMoves() {
+		moves = "0B0";
+		nbulletL =0;
+		nbulletR =0;
+		nMove =1;
 	}
-	public void reset() {
-		this.isclick = false;
-	}
+
 	// getters
 	public int getX() {
 		return x;
 	}
-	public Table getTable(){
+
+	public Table getTable() {
 		return table;
 	}
-	public Player getPlayer() {
-		return world.getPlayer1();
+
+
+	public String getMoves() {
+		return moves;
+
 	}
 
-  
-}
+	public void setLock(boolean lock) {
+		this.lock = lock;
+	}
 
+	public void onClick() {
+		// TODO Auto-generated method stub
+		Gdx.app.log("Button", "click");
+	}
+	
+
+}
