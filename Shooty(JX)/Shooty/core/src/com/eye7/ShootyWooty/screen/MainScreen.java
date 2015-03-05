@@ -5,8 +5,8 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
-import com.eye7.ShootyWooty.world.DisplayMap;
-import com.eye7.ShootyWooty.world.GameRenderer;
+import com.eye7.ShootyWooty.render.DisplayMap;
+import com.eye7.ShootyWooty.render.GameRenderer;
 import com.eye7.ShootyWooty.world.GameWorld;
 
 

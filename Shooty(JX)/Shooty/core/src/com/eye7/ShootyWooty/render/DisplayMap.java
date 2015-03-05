@@ -1,4 +1,4 @@
-package com.eye7.ShootyWooty.world;
+package com.eye7.ShootyWooty.render;
 
         import com.badlogic.gdx.ApplicationAdapter;
         import com.badlogic.gdx.Gdx;
@@ -9,6 +9,7 @@ package com.eye7.ShootyWooty.world;
         import com.badlogic.gdx.graphics.Texture;
         import com.badlogic.gdx.graphics.g2d.Sprite;
         import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+        import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
         import com.badlogic.gdx.maps.MapLayer;
         import com.badlogic.gdx.maps.MapObjects;
         import com.badlogic.gdx.maps.objects.RectangleMapObject;
@@ -20,6 +21,7 @@ package com.eye7.ShootyWooty.world;
         import com.badlogic.gdx.math.Vector2;
         import com.badlogic.gdx.scenes.scene2d.Actor;
         import com.eye7.ShootyWooty.object.Player;
+        import com.eye7.ShootyWooty.world.GameMap;
 
 /**
  * Created by JunXiang on 1/3/2015.
@@ -30,7 +32,9 @@ public class DisplayMap implements InputProcessor {
     //Map
     TiledMap tiledMap;
     OrthographicCamera camera;
-    MapRenderer tiledMapRenderer;
+    OrthogonalTiledMapRenderer tiledMapRenderer;
+    GameMap gameMap;
+    private ShapeRenderer shapeRenderer;
     int tilesize = 32;
     int posX;
     int posY;
@@ -43,8 +47,7 @@ public class DisplayMap implements InputProcessor {
     int screenWidth = 480 * scaleWFactor;
     int screenHeight = 320 * scaleHFactor;
 
-    //Player
-    Player player;
+    Player temp;
 
     public DisplayMap () {
         sb = new SpriteBatch();
@@ -52,27 +55,34 @@ public class DisplayMap implements InputProcessor {
         float h = Gdx.graphics.getHeight() /2;
 
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, 320, 192);
+        camera.setToOrtho(false, 640, 384);
         camera.update();
         tiledMap = new TmxMapLoader().load("maps/borderedmap.tmx");
-        MapLayer RockLayer = tiledMap.getLayers().get("Rocks");
-        MapLayer SpawnLayer = tiledMap.getLayers().get("Spawns");
-        MapObjects Rocks = RockLayer.getObjects();
-        MapObjects Spawns = SpawnLayer.getObjects();
-        tiledMapRenderer = new MapRenderer(tiledMap);
-        Gdx.input.setInputProcessor(this);
+        tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap, sb);
 
+        gameMap = new GameMap(tiledMap);
+        gameMap.setUpPlayers(2);
+        //temp = new Player(-50,50,0);
+
+        shapeRenderer = new ShapeRenderer();
+        shapeRenderer.setProjectionMatrix(camera.combined);
 
     }
 
     public void render () {
+
         Gdx.gl.glViewport(screenXStart, screenYStart, screenWidth, screenHeight);
         camera.update();
         tiledMapRenderer.setView(camera);
         tiledMapRenderer.render();
+        gameMap.render(sb);
+        //sb.begin();
+        //temp.draw(sb);
+       // sb.end();
 
     }
 
+    //Input Processor Methods
     @Override
     public boolean keyDown(int keycode) {
         return false;

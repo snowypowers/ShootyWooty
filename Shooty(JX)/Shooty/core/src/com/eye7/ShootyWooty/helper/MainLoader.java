@@ -5,6 +5,7 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.eye7.ShootyWooty.main;
 
 /**
  * Created by JunXiang on 3/3/2015.
@@ -17,8 +18,8 @@ public class MainLoader {
     public static void load() {
         white = new BitmapFont(Gdx.files.internal("fonts/white.fnt"),true); // white font
         green = new BitmapFont(Gdx.files.internal("fonts/green.fnt"),true); // green font
-        white.setScale(.3f,.3f); // scale it to size
-        green.setScale(.5f, .5f);
+        white.setScale(main.scaleX, main.scaleY); // scale it to size
+        green.setScale(main.scaleX, main.scaleY);
         atlas = new TextureAtlas(Gdx.files.internal("Gbuttons/Gbuttons.pack")); // atlas for skin
         skin = new Skin(atlas); // skin containing drawables
     }
