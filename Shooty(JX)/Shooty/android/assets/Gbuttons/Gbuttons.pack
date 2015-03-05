@@ -1,0 +1,185 @@
+
+Gbuttons.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+bullet
+  rotate: false
+  xy: 1, 110
+  size: 105, 107
+  split: 25, 26, 27, 27
+  orig: 105, 107
+  offset: 0, 0
+  index: -1
+bullet
+  rotate: false
+  xy: 1, 110
+  size: 105, 107
+  orig: 105, 107
+  offset: 0, 0
+  index: -1
+bulletChosen
+  rotate: false
+  xy: 1, 1
+  size: 105, 107
+  split: 25, 26, 27, 26
+  orig: 105, 107
+  offset: 0, 0
+  index: -1
+bulletChosen
+  rotate: false
+  xy: 1, 1
+  size: 105, 107
+  orig: 105, 107
+  offset: 0, 0
+  index: -1
+buttonBlank.down
+  rotate: false
+  xy: 108, 110
+  size: 105, 107
+  split: 0, 0, 1, 2
+  orig: 105, 107
+  offset: 0, 0
+  index: -1
+buttonBlank.down
+  rotate: false
+  xy: 108, 110
+  size: 105, 107
+  orig: 105, 107
+  offset: 0, 0
+  index: -1
+buttonBlank.up
+  rotate: false
+  xy: 108, 1
+  size: 105, 107
+  split: 0, 0, 0, 2
+  orig: 105, 107
+  offset: 0, 0
+  index: -1
+buttonBlank.up
+  rotate: false
+  xy: 108, 1
+  size: 105, 107
+  orig: 105, 107
+  offset: 0, 0
+  index: -1
+buttonD.down
+  rotate: false
+  xy: 215, 110
+  size: 105, 107
+  split: 1, 0, 4, 1
+  orig: 105, 107
+  offset: 0, 0
+  index: -1
+buttonD.down
+  rotate: false
+  xy: 215, 110
+  size: 105, 107
+  orig: 105, 107
+  offset: 0, 0
+  index: -1
+buttonD.up
+  rotate: false
+  xy: 215, 1
+  size: 105, 107
+  split: 1, 0, 0, 3
+  orig: 105, 107
+  offset: 0, 0
+  index: -1
+buttonD.up
+  rotate: false
+  xy: 215, 1
+  size: 105, 107
+  orig: 105, 107
+  offset: 0, 0
+  index: -1
+buttonF.down
+  rotate: false
+  xy: 322, 110
+  size: 105, 107
+  split: 0, 0, 0, 2
+  orig: 105, 107
+  offset: 0, 0
+  index: -1
+buttonF.down
+  rotate: false
+  xy: 322, 110
+  size: 105, 107
+  orig: 105, 107
+  offset: 0, 0
+  index: -1
+buttonF.up
+  rotate: false
+  xy: 322, 1
+  size: 105, 107
+  split: 0, 0, 0, 3
+  orig: 105, 107
+  offset: 0, 0
+  index: -1
+buttonF.up
+  rotate: false
+  xy: 322, 1
+  size: 105, 107
+  orig: 105, 107
+  offset: 0, 0
+  index: -1
+buttonL.down
+  rotate: false
+  xy: 429, 110
+  size: 105, 107
+  split: 0, 0, 2, 2
+  orig: 105, 107
+  offset: 0, 0
+  index: -1
+buttonL.down
+  rotate: false
+  xy: 429, 110
+  size: 105, 107
+  orig: 105, 107
+  offset: 0, 0
+  index: -1
+buttonL.up
+  rotate: false
+  xy: 429, 1
+  size: 105, 107
+  split: 0, 0, 1, 2
+  orig: 105, 107
+  offset: 0, 0
+  index: -1
+buttonL.up
+  rotate: false
+  xy: 429, 1
+  size: 105, 107
+  orig: 105, 107
+  offset: 0, 0
+  index: -1
+buttonR.down
+  rotate: false
+  xy: 536, 110
+  size: 105, 107
+  split: 0, 0, 2, 2
+  orig: 105, 107
+  offset: 0, 0
+  index: -1
+buttonR.down
+  rotate: false
+  xy: 536, 110
+  size: 105, 107
+  orig: 105, 107
+  offset: 0, 0
+  index: -1
+buttonR.up
+  rotate: false
+  xy: 536, 1
+  size: 105, 107
+  split: 0, 0, 1, 2
+  orig: 105, 107
+  offset: 0, 0
+  index: -1
+buttonR.up
+  rotate: false
+  xy: 536, 1
+  size: 105, 107
+  orig: 105, 107
+  offset: 0, 0
+  index: -1
