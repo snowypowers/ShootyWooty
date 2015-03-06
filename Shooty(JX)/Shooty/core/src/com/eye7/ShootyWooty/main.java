@@ -23,14 +23,12 @@ public class main extends Game {
 	@Override
 	public void create () {
         Gdx.app.log("ShootyGame", "created");
+        scaleX = Gdx.graphics.getWidth() / 960.0f;
+        scaleY = Gdx.graphics.getHeight() / 540.0f;
         MainLoader.load();
         setScreen(new MainScreen());
         Gdx.app.log("Screen Reso:", "Width: " + String.valueOf(Gdx.graphics.getWidth()));
         Gdx.app.log("Screen Reso:", "Height: " + String.valueOf(Gdx.graphics.getHeight()));
-
-        scaleX = Gdx.graphics.getWidth() / 960.0f;
-        scaleY = Gdx.graphics.getHeight() / 540.0f;
-
         Gdx.app.log("ScaleX", String.valueOf(scaleX));
         Gdx.app.log("ScaleY", String.valueOf(scaleY));
 	}

@@ -1,16 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="30" height="30" tilewidth="32" tileheight="32" nextobjectid="47">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="30" height="30" tilewidth="32" tileheight="32" nextobjectid="48">
  <tileset firstgid="1" name="borderedtile" tilewidth="32" tileheight="32">
   <image source="borderedtile.png" width="160" height="32"/>
  </tileset>
  <layer name="Tiles" width="30" height="30">
   <data encoding="base64" compression="zlib">
-   eJxjZGBgYBzFA4qZ0fhMg8BNgw1TK0wImUOMPdRSM9zjmgkHezCHwWByC7XcO9T8RG3MMkjigprxMNLjdBSP4lE8ikcxdTEAlZcDmg==
+   eJzt1EEKACAIRFGt7n/mThC1GOQbs3jQInRSKCMiDWUAMtCoZnKr89JHdef3XY/DmTwDUhZV3m5v6krxtyj3bmZWaQEyqE1AhiobbhMDmg==
   </data>
  </layer>
  <objectgroup name="Spawns">
-  <object id="20" name="Spawn1" x="224" y="96" width="32" height="32"/>
-  <object id="21" name="Spawn2" x="672" y="448" width="32" height="32"/>
+  <object id="20" name="Spawn1" x="32" y="896" width="32" height="32">
+   <properties>
+    <property name="direction" value="180"/>
+   </properties>
+  </object>
+  <object id="21" name="Spawn2" x="256" y="832" width="32" height="32">
+   <properties>
+    <property name="direction" value="0"/>
+   </properties>
+  </object>
  </objectgroup>
  <objectgroup name="Rocks">
   <object id="22" name="Rock" x="512" y="192" width="32" height="32">

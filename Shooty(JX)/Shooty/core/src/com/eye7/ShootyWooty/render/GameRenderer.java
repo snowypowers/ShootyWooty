@@ -1,4 +1,4 @@
-package com.eye7.ShootyWooty.world;
+package com.eye7.ShootyWooty.render;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
@@ -18,6 +18,8 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.eye7.ShootyWooty.helper.MainLoader;
 import com.eye7.ShootyWooty.main;
+import com.eye7.ShootyWooty.object.Player;
+import com.eye7.ShootyWooty.world.GameWorld;
 
 /**
  * @author PT
@@ -61,10 +63,10 @@ public class GameRenderer {
         batcher.begin();
         // render time and moves
         MainLoader.white.draw(batcher, myWorld.getOut() + "     " + myWorld.getTimeStatus()+Integer.toString(myWorld.getTime()), 0, 0);
-        //MainLoader.white.draw(batcher, myWorld.getOut(), 0, 0);
-
-        MainLoader.white.setScale(main.scaleX, main.scaleY);
+        //MainLoader.white.setScale(main.scaleX, main.scaleY);
         batcher.end();
+
+
 
 
     }
