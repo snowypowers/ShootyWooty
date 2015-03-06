@@ -95,7 +95,7 @@ public class Button {
 					imageButtonSytle.down = buttonDOWN.get(nMove);
 //					Gdx.app.log("Button", moves.substring(0, 1));
 					moves = moves.substring(0, 1) + movements[nMove] + moves.substring(2, 3);
-					Gdx.app.log("Button", moves + " after");
+//					Gdx.app.log("Button", moves + " after");
 					if (nMove == buttonUP.size() - 1) {
 						nMove = 0;
 					} else {

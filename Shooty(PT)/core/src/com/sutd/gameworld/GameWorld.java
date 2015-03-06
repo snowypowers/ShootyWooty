@@ -29,38 +29,25 @@ public class GameWorld {
 	private String timeStatus;
 	private Bullet bulletl;
 	private Bullet bulletr;
-	private MoveHandler moveHandler;
-	private Boolean check;
+	private MoveHandler moveHandler1;
 
-    private int pointer;
-    private float oldPositionX;
-    private float oldPositionY;
-    private boolean stop;
-
-    private float[] movement;
-     private String command;
-    private float bulletDistanceR;
-    private float bulletDistanceL;
 
     public GameWorld(Stage stage) {
 		this.stage = stage;
-		player1 = new Player(10,100);
-		bulletl = new Bullet(player1.getX(), player1.getY(),player1);
-		bulletr = new Bullet(player1.getX(), player1.getY(),player1);
+
 		button0 = new Button(320, 350, stage);
 		button1 = new Button(320, 240, stage);
 		button2 = new Button(320, 130, stage);
 		button3 = new Button(320, 20, stage);
-		moveHandler = new MoveHandler();
+
+        player1 = new Player(10,100);
+        bulletl = new Bullet(player1.getX(), player1.getY(),player1);
+        bulletr = new Bullet(player1.getX(), player1.getY(),player1);
+		moveHandler1 = new MoveHandler(player1,bulletl,bulletr,moves);
+
 		timer = new Timer(0); 
 		timer.start(); // start timer
-		check = false;
-		pointer = 0;
-        movement = new float[3];
-        stop = false;
-        bulletDistanceR = 20;
-        bulletDistanceL = 20;
-        command = moves[0];
+
 	}
 
 	// constantly call this method
@@ -80,85 +67,8 @@ public class GameWorld {
 			button2.setLock(true);
 			button3.setLock(true);
 			// if there are 4 moves input execute the moves
-            if(!stop) {
-                if (check) {
-                    if (Math.abs(movement[0]) > 0) {
-                        movement[0] += movement[2];
-                        player1.incrementX(movement[2] * -1);
-                        bulletl.incrementX(movement[2] * -1);
-                        bulletr.incrementX(movement[2] * -1);
-//                        Gdx.app.log("GameWorld-X", movement[0] + "");
-//                        Gdx.app.log("GameWorld-X", player1.getX() + "");
-                        bulletl.setReturn(player1.getX(),player1.getY());
-                        bulletr.setReturn(player1.getX(),player1.getY());
-
-                    } else if (Math.abs(movement[1]) > 0) {
-                        movement[1] += movement[2];
-                        player1.incrementY(movement[2] * -1);
-                        bulletl.incrementY(movement[2] * -1);
-                        bulletr.incrementY(movement[2] * -1);
-//                        Gdx.app.log("GameWorld-Y", player1.getY() + "");
-                        bulletl.setReturn(player1.getX(),player1.getY());
-                        bulletr.setReturn(player1.getX(),player1.getY());
-                    } else {
-
-                         if(command.substring(2).equals("1")&&command.substring(0,1).equals("0")){
-                            if(bulletDistanceR>0){
-                                bulletDistanceR-=1f;
-                                bulletr.incrementX(1);
-                                Gdx.app.log("GameWorld-Bullet",bulletr.getX()+"");
-                            }
-                            else{
-                                bulletDistanceR=20;
-                                bulletr.getReturn();
-                                check = false;
-
-                            }
-
-                        }
-                        else if(command.substring(0,1).equals("1")&&command.substring(2).equals("0")){
-                            if(bulletDistanceL>0){
-                                bulletDistanceL-=1f;
-                                bulletl.incrementX(-1);
-//                                Gdx.app.log("GameWorld-Bullet",bulletl.getX()+"");
-                            }
-                            else{
-                                bulletDistanceL=20;
-                                bulletl.getReturn();
-                                check = false;
-                            }
-                        }
-                        else if(command.substring(0,1).equals("1")&&command.substring(2).equals("1")){
-                             if(bulletDistanceL>0 && bulletDistanceR>0){
-                                 bulletDistanceL-=1f;
-                                 bulletl.incrementX(-1);
-                                 bulletDistanceR-=1f;
-                                 bulletr.incrementX(1);
-
-                             }
-                             else{
-                                 bulletDistanceR=20;
-                                 bulletr.getReturn();
-                                 bulletDistanceL=20;
-                                 bulletl.getReturn();
-                                 check = false;
-                             }
-                         }
-                        else check = false;
-                    }
-                } else {
-                    command = moves[pointer];
-                    Gdx.app.log("GameWorld", command);
-                    movement = moveHandler.AmountToMove(command);
-                    pointer += 1;
-                    if (pointer == 4) {
-                        pointer = 0;
-                        stop=true;
-
-                    }
-                    check = true;
-                }
-            }
+            moveHandler1.updateMove(moves);
+            moveHandler1.execute();
 
 			button0.resetButton(); // reset the button display
 			button1.resetButton();
@@ -167,8 +77,7 @@ public class GameWorld {
 
 		}
 		if (time == 0) {
-            stop = false;
-            check = false;
+            moveHandler1.setStopCheck(false);
 			button0.setLock(false); // release the lock
 			button1.setLock(false);
 			button2.setLock(false);
