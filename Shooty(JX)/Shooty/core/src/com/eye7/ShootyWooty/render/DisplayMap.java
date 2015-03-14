@@ -20,6 +20,7 @@ package com.eye7.ShootyWooty.render;
         import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
         import com.badlogic.gdx.math.Vector2;
         import com.badlogic.gdx.scenes.scene2d.Actor;
+        import com.eye7.ShootyWooty.model.GameConstants;
         import com.eye7.ShootyWooty.object.Player;
         import com.eye7.ShootyWooty.world.GameMap;
 
@@ -61,7 +62,7 @@ public class DisplayMap implements InputProcessor {
         tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap, sb);
 
         gameMap = new GameMap(tiledMap);
-        gameMap.setUpPlayers(2);
+        gameMap.setUpPlayers(GameConstants.NUM_PLAYERS);
         //temp = new Player(-50,50,0);
 
         shapeRenderer = new ShapeRenderer();

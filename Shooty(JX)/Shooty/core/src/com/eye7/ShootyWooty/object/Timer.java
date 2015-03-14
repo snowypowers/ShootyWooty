@@ -1,6 +1,7 @@
 package com.eye7.ShootyWooty.object;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.utils.TimeUtils;
 
 /**
  * @author PT
@@ -18,32 +19,20 @@ public class Timer extends Thread {
 
     @Override
     public void run() {
-        while (true) {
-
-            if (time < 30) {
+        while (!isInterrupted()) {
+                if (time >= 0) {
+                    timeStatus = "Time: ";
+                } else {
+                    timeStatus = "Executing Moves...";
+                }
                 try {
                     Thread.sleep(1000);
                     time += 1;
-                    Gdx.app.log("GameWorld", time + "");
+                    //Gdx.app.log("GameWorld", time + "");
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }
-            else{
-                timeStatus = "Executing Moves...";
-                try {
-                    // allowing 5 seconds for execution
-                    Thread.sleep(5000);
-
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
-                time=0;
-            }
-
-            timeStatus = "Time: ";
-        }
 
     }
     public String getTimeStatus() {
@@ -51,6 +40,9 @@ public class Timer extends Thread {
     }
     public int getTime() {
         return time;
+    }
+    public void reset() {
+        time = -8;
     }
 }
 

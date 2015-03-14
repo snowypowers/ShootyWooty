@@ -13,6 +13,7 @@ import com.badlogic.gdx.math.Ellipse;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
 import com.eye7.ShootyWooty.model.Direction;
+import com.eye7.ShootyWooty.model.GameConstants;
 import com.eye7.ShootyWooty.object.Player;
 
 /**
@@ -44,12 +45,14 @@ public class GameMap {
         players = new Array<Player>();
         for (int i = 0; i < num; i++) {
             RectangleMapObject spawn = (RectangleMapObject) spawns.get("Spawn" + String.valueOf(i+1));
-            players.add(new Player((int) spawn.getRectangle().x,(int) spawn.getRectangle().y, Integer.parseInt(spawn.getProperties().get("direction").toString())));
+            players.add(new Player(this, (int) spawn.getRectangle().x,(int) spawn.getRectangle().y, Integer.parseInt(spawn.getProperties().get("direction").toString())));
             Gdx.app.log("Player Creation", players.get(i).getPosition().toString());
         }
+        GameConstants.PLAYERS = players;
     }
 
     public void render(SpriteBatch sb) {
+        sb.enableBlending();
         sb.begin();
 
         for (Player p: players) {

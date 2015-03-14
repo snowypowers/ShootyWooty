@@ -6,6 +6,8 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.eye7.ShootyWooty.helper.MoveHandler;
+import com.eye7.ShootyWooty.model.GameConstants;
 import com.eye7.ShootyWooty.object.Button;
 import com.eye7.ShootyWooty.object.Player;
 import com.eye7.ShootyWooty.object.Timer;
@@ -50,9 +52,9 @@ public class GameWorld {
         moves[3] = button3.getMoves();
 
         out = "Player deciding...";
-        if (time == 30) {
+        if (time >= 30) {
 
-            out = moves[0] + moves[1] + moves[2] + moves[3]; // this out stores player inputs
+            out = moves[0] +" "+ moves[1] +" "+ moves[2] +" "+ moves[3]; // this out stores player inputs
             Gdx.app.log("GameWorld", out);
 
             button0.setLock(true); // lock the button from being pressed while executing moves
@@ -64,6 +66,11 @@ public class GameWorld {
             button1.resetButton();
             button2.resetButton();
             button3.resetButton();
+
+            MoveHandler mh = new MoveHandler(GameConstants.PLAYER_TAG, moves);
+            mh.start();
+
+            timer.reset();
 
         }
         if (time == 0) {
