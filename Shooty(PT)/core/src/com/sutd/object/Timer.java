@@ -20,11 +20,10 @@ public class Timer extends Thread {
 	public void run() {
 		while (true) {
 			
-			if (time < 10) {
+			if (time < 30) {
 				try {
 					Thread.sleep(1000);
 					time += 1;
-//					Gdx.app.log("GameWorld", time + "");
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}

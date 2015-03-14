@@ -31,8 +31,6 @@ public class GameRenderer {
 	}
 	
 	public void render(){
-
-		
 		 Gdx.gl.glClearColor(10/255.0f, 15/255.0f, 230/255.0f, 1f);
 		 Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		 
@@ -40,35 +38,32 @@ public class GameRenderer {
 		 myWorld.getStage().draw();
 		 
 		 batcher.begin();
-//		 render time and moves
+        // render time and moves
 		 AssetLoader.white.draw(batcher, myWorld.getTimeStatus()+Integer.toString(myWorld.getTime()), 110, 0);
 		 AssetLoader.white.draw(batcher, myWorld.getOut(), 0, 0);
-
+         AssetLoader.green.draw(batcher, myWorld.getPlayer1().getHealth()+"",0,20);
+         AssetLoader.green.draw(batcher,myWorld.getPlayer2().getHealth()+"",0,40);
 		 batcher.end();
 		 
 		 
 		 shapeRenderer.begin(ShapeType.Filled);
+        // Player1
+         shapeRenderer.setColor(0,0,0,1);
 		 shapeRenderer.circle(myWorld.getPlayer1().getX(), myWorld.getPlayer1().getY(), 5);
 		 shapeRenderer.setColor(0,0,0,1);
-//         Gdx.app.log("GameRenderer","Y:"+myWorld.getBulletl().getY()+" X:"+myWorld.getBulletl().getX());
-		 shapeRenderer.circle(myWorld.getBulletl().getX(), myWorld.getBulletl().getY(), 2);
+		 shapeRenderer.circle(myWorld.getBulletl(myWorld.getPlayer1()).getX(), myWorld.getBulletl(myWorld.getPlayer1()).getY(), 2);
 		 shapeRenderer.setColor(0,0,0,1);
-		 shapeRenderer.circle(myWorld.getBulletr().getX(), myWorld.getBulletr().getY(), 2);
-		 shapeRenderer.setColor(0,0,0,1);
+		 shapeRenderer.circle(myWorld.getBulletr(myWorld.getPlayer1()).getX(), myWorld.getBulletr(myWorld.getPlayer1()).getY(), 2);
+		 shapeRenderer.setColor(0,100,0,1);
+
+        // Player2
+        shapeRenderer.circle(myWorld.getPlayer2().getX(), myWorld.getPlayer2().getY(), 5);
+        shapeRenderer.setColor(0,100,0,1);
+        shapeRenderer.circle(myWorld.getBulletl(myWorld.getPlayer2()).getX(), myWorld.getBulletl(myWorld.getPlayer2()).getY(), 2);
+        shapeRenderer.setColor(0,100,0,1);
+        shapeRenderer.circle(myWorld.getBulletr(myWorld.getPlayer2()).getX(), myWorld.getBulletr(myWorld.getPlayer2()).getY(), 2);
 		 shapeRenderer.end();
 		 
 	}
-	public void drawVLine(int x) {
-		shapeRenderer.begin(ShapeType.Filled);
-		 shapeRenderer.setColor(87 / 255.0f, 225 / 255.0f, 120 / 255.0f, 1);
-		 shapeRenderer.line(x, 0, x, 160);
-		 shapeRenderer.end();
-		
-	}
-	public void drawHLine(int y){
-		shapeRenderer.begin(ShapeType.Filled);
-		 shapeRenderer.setColor(87 / 255.0f, 225 / 255.0f, 120 / 255.0f, 1);
-		 shapeRenderer.line(0, y, 136, y);
-		 shapeRenderer.end();
-	}
+
 }

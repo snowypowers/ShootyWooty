@@ -19,7 +19,7 @@ public class AssetLoader {
 		white = new BitmapFont(Gdx.files.internal("white.fnt"),true); // white font
 		green = new BitmapFont(Gdx.files.internal("font.fnt"),true); // green font
 		white.setScale(.3f,.3f); // scale it to size
-		green.setScale(.5f, .5f);
+		green.setScale(.3f, .3f);
 		atlas = new TextureAtlas(Gdx.files.internal("Gbuttons/Gbuttons.pack")); // atlas for skin
 		skin = new Skin(atlas); // skin containing drawables
 	}

@@ -91,16 +91,18 @@ public class Button {
 			public void changed(ChangeEvent event, Actor actor) {
 //				Gdx.app.log("GameScreen", "button click");
 				if (!lock) { // record input when not locked
-					imageButtonSytle.up = buttonUP.get(nMove);
-					imageButtonSytle.down = buttonDOWN.get(nMove);
+                    imageButtonSytle.up = buttonUP.get(nMove);
+                    imageButtonSytle.down = buttonDOWN.get(nMove);
+                    moves = moves.substring(0, 1) + movements[nMove] + moves.substring(2, 3);
 //					Gdx.app.log("Button", moves.substring(0, 1));
-					moves = moves.substring(0, 1) + movements[nMove] + moves.substring(2, 3);
-//					Gdx.app.log("Button", moves + " after");
-					if (nMove == buttonUP.size() - 1) {
+                    Gdx.app.log("Button",nMove+"");
+					if (nMove == buttonUP.size()-1) {
 						nMove = 0;
 					} else {
+
 						nMove += 1;
 					}
+
 				}
 				
 			}
@@ -223,10 +225,5 @@ public class Button {
 		this.lock = lock;
 	}
 
-	public void onClick() {
-		// TODO Auto-generated method stub
-		Gdx.app.log("Button", "click");
-	}
-	
 
 }

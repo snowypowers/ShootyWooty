@@ -21,7 +21,6 @@ public class GameScreen implements Screen {
 
 	public GameScreen() {
 		Gdx.app.log("GameScreen", "Attached");
-
 	    stage = new Stage(); // contain buttons and display
 		world = new GameWorld(stage); // contains game objects
 		renderer = new GameRenderer(world);	// animate game objects
