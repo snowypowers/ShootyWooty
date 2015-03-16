@@ -126,11 +126,12 @@ public class MoveHandler extends Thread{
             if(command.substring(0,1).equals("1")){
                 player.startShootLeft();
             }
+            Gdx.app.log("Shooting", String.valueOf(TimeUtils.timeSinceMillis(startTime)));
             while (TimeUtils.timeSinceMillis(startTime) > 1000 && TimeUtils.timeSinceMillis(startTime) <= 2000) {
 
                         // shoot after every move
-                        bulletl.setReturn(player.getX(), player.getY());
-                        bulletr.setReturn(player.getX(), player.getY());
+                        //bulletl.setReturn(player.getX(), player.getY());
+                        //bulletr.setReturn(player.getX(), player.getY());
                         if (!stopShoot) shootBullets(); // continue to shoot if not hit
                         else { // stop shooting if hit
                             bullet_distance_L = 0;
@@ -146,6 +147,8 @@ public class MoveHandler extends Thread{
             }
             player.endShootLeft();
             player.endShootRight();
+            bullet_distance_R = BULLET_DISTANCE;
+            bullet_distance_L = BULLET_DISTANCE;
         }
         Gdx.app.log("MoveHandler", "End!");
     }
