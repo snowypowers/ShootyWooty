@@ -90,13 +90,13 @@ public class Button {
         moveButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                Gdx.app.log("GameScreen", "button click");
+
                 if (!lock) { // record input when not locked
                     imageButtonSytle.up = buttonUP.get(nMove);
                     imageButtonSytle.down = buttonDOWN.get(nMove);
-                    Gdx.app.log("Button", moves.substring(0, 1));
+//                    Gdx.app.log("Button", moves.substring(0, 1));
                     moves = moves.substring(0, 1) + movements[nMove] + moves.substring(2, 3);
-                    Gdx.app.log("Button", moves + " after");
+//                    Gdx.app.log("Button", moves + " after");
                     if (nMove == buttonUP.size() - 1) {
                         nMove = 0;
                     } else {
@@ -109,12 +109,12 @@ public class Button {
         bulletButtonL.addListener(new ChangeListener(){
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                Gdx.app.log("GameScreen", "bullet click");
+
                 if (!lock) {
                     imageButtonSytle2.up = bullet.get(nbulletL);
                     imageButtonSytle2.down = bullet.get(nbulletL);
 
-                    Gdx.app.log("Button", moves);
+//                    Gdx.app.log("Button", moves);
                     if (nbulletL == 1) {
                         moves = "0" + moves.substring(1,3);
                         nbulletL = 0;
@@ -130,18 +130,18 @@ public class Button {
 
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                Gdx.app.log("GameScreen", "bullet click");
+
                 if (!lock) {
                     imageButtonSytle3.up = bullet.get(nbulletR);
                     imageButtonSytle3.down = bullet.get(nbulletR);
                     if (nbulletR == 1) {
                         moves = moves.substring(0, 2) + "0";
                         nbulletR = 0;
-                        Gdx.app.log("Button", moves);
+//                        Gdx.app.log("Button", moves);
                     } else {
                         moves = moves.substring(0, 2) + "1";
                         nbulletR += 1;
-                        Gdx.app.log("Button", moves);
+//                        Gdx.app.log("Button", moves);
                     }
                 }
             }

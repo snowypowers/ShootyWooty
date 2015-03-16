@@ -10,6 +10,7 @@ import com.badlogic.gdx.maps.objects.EllipseMapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Ellipse;
+import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
 import com.eye7.ShootyWooty.model.Direction;
@@ -56,7 +57,6 @@ public class GameMap {
         sb.begin();
 
         for (Player p: players) {
-
             p.draw(sb);
         }
         sb.end();

@@ -1,6 +1,7 @@
 package com.eye7.ShootyWooty.world;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
 import com.badlogic.gdx.Gdx;
@@ -67,9 +68,12 @@ public class GameWorld {
             button2.resetButton();
             button3.resetButton();
 
-            MoveHandler mh = new MoveHandler(GameConstants.PLAYER_TAG, moves);
-            mh.start();
+            for(int i=1; i<GameConstants.PLAYERS.size+1;i++) {
+                MoveHandler mh1 = new MoveHandler(i, moves);
+                mh1.start();
+            }
 
+//            Gdx.app.log("GameWorld",GameConstants.PLAYER_TAG+"");
             timer.reset();
 
         }
@@ -124,6 +128,7 @@ public class GameWorld {
     public String getTimeStatus() {
         return timeStatus;
     }
+
 
 }
 

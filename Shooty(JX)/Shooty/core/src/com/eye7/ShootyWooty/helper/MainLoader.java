@@ -16,11 +16,11 @@ public class MainLoader {
     public static Skin skin;
 
     public static void load() {
-        white = new BitmapFont(Gdx.files.internal("fonts/white.fnt"),true); // white font
-        green = new BitmapFont(Gdx.files.internal("fonts/green.fnt"),true); // green font
+        white = new BitmapFont(Gdx.files.internal("android/assets/fonts/white.fnt"),true); // white font
+        green = new BitmapFont(Gdx.files.internal("android/assets/fonts/green.fnt"),true); // green font
         white.setScale(main.scaleX, main.scaleY); // scale it to size
         green.setScale(main.scaleX, main.scaleY);
-        atlas = new TextureAtlas(Gdx.files.internal("Gbuttons/Gbuttons.pack")); // atlas for skin
+        atlas = new TextureAtlas(Gdx.files.internal("android/assets/Gbuttons/Gbuttons.pack")); // atlas for skin
         skin = new Skin(atlas); // skin containing drawables
     }
 }

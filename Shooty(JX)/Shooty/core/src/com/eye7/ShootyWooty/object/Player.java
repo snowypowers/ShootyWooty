@@ -4,6 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.maps.objects.CircleMapObject;
+import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
 import com.eye7.ShootyWooty.model.Direction;
 import com.eye7.ShootyWooty.world.GameMap;
@@ -29,6 +31,9 @@ public class Player {
     private boolean shootLeft;
     private boolean shootRight;
 
+    private CircleMapObject boundingCircle;
+    private float RADIUS = 2;
+
 	// takes in x,y as origin
 	public Player(GameMap map, int x, int y, int d) {
         playerID = nextID;
@@ -37,7 +42,7 @@ public class Player {
 
         this.map = map; // Reference to the GameMap object in order to get the positions of other objects;
 
-        this.pic = new Texture(Gdx.files.internal("players/player"+String.valueOf(playerID)+".png"));
+        this.pic = new Texture(Gdx.files.internal("android/assets/players/player"+String.valueOf(playerID)+".png"));
 		this.x = x;
 		this.y = y;
         this.dir = d;
@@ -49,6 +54,8 @@ public class Player {
 
         bulletl = new Bullet(this.x, this.y,this);
         bulletr = new Bullet(this.x, this.y,this);
+
+        boundingCircle = new CircleMapObject(this.x,this.y,RADIUS);
 	}
 
     public void draw(SpriteBatch sb) {
@@ -62,9 +69,6 @@ public class Player {
         s.setRotation(dir);
         s.setPosition(x,y);
         s.draw(sb);
-
-
-
     }
 
     public void decreaseHealth(){
@@ -75,10 +79,14 @@ public class Player {
 	// setters
 	public void incrementX(float x) {
 		this.x +=x;
+        boundingCircle.getCircle().set(this.x,this.y,RADIUS);
+//        Gdx.app.log("Player",boundingCircle.x+" X");
 	}
 
 	public void incrementY(float y) {
 		this.y += y;
+        boundingCircle.getCircle().set(this.x,this.y,RADIUS);
+//        Gdx.app.log("Player",boundingCircle.y+" Y");
 	}
 
     public void rotate (int r) {
@@ -131,7 +139,10 @@ public class Player {
     public Bullet getBulletr() {
         return bulletr;
     }
-	// reset methods
+
+    public CircleMapObject getBoundingCircle(){
+        return boundingCircle;
+    }
 
     //Aligns player into the closest gridbox
     public void snapInGrid() {
@@ -160,6 +171,9 @@ public class Player {
             rotate(90 - Roff);
             //Gdx.app.log("playerSnapR", String.valueOf(90 - Roff));
         }
+    }
+    public int getHealth(){
+        return health;
     }
 
 

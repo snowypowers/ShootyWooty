@@ -18,6 +18,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.eye7.ShootyWooty.helper.MainLoader;
 import com.eye7.ShootyWooty.main;
+import com.eye7.ShootyWooty.model.GameConstants;
 import com.eye7.ShootyWooty.object.Player;
 import com.eye7.ShootyWooty.world.GameWorld;
 
@@ -63,6 +64,9 @@ public class GameRenderer {
         batcher.begin();
         // render time and moves
         MainLoader.white.draw(batcher, myWorld.getOut() + "     " + myWorld.getTimeStatus()+Integer.toString(myWorld.getTime()), 0, 0);
+        MainLoader.green.draw(batcher, "Player1 blood: "+Integer.toString(GameConstants.PLAYERS.get(0).getHealth()), 0,30);
+        MainLoader.green.draw(batcher, "Player2 blood: "+Integer.toString(GameConstants.PLAYERS.get(1).getHealth()), 0,60);
+
         //MainLoader.white.setScale(main.scaleX, main.scaleY);
         batcher.end();
 
@@ -70,18 +74,6 @@ public class GameRenderer {
 
 
     }
-    public void drawVLine(int x) {
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        shapeRenderer.setColor(87 / 255.0f, 225 / 255.0f, 120 / 255.0f, 1);
-        shapeRenderer.line(x, 0, x, 160);
-        shapeRenderer.end();
 
-    }
-    public void drawHLine(int y){
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        shapeRenderer.setColor(87 / 255.0f, 225 / 255.0f, 120 / 255.0f, 1);
-        shapeRenderer.line(0, y, 136, y);
-        shapeRenderer.end();
-    }
 }
 
