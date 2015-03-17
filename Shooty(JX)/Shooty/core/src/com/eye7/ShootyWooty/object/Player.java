@@ -42,7 +42,7 @@ public class Player {
 
         this.map = map; // Reference to the GameMap object in order to get the positions of other objects;
 
-        this.pic = new Texture(Gdx.files.internal("android/assets/players/player"+String.valueOf(playerID)+".png"));
+        this.pic = new Texture(Gdx.files.internal("players/player"+String.valueOf(playerID)+".png"));
 		this.x = x;
 		this.y = y;
         this.dir = d;

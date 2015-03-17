@@ -58,7 +58,7 @@ public class DisplayMap implements InputProcessor {
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 640, 384);
         camera.update();
-        tiledMap = new TmxMapLoader().load("android/assets/maps/borderedmap.tmx");
+        tiledMap = new TmxMapLoader().load("maps/borderedmap.tmx");
         tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap, sb);
 
         gameMap = new GameMap(tiledMap);
