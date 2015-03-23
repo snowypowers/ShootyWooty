@@ -2,14 +2,16 @@ package com.eye7.ShootyWooty.helper;
 
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.CircleMapObject;
+import com.badlogic.gdx.math.Intersector;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.Timer;
 import com.eye7.ShootyWooty.model.GameConstants;
 import com.eye7.ShootyWooty.object.Bullet;
 import com.eye7.ShootyWooty.object.Player;
-import com.badlogic.gdx.math.Intersector;
+import com.eye7.ShootyWooty.world.GameMap;
 
 import static com.badlogic.gdx.utils.Timer.Task;
 
@@ -41,7 +43,8 @@ public class MoveHandler extends Thread{
     private float bullet_distance_R;
     private float bullet_distance_L;
 
-    private boolean stopShoot;
+    private boolean stopShootr;
+    private boolean stopShootl;
 
     private int PlayerTag;
 
@@ -75,7 +78,8 @@ public class MoveHandler extends Thread{
 
         this.moves=moves;
 
-        stopShoot = false;
+        stopShootr = false;
+        stopShootl = false;
     }
 
     public void nextMove() {
@@ -94,19 +98,33 @@ public class MoveHandler extends Thread{
             Gdx.app.log("MoveHandler","start");
             while (TimeUtils.timeSinceMillis(startTime) <= 1000){
                 // move along x axis
+                CircleMapObject check = player.getBoundingCircle();
+
                 if (movement[0] > 0f) {
-                    player.incrementX(movement[2]);
-                    movement[0] -= PLAYER_INCREMENT;
-                    bulletl.incrementX(movement[2]); // move bullet with player
-                    bulletr.incrementX(movement[2]);
+                    check.getCircle().setPosition((check.getCircle().x+movement[2]),check.getCircle().y);
+                    if (!checkRock(check)){
+                        player.incrementX(movement[2]);
+                        movement[0] -= PLAYER_INCREMENT;
+                        bulletl.incrementX(movement[2]); // move bullet with player
+                        bulletr.incrementX(movement[2]);
+                    }
+                    else{
+                        check.getCircle().setPosition((check.getCircle().x-movement[2]),check.getCircle().y);
+                    }
                 }
 
                 // move along Y axis
                 if (movement[1] > 0f) {
-                    player.incrementY(movement[2]);
-                    movement[1] -= PLAYER_INCREMENT;
-                    bulletl.incrementY(movement[2]);
-                    bulletr.incrementY(movement[2]);
+                    check.getCircle().setPosition(check.getCircle().x,(check.getCircle().y+movement[2]));
+                    if (!checkRock(check)) {
+                        player.incrementY(movement[2]);
+                        movement[1] -= PLAYER_INCREMENT;
+                        bulletl.incrementY(movement[2]);
+                        bulletr.incrementY(movement[2]);
+                    }
+                    else{
+                        check.getCircle().setPosition(check.getCircle().x,(check.getCircle().y-movement[2]));
+                    }
                 }
 
                 if (movement[3] != 0f) {
@@ -136,34 +154,42 @@ public class MoveHandler extends Thread{
             Gdx.app.log("Shooting", String.valueOf(TimeUtils.timeSinceMillis(startTime)));
             while (TimeUtils.timeSinceMillis(startTime) > 1000 && TimeUtils.timeSinceMillis(startTime) <= 3000) {
 
-                        // shoot after every move
-                        bulletl.setReturn(player.getX(), player.getY());
-                        bulletr.setReturn(player.getX(), player.getY());
-                if(!stopShoot) {
+                // shoot after every move
+                bulletl.setReturn(player.getX(), player.getY());
+                bulletr.setReturn(player.getX(), player.getY());
+                if (!stopShootl || !stopShootr) {
                     for (int j = 0; j < GameConstants.PLAYERS.size; j++) {
                         if (j != PlayerTag - 1) {
-                            if (checkPlayerHit(player.getBulletl().getBoundingCircle(), GameConstants.PLAYERS.get(j).getBoundingCircle())) {
+                            if (!stopShootl && checkPlayerHit(player.getBulletl().getBoundingCircle(), GameConstants.PLAYERS.get(j).getBoundingCircle())) {
                                 bullet_distance_L = 0;
                                 bullet_distance_R = 0;
                                 GameConstants.PLAYERS.get(j).decreaseHealth();
-                                stopShoot = true;
-                            } else if (checkPlayerHit(player.getBulletr().getBoundingCircle(), GameConstants.PLAYERS.get(j).getBoundingCircle())) {
-                                bullet_distance_L = 0;
-                                bullet_distance_R = 0;
-                                GameConstants.PLAYERS.get(j).decreaseHealth();
-                                stopShoot = true;
-                            } else {
-                                if (!stopShoot)
-                                    shootBullets();
-                                try {
-                                    Thread.sleep(20);
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                }
+                                stopShootl = true;
                             }
+                            if (!stopShootr && checkPlayerHit(player.getBulletr().getBoundingCircle(), GameConstants.PLAYERS.get(j).getBoundingCircle())) {
+                                bullet_distance_L = 0;
+                                bullet_distance_R = 0;
+                                GameConstants.PLAYERS.get(j).decreaseHealth();
+                                stopShootr = true;
+                            }
+                            if (checkRock(player.getBulletr().getBoundingCircle())) {
+                                stopShootr = true;
+                            }
+                            if (checkRock(player.getBulletl().getBoundingCircle())) {
+                                stopShootl = true;
+                            }
+                            if (!stopShootl || !stopShootr)
+                                shootBullets();
+                            try {
+                                Thread.sleep(20);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+
                         }
                     }
                 }
+
                 else break;
 
             }
@@ -171,7 +197,8 @@ public class MoveHandler extends Thread{
             player.endShootRight();
             bullet_distance_R = BULLET_DISTANCE;
             bullet_distance_L = BULLET_DISTANCE;
-            stopShoot=false;
+            stopShootl=false;
+            stopShootr = false;
         }
         Gdx.app.log("MoveHandler", "End!");
     }
@@ -180,10 +207,18 @@ public class MoveHandler extends Thread{
     // shooting method
     public void shootBullets(){
         // shoot right
-        if(command.substring(2).equals("1")){
+        if(command.substring(2).equals("1")&&!stopShootr){
             if(bullet_distance_R>0){
+                Gdx.app.log("PlayerDirection",Integer.toString(player.getDir()));
                 bullet_distance_R-=BULLET_INCREMENT;
-                bulletr.incrementX(BULLET_INCREMENT);
+                if (player.getDir()==0)
+                    bulletr.incrementX(BULLET_INCREMENT);
+                else if(player.getDir()==90)
+                    bulletr.incrementY(BULLET_INCREMENT);
+                else if(player.getDir()==180)
+                    bulletr.incrementX(BULLET_INCREMENT*-1);
+                else if(player.getDir()==270)
+                    bulletr.incrementY(BULLET_INCREMENT*-1);
             }
             else{
                 bullet_distance_R = BULLET_DISTANCE;
@@ -192,10 +227,17 @@ public class MoveHandler extends Thread{
             }
         }
         // shoot left
-        if(command.substring(0,1).equals("1")){
+        if(command.substring(0,1).equals("1")&&!stopShootl){
             if(bullet_distance_L>0){
                 bullet_distance_L-=BULLET_INCREMENT;
-                bulletl.incrementX(BULLET_INCREMENT*-1);
+                if (player.getDir()==0)
+                    bulletl.incrementX(BULLET_INCREMENT*-1);
+                else if(player.getDir()==90)
+                    bulletl.incrementY(BULLET_INCREMENT*-1);
+                else if(player.getDir()==180)
+                    bulletl.incrementX(BULLET_INCREMENT);
+                else if(player.getDir()==270)
+                    bulletl.incrementY(BULLET_INCREMENT);
             }
             else{
                 bullet_distance_L=BULLET_DISTANCE;
@@ -205,10 +247,10 @@ public class MoveHandler extends Thread{
         }
 
     }
-
-    public void setStopShoot(boolean stop){ // setter for stop when there is collision
-        stopShoot = stop;
-    }
+//
+//    public void setStopShoot(boolean stop){ // setter for stop when there is collision
+//        stopShoot = stop;
+//    }
 
     /////////////////////////////////////METHODS FOR MOVE CONTROL//////////////////////////////////////
     public void updateMove(String[] moves){
@@ -321,4 +363,15 @@ public class MoveHandler extends Thread{
         }
         else return false;
     }
+    public boolean checkRock(CircleMapObject mapObject){
+        Array<Rectangle> rocks = GameMap.getRocks();
+        for(int i=0; i<rocks.size;i++){
+            if (Intersector.overlaps(mapObject.getCircle(), rocks.get(i))){
+                return true;
+
+            }
+        }
+        return false;
+    }
+
 }

@@ -1,5 +1,6 @@
 package com.eye7.ShootyWooty.screen;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
@@ -10,20 +11,16 @@ import com.eye7.ShootyWooty.render.GameRenderer;
 import com.eye7.ShootyWooty.world.GameWorld;
 
 
-/**
- * @author PT
- * receive update from GameWorld and GameRenderer
- * and display accordingly
- */
 public class MainScreen implements Screen {
     private GameWorld world;
     private GameRenderer renderer;
     private Stage stage;
     private DisplayMap map;
     private InputMultiplexer input;
+    private Game game;
 
-
-    public MainScreen() {
+    public MainScreen(Game game) {
+        this.game = game;
         Gdx.app.log("GameScreen", "Attached");
         Gdx.gl.glViewport(0,0,Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
@@ -87,4 +84,6 @@ public class MainScreen implements Screen {
     }
 
 }
+
+
 
