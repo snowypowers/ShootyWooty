@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.eye7.ShootyWooty.helper.ActionResolver;
 import com.eye7.ShootyWooty.helper.MainLoader;
+import com.eye7.ShootyWooty.model.GameConstants;
 import com.eye7.ShootyWooty.screen.MainScreen;
 
 
@@ -15,8 +16,6 @@ public class main extends Game {
     SpriteBatch batch;
     Texture img;
 
-    public static float scaleX;
-    public static float scaleY;
     private ActionResolver actionResolver;
     public main(ActionResolver actionResolver){
 
@@ -27,14 +26,14 @@ public class main extends Game {
     public void create () {
 
         Gdx.app.log("ShootyGame", "created");
-        scaleX = Gdx.graphics.getWidth() / 960.0f;
-        scaleY = Gdx.graphics.getHeight() / 540.0f;
+        GameConstants.SCALE_X = Gdx.graphics.getWidth() / 960.0f;
+        GameConstants.SCALE_Y = Gdx.graphics.getHeight() / 540.0f;
         MainLoader.load();
         setScreen(new MainScreen(this));
         Gdx.app.log("Screen Reso:", "Width: " + String.valueOf(Gdx.graphics.getWidth()));
         Gdx.app.log("Screen Reso:", "Height: " + String.valueOf(Gdx.graphics.getHeight()));
-        Gdx.app.log("ScaleX", String.valueOf(scaleX));
-        Gdx.app.log("ScaleY", String.valueOf(scaleY));
+        Gdx.app.log("ScaleX", String.valueOf(GameConstants.SCALE_X));
+        Gdx.app.log("ScaleY", String.valueOf(GameConstants.SCALE_Y));
     }
 
     @Override

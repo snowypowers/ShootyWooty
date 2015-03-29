@@ -16,4 +16,7 @@ public class GameConstants {
     public static HashMap<Integer, Player> PLAYERS = new HashMap<Integer, Player>(); //Array of player objects
     public static Timer TURN_TIMER; // The turn timer
 
+    public static float SCALE_X;
+    public static float SCALE_Y;
+
 }

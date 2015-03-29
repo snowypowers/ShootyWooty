@@ -28,6 +28,7 @@ package com.eye7.ShootyWooty.render;
  * Created by JunXiang on 1/3/2015.
  */
 public class DisplayMap implements InputProcessor {
+    private static final String TAG = "DisplayMap";
 
     SpriteBatch sb;
     //Map
@@ -41,19 +42,17 @@ public class DisplayMap implements InputProcessor {
     int posY;
 
     //Map position
-    int scaleWFactor = Gdx.graphics.getWidth() / 960;
-    int scaleHFactor = Gdx.graphics.getHeight() / 540;
-    int screenXStart = 50 * scaleWFactor;
-    int screenYStart = 50 * scaleHFactor;
-    int screenWidth = 480 * scaleWFactor;
-    int screenHeight = 320 * scaleHFactor;
+    private double scaleWFactor = Gdx.graphics.getWidth() / 960;
+    private double scaleHFactor = Gdx.graphics.getHeight() / 540;
+    private int screenXStart = (int) (50 * scaleWFactor);
+    private int screenYStart = (int) (50 * scaleHFactor);
+    private int screenWidth = (int) (480 * scaleWFactor);
+    private int screenHeight = (int) (320 * scaleHFactor);
 
     Player temp;
 
     public DisplayMap () {
         sb = new SpriteBatch();
-        float w = Gdx.graphics.getWidth() /2;
-        float h = Gdx.graphics.getHeight() /2;
 
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 640, 384);
@@ -63,7 +62,6 @@ public class DisplayMap implements InputProcessor {
 
         gameMap = new GameMap(tiledMap);
         gameMap.setUpPlayers(GameConstants.NUM_PLAYERS);
-        //temp = new Player(-50,50,0);
 
         shapeRenderer = new ShapeRenderer();
         shapeRenderer.setProjectionMatrix(camera.combined);
@@ -71,7 +69,7 @@ public class DisplayMap implements InputProcessor {
     }
 
     public void render () {
-
+    //Define the rectangle where the map will be rendered
         Gdx.gl.glViewport(screenXStart, screenYStart, screenWidth, screenHeight);
         camera.update();
         tiledMapRenderer.setView(camera);
@@ -81,6 +79,17 @@ public class DisplayMap implements InputProcessor {
         //temp.draw(sb);
        // sb.end();
 
+    }
+
+    public void resize(int width, int height) {
+        scaleWFactor = width / 960.0;
+        scaleHFactor = height / 540.0;
+        Gdx.app.log(TAG, "Scaling: " + String.valueOf(scaleWFactor) + " " + String.valueOf(scaleHFactor));
+        screenXStart = (int) (50 * scaleWFactor);
+        screenYStart = (int) (50 * scaleHFactor);
+        screenWidth = (int) (480 * scaleWFactor);
+        screenHeight = (int) (320 * scaleHFactor);
+        Gdx.app.log(TAG, "Resized to " + String.valueOf(screenWidth) + " by " + String.valueOf(screenHeight));
     }
 
     //Input Processor Methods

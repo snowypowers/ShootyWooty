@@ -44,8 +44,9 @@ public class MainScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-        Gdx.app.log("GameScreen", "resizing");
+        Gdx.app.log("GameScreen", "resizing to width " + String.valueOf(width) + " and height " + String.valueOf(height));
         stage.getViewport().update(width,height, true);
+        map.resize(width, height);
     }
 
     @Override
