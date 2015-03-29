@@ -8,6 +8,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.eye7.ShootyWooty.helper.MoveHandler;
+import com.eye7.ShootyWooty.helper.TurnHandler;
 import com.eye7.ShootyWooty.model.GameConstants;
 import com.eye7.ShootyWooty.object.Button;
 import com.eye7.ShootyWooty.object.Player;
@@ -30,7 +31,9 @@ public class GameWorld {
     private String out;
     private int time;
     private Timer timer;
+    private Object timerReset = new Object();
     private String timeStatus;
+    private TurnHandler th;
 
     public GameWorld(Stage stage) {
         this.stage = stage;
@@ -39,7 +42,7 @@ public class GameWorld {
         button1 = new Button(800, 320, stage);
         button2 = new Button(800, 210, stage);
         button3 = new Button(800, 100, stage);
-        timer = new Timer(0);
+        timer = new Timer(timerReset);
         timer.start(); // start timer
     }
 
@@ -54,6 +57,7 @@ public class GameWorld {
 
         out = "Player deciding...";
         if (time >= 30) {
+            timer.reset();
 
             out = moves[0] +" "+ moves[1] +" "+ moves[2] +" "+ moves[3]; // this out stores player inputs
             Gdx.app.log("GameWorld", out);
@@ -67,14 +71,31 @@ public class GameWorld {
             button1.resetButton();
             button2.resetButton();
             button3.resetButton();
+            Gdx.app.log("GameWorld", "Creating TurnHandler");
+             th = new TurnHandler();
 
-            for(int i=1; i<GameConstants.PLAYERS.size+1;i++) {
-                MoveHandler mh1 = new MoveHandler(i, moves);
-                mh1.start();
-            }
+            //Code to add turns to TurnHandler here
+            th.addTurn(GameConstants.PLAYER_TAG, moves);
+            th.addTurn(2, moves);
+            Gdx.app.log("GameWorld", "Starting TurnHandler");
+            th.start();
 
-//            Gdx.app.log("GameWorld",GameConstants.PLAYER_TAG+"");
-            timer.reset();
+            //Thread endTurn sees if current turn is complete and notifies Timer to start running again.
+            Thread endTurn = new Thread(new Runnable() {
+
+                public void run() {
+                    try {
+                        th.join();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    Gdx.app.log("GameWorld", "Turn End");
+                    synchronized (timerReset) {
+                        timerReset.notify();
+                    }
+                }
+            });
+            endTurn.start();
 
         }
         if (time == 0) {

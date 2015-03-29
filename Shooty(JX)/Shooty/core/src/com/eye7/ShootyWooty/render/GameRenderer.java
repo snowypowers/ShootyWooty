@@ -64,8 +64,8 @@ public class GameRenderer {
         batcher.begin();
         // render time and moves
         MainLoader.white.draw(batcher, myWorld.getOut() + "     " + myWorld.getTimeStatus()+Integer.toString(myWorld.getTime()), 0, 0);
-        MainLoader.green.draw(batcher, "Player1 blood: "+Integer.toString(GameConstants.PLAYERS.get(0).getHealth()), 0,30);
-        MainLoader.green.draw(batcher, "Player2 blood: "+Integer.toString(GameConstants.PLAYERS.get(1).getHealth()), 0,60);
+        MainLoader.green.draw(batcher, "Player1 blood: "+Integer.toString(GameConstants.PLAYERS.get(1).getHealth()), 0,30);
+        MainLoader.green.draw(batcher, "Player2 blood: "+Integer.toString(GameConstants.PLAYERS.get(2).getHealth()), 0,60);
 
         //MainLoader.white.setScale(main.scaleX, main.scaleY);
         batcher.end();

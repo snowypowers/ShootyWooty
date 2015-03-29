@@ -10,11 +10,13 @@ import com.badlogic.gdx.utils.TimeUtils;
  * 30 seconds round
  */
 public class Timer extends Thread {
+    private Object timerReset;
     private int time;
     private String timeStatus = "Time: ";
 
-    public Timer(int time) {
-        this.time = time;
+    public Timer(Object timerReset) {
+        time = 0;
+        this.timerReset = timerReset;
     }
 
     @Override
@@ -30,7 +32,13 @@ public class Timer extends Thread {
                     time += 1;
                     //Gdx.app.log("GameWorld", time + "");
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    try {
+                        synchronized(timerReset) {
+                            timerReset.wait();
+                        }
+                    } catch (InterruptedException e1) {
+                        e1.printStackTrace();
+                    }
                 }
             }
 
@@ -42,7 +50,9 @@ public class Timer extends Thread {
         return time;
     }
     public void reset() {
-        time = -8;
+        timeStatus = "Executing Moves...";
+        time = -1;
+        interrupt();
     }
 }
 

@@ -122,6 +122,8 @@ public class Player {
 		return position;
 	}
 
+    public int getPlayerID() { return playerID; }
+
 	public float getX() {
 		return x;
 	}
