@@ -1,17 +1,11 @@
 package com.eye7.ShootyWooty.world;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.viewport.Viewport;
-import com.eye7.ShootyWooty.helper.MoveHandler;
+import com.eye7.ShootyWooty.helper.ActionResolver;
 import com.eye7.ShootyWooty.helper.TurnHandler;
 import com.eye7.ShootyWooty.model.GameConstants;
 import com.eye7.ShootyWooty.object.Button;
-import com.eye7.ShootyWooty.object.Player;
 import com.eye7.ShootyWooty.object.Timer;
 
 /**
@@ -34,10 +28,10 @@ public class GameWorld {
     private Object timerReset = new Object();
     private String timeStatus;
     private TurnHandler th;
-
-    public GameWorld(Stage stage) {
+    private ActionResolver actionResolver;
+    public GameWorld(Stage stage, ActionResolver actionResolver) {
         this.stage = stage;
-
+        this.actionResolver = actionResolver;
         button0 = new Button(800, 430, stage);
         button1 = new Button(800, 320, stage);
         button2 = new Button(800, 210, stage);
@@ -61,7 +55,14 @@ public class GameWorld {
 
             out = moves[0] +" "+ moves[1] +" "+ moves[2] +" "+ moves[3]; // this out stores player inputs
             Gdx.app.log("GameWorld", out);
+            actionResolver.sendMessageHost(out);
+            while(!actionResolver.getValid()){
+                continue;
+            }
 
+            String OppMoves = actionResolver.getMoves();
+            Gdx.app.log("Opponent Moves", OppMoves);
+            actionResolver.setValid(false);
             button0.setLock(true); // lock the button from being pressed while executing moves
             button1.setLock(true);
             button2.setLock(true);
