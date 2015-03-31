@@ -12,6 +12,7 @@ package com.eye7.ShootyWooty.render;
         import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
         import com.badlogic.gdx.maps.MapLayer;
         import com.badlogic.gdx.maps.MapObjects;
+        import com.badlogic.gdx.maps.MapProperties;
         import com.badlogic.gdx.maps.objects.RectangleMapObject;
         import com.badlogic.gdx.maps.tiled.TiledMap;
         import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
@@ -37,7 +38,7 @@ public class DisplayMap implements InputProcessor {
     OrthogonalTiledMapRenderer tiledMapRenderer;
     GameMap gameMap;
     private ShapeRenderer shapeRenderer;
-    int tilesize = 32;
+    int zoom = 4;
     int posX;
     int posY;
 
@@ -49,19 +50,27 @@ public class DisplayMap implements InputProcessor {
     private int screenWidth = (int) (480 * scaleWFactor);
     private int screenHeight = (int) (320 * scaleHFactor);
 
+    private MapProperties mp;
+    private int mapPixelWidth;
+    private int mapPixelHeight;
+
     Player temp;
 
     public DisplayMap () {
         sb = new SpriteBatch();
 
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, 640, 384);
+        camera.setToOrtho(false, 960 / zoom, 540 / zoom);
         camera.update();
         tiledMap = new TmxMapLoader().load("maps/borderedmap.tmx");
         tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap, sb);
 
         gameMap = new GameMap(tiledMap);
         gameMap.setUpPlayers(GameConstants.NUM_PLAYERS);
+
+        mp = tiledMap.getProperties();
+        mapPixelWidth = mp.get("tilewidth", Integer.class) * mp.get("width", Integer.class);
+        mapPixelHeight = mp.get("tileheight", Integer.class) * mp.get("height", Integer.class);
 
         shapeRenderer = new ShapeRenderer();
         shapeRenderer.setProjectionMatrix(camera.combined);
@@ -100,26 +109,6 @@ public class DisplayMap implements InputProcessor {
 
     @Override
     public boolean keyUp(int keycode) {
-
-        if(keycode == Input.Keys.LEFT) {
-            if (camera.position.x >= 112) {
-                camera.translate(-32,0);
-            } else {
-                System.out.println("reached left edge");
-            }
-        }
-
-        if(keycode == Input.Keys.RIGHT)
-            //camera.translate(32,0);
-        if(keycode == Input.Keys.UP)
-            //camera.translate(0,-32);
-        if(keycode == Input.Keys.DOWN)
-            //camera.translate(0,32);
-        if(keycode == Input.Keys.NUM_1)
-            tiledMap.getLayers().get(0).setVisible(!tiledMap.getLayers().get(0).isVisible());
-        if(keycode == Input.Keys.NUM_2)
-            tiledMap.getLayers().get(1).setVisible(!tiledMap.getLayers().get(1).isVisible());
-        System.out.println(camera.position.toString());
         return false;
     }
 
@@ -139,13 +128,30 @@ public class DisplayMap implements InputProcessor {
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        float x = 0;
+        float y = 0;
+        if (camera.position.x < (screenWidth / (2*zoom))) {
+            x = (screenWidth/(2*zoom)) - camera.position.x;
+        } else if (camera.position.x > (mapPixelWidth - (screenWidth/(2*zoom)))) {
+            x = (mapPixelWidth - (screenWidth/(2*zoom))) - camera.position.x;
+        }
+        if (camera.position.y < (screenHeight / (2*zoom))) {
+            y = (screenHeight/(2*zoom)) - camera.position.y;
+        } else if (camera.position.y > (mapPixelHeight - (screenHeight/(2*zoom)))) {
+            y = (mapPixelHeight - (screenHeight/(2*zoom))) - camera.position.y;
+        }
+
+        camera.translate(x,y);
+
         return false;
     }
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
         if (withinScreenX(posX) && withinScreenY(posY)) {
-            camera.translate((posX - screenX), (screenY - posY));
+            int newX = posX - screenX;
+            int newY = screenY - posY;
+            camera.translate(newX / 4, newY / 4);
             posX = screenX;
             posY = screenY;
             return true;
