@@ -45,6 +45,11 @@
             android:text="@string/quick_game" />
         <TextView style="@style/MainScreenButtonBlurb"
             android:text="@string/quick_game_explanation" />
+        <Button android:id="@+id/button_quick_game1"
+            style="@style/MainScreenButtonBlurb"
+            android:text="@string/quick_game" />
+        <TextView style="@style/MainScreenButtonBlurb"
+            android:text="@string/invite_players_explanation" />
         <Button android:id="@+id/button_invite_players"
             style="@style/MainScreenButton"
             android:text="@string/invite_players" />

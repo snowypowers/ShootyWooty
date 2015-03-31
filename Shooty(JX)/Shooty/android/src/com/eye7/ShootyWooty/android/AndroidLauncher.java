@@ -33,10 +33,9 @@ import com.google.android.gms.plus.Plus;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
+import java.util.Random;
 
 public class AndroidLauncher extends AndroidApplication implements ActionResolver, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
         View.OnClickListener, RealTimeMessageReceivedListener,
@@ -47,7 +46,7 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
      * the game with the Google Play game services API.
      */
 
-    final static String TAG = "ButtonClicker2000";
+    final static String TAG = "ShootyWooty";
 
     // Request codes for the UIs that we show with startActivityForResult:
     final static int RC_SELECT_PLAYERS = 10000;
@@ -88,8 +87,14 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
     String mIncomingInvitationId = null;
 
     // Message buffer for sending messages
-    byte[] mMsgBuf = new byte[2];
+//    byte[] mMsgBuf = new byte[2];
+    private Participant host = null;
     private View gameView;
+    private boolean iHost = false;
+    Map<String, String> moves = new HashMap<>();
+    String curMoves = null;
+    Boolean validMoves = false;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -166,17 +171,21 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
                 break;
             case R.id.button_quick_game:
                 // user wants to play against a random opponent right now
-                startQuickGame();
+                startQuickGame(2);
+                break;
+            case R.id.button_quick_game1:
+                startQuickGame(4);
                 break;
 
         }
     }
 
-    void startQuickGame() {
+    void startQuickGame(int player) {
         // quick-start a game with 1 randomly selected opponent
-        final int MIN_OPPONENTS = 1, MAX_OPPONENTS = 1;
+        final int MIN_OPPONENTS = 1, MAX_OPPONENTS = player-1;
         Bundle autoMatchCriteria = RoomConfig.createAutoMatchCriteria(MIN_OPPONENTS,
                 MAX_OPPONENTS, 0);
+
         RoomConfig.Builder rtmConfigBuilder = RoomConfig.builder(this);
         rtmConfigBuilder.setMessageReceivedListener(this);
         rtmConfigBuilder.setRoomStatusUpdateListener(this);
@@ -456,6 +465,7 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
 
     // Called when we are connected to the room. We're not ready to play yet! (maybe not everybody
     // is connected yet).
+
     @Override
     public void onConnectedToRoom(Room room) {
         Log.d(TAG, "onConnectedToRoom.");
@@ -464,7 +474,6 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
         mRoomId = room.getRoomId();
         mParticipants = room.getParticipants();
         mMyId = room.getParticipantId(Games.Players.getCurrentPlayerId(mGoogleApiClient));
-
         // print out the list of participants (for debug purposes)
         Log.d(TAG, "Room ID: " + mRoomId);
         Log.d(TAG, "My ID " + mMyId);
@@ -536,6 +545,14 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
     // participants and update the display. In a real game we would also have to check if that
     // change requires some action like removing the corresponding player avatar from the screen,
     // etc.
+
+    public void updateHost(List<String> peersWhoLeft){
+        for(String s: peersWhoLeft){
+            if (s.equals(host.getParticipantId())){
+                chooseHost();
+            }
+        }
+    }
     @Override
     public void onPeerDeclined(Room room, List<String> arg1) {
         updateRoom(room);
@@ -561,7 +578,7 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
 
     @Override
     public void onPeerLeft(Room room, List<String> peersWhoLeft) {
-        updateRoom(room);
+        updateRoom2(room, peersWhoLeft);
     }
 
     @Override
@@ -581,15 +598,21 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
 
     @Override
     public void onPeersDisconnected(Room room, List<String> peers) {
-        updateRoom(room);
+        updateRoom2(room, peers);
     }
+    void updateRoom2(Room room, List<String> peers){
+        if(room!=null) {
+            mParticipants = room.getParticipants();
+            sortParticipants();
+            if (mParticipants.get(0).getParticipantId().equals(mMyId))
+                updateHost(peers);
+        }
 
+    }
     void updateRoom(Room room) {
         if (room != null) {
             mParticipants = room.getParticipants();
-        }
-        if (mParticipants != null) {
-//            updatePeerScoresDisplay();
+            sortParticipants();
         }
     }
 
@@ -605,114 +628,130 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
     // Reset game variables in preparation for a new game.
     void resetGameVars() {
         mSecondsLeft = GAME_DURATION;
-        mScore = 0;
-        mParticipantScore.clear();
-        mFinishedParticipants.clear();
     }
-
+    public void sortParticipants(){
+        int i;
+        ArrayList<Participant> sorted = new ArrayList<>();
+        outer:
+        for (Participant p: mParticipants){
+            for(i=0; i<sorted.size(); i++){
+                if (p.getParticipantId().compareTo(sorted.get(i).getParticipantId())<0){
+                    sorted.add(i,p);
+                    continue outer;
+                }
+            }
+            sorted.add(p);
+        }
+        mParticipants = sorted;
+    }
     // Start the gameplay phase of the game.
     void startGame(boolean multiplayer) {
         mMultiplayer = multiplayer;
-//        updateScoreDisplay();
-        broadcastScore(false);
+        if(mMultiplayer) {
+            sortParticipants();
+            if (mParticipants.get(0).getParticipantId().equals(mMyId)) {
+                Log.d(TAG, "Choosing Host");
+                chooseHost();
+            }
+        }
         switchToScreen(R.id.screen_game);
 
 
     }
-
-
-
-    // indicates the player scored one point
-    void scoreOnePoint() {
-        if (mSecondsLeft <= 0)
-            return; // too late!
-        ++mScore;
-//        updateScoreDisplay();
-//        updatePeerScoresDisplay();
-
-        // broadcast our new score to our peers
-        broadcastScore(false);
+    public boolean getValid(){
+        return validMoves;
+    }
+    public void setValid(boolean v){
+        validMoves = v;
+    }
+    public String getMoves(){
+        return curMoves;
     }
 
-    /*
-     * COMMUNICATIONS SECTION. Methods that implement the game's network
-     * protocol.
-     */
+    public Participant getHost(String s){
+        Log.d(TAG, "Getting Host");
+        for(Participant p : mParticipants){
+            if (p.getParticipantId().equals(s)){
+                return p;
+            }
+        }
+        Log.d(TAG, "Could not find Host");
+        return null;
+    }
+    public void chooseHost(){
+        Random rnd = new Random();
+        String s = mParticipants.get(rnd.nextInt(mParticipants.size()-1)).getParticipantId();
+        host = getHost(s);
+        if(host.getParticipantId().equals(mMyId))
+            iHost = true;
+        sendMessageAll("$", s);
+        Log.d(TAG, "Host chosen message sent "+s + mMyId);
+    }
 
-    // Score of other participants. We update this as we receive their scores
-    // from the network.
-    Map<String, Integer> mParticipantScore = new HashMap<String, Integer>();
-
-    // Participants who sent us their final score.
-    Set<String> mFinishedParticipants = new HashSet<String>();
-
-    // Called when we receive a real-time message from the network.
-    // Messages in our game are made up of 2 bytes: the first one is 'F' or 'U'
-    // indicating
-    // whether it's a final or interim score. The second byte is the score.
-    // There is also the
-    // 'S' message, which indicates that the game should start.
+    public void readyToSend(){
+        String movestoSend = "";
+        for(Participant p:mParticipants){
+            movestoSend += moves.get(p.getParticipantId());
+        }
+        sendMessageAll("",movestoSend);
+        curMoves = movestoSend;
+        validMoves = true;
+        moves = new HashMap<>();
+    }
     @Override
     public void onRealTimeMessageReceived(RealTimeMessage rtm) {
+        Log.d(TAG, "Message Received");
         byte[] buf = rtm.getMessageData();
+        String s = new String(buf);
         String sender = rtm.getSenderParticipantId();
-        Log.d(TAG, "Message received: " + (char) buf[0] + "/" + (int) buf[1]);
-
-        if (buf[0] == 'F' || buf[0] == 'U') {
-            // score update.
-            int existingScore = mParticipantScore.containsKey(sender) ?
-                    mParticipantScore.get(sender) : 0;
-            int thisScore = (int) buf[1];
-            if (thisScore > existingScore) {
-                // this check is necessary because packets may arrive out of
-                // order, so we
-                // should only ever consider the highest score we received, as
-                // we know in our
-                // game there is no way to lose points. If there was a way to
-                // lose points,
-                // we'd have to add a "serial number" to the packet.
-                mParticipantScore.put(sender, thisScore);
-            }
-
-            // update the scores on the screen
-//            updatePeerScoresDisplay();
-
-            // if it's a final score, mark this participant as having finished
-            // the game
-            if ((char) buf[0] == 'F') {
-                mFinishedParticipants.add(rtm.getSenderParticipantId());
+        if (s.charAt(0)=='$'){
+            host = getHost(s.substring(1));
+            if(host.getParticipantId().equals(mMyId))
+                iHost = true;
+        }
+        if(s.charAt(0)=='!' &&  iHost){
+            moves.put(sender,s);
+            if (moves.size()==mParticipants.size()){
+                readyToSend();
             }
         }
+        else if (s.charAt(0)=='!'){
+            curMoves = s;
+            validMoves = true;
+        }
+        Log.d(TAG, "Message received: " + s);
+
     }
-
-    // Broadcast my score to everybody else.
-    void broadcastScore(boolean finalScore) {
-        if (!mMultiplayer)
-            return; // playing single-player mode
-
-        // First byte in message indicates whether it's a final score or not
-        mMsgBuf[0] = (byte) (finalScore ? 'F' : 'U');
-
-        // Second byte is the score.
-        mMsgBuf[1] = (byte) mScore;
-
-        // Send to every other participant.
-        for (Participant p : mParticipants) {
+    public void sendMessageHost(String s){
+        if(!mMultiplayer)
+            return;
+        if (!iHost) {
+            byte[] bytes = ("!" + s).getBytes();
+            Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, bytes,
+                    mRoomId, host.getParticipantId());
+        }
+        else {
+            moves.put(mMyId,"!"+s);
+        }
+    }
+    public void sendMessageAll(String x, String s){
+        if(!mMultiplayer)
+            return;
+        byte[] bytes = (x+s).getBytes();
+        for (Participant p : mParticipants){
             if (p.getParticipantId().equals(mMyId))
                 continue;
-            if (p.getStatus() != Participant.STATUS_JOINED)
+            if (p.getStatus()==Participant.STATUS_LEFT)
                 continue;
-            if (finalScore) {
-                // final score notification must be sent via reliable message
-                Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, mMsgBuf,
-                        mRoomId, p.getParticipantId());
-            } else {
-                // it's an interim score notification, so we can use unreliable
-                Games.RealTimeMultiplayer.sendUnreliableMessage(mGoogleApiClient, mMsgBuf, mRoomId,
-                        p.getParticipantId());
-            }
+
+            int b = Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, bytes,
+                    mRoomId, p.getParticipantId());
+            Log.d(TAG, "Message sent "+Integer.toString(b)+ p.getParticipantId());
         }
+
     }
+
+
 
     /*
      * UI SECTION. Methods that implement the game's UI.
@@ -766,45 +805,7 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
         }
     }
 
-    // updates the label that shows my score
-//    void updateScoreDisplay() {
-//        ((TextView) findViewById(R.id.my_score)).setText(formatScore(mScore));
-//    }
 
-    // formats a score as a three-digit number
-    String formatScore(int i) {
-        if (i < 0)
-            i = 0;
-        String s = String.valueOf(i);
-        return s.length() == 1 ? "00" + s : s.length() == 2 ? "0" + s : s;
-    }
-
-    // updates the screen with the scores from our peers
-//    void updatePeerScoresDisplay() {
-//        ((TextView) findViewById(R.id.score0)).setText(formatScore(mScore) + " - Me");
-//        int[] arr = {
-//                R.id.score1, R.id.score2, R.id.score3
-//        };
-//        int i = 0;
-//
-//        if (mRoomId != null) {
-//            for (Participant p : mParticipants) {
-//                String pid = p.getParticipantId();
-//                if (pid.equals(mMyId))
-//                    continue;
-//                if (p.getStatus() != Participant.STATUS_JOINED)
-//                    continue;
-//                int score = mParticipantScore.containsKey(pid) ? mParticipantScore.get(pid) : 0;
-//                ((TextView) findViewById(arr[i])).setText(formatScore(score) + " - " +
-//                        p.getDisplayName());
-//                ++i;
-//            }
-//        }
-//
-//        for (; i < arr.length; ++i) {
-//            ((TextView) findViewById(arr[i])).setText("");
-//        }
-//    }
 
     /*
      * MISC SECTION. Miscellaneous methods.
