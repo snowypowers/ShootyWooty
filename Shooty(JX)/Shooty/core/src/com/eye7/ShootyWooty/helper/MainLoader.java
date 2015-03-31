@@ -21,7 +21,7 @@ public class MainLoader {
         green = new BitmapFont(Gdx.files.internal("fonts/green.fnt"),true); // green font
         white.setScale(GameConstants.SCALE_X, GameConstants.SCALE_Y); // scale it to size
         green.setScale(GameConstants.SCALE_X, GameConstants.SCALE_Y);
-        atlas = new TextureAtlas(Gdx.files.internal("Gbuttons/Gbuttons.pack")); // atlas for skin
+        atlas = new TextureAtlas(Gdx.files.internal("buttons/Gbuttons.pack")); // atlas for skin
         skin = new Skin(atlas); // skin containing drawables
     }
 }

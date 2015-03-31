@@ -1,0 +1,103 @@
+
+Gbuttons.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+buttonBlank.down
+  rotate: false
+  xy: 1, 367
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+buttonBlank.up
+  rotate: false
+  xy: 1, 237
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+buttonD.down
+  rotate: false
+  xy: 131, 367
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+buttonD.up
+  rotate: false
+  xy: 1, 107
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+buttonF.down
+  rotate: false
+  xy: 131, 237
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+buttonF.up
+  rotate: false
+  xy: 261, 367
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+buttonL.down
+  rotate: false
+  xy: 131, 107
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+buttonL.up
+  rotate: false
+  xy: 261, 237
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+buttonR.down
+  rotate: false
+  xy: 391, 367
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+buttonR.up
+  rotate: false
+  xy: 261, 107
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+bullet
+  rotate: false
+  xy: 1, 54
+  size: 59, 51
+  orig: 59, 51
+  offset: 0, 0
+  index: -1
+bulletChosen
+  rotate: false
+  xy: 391, 314
+  size: 59, 51
+  orig: 59, 51
+  offset: 0, 0
+  index: -1
+bulletChosenR
+  rotate: false
+  xy: 521, 444
+  size: 59, 51
+  orig: 59, 51
+  offset: 0, 0
+  index: -1
+bulletR
+  rotate: false
+  xy: 1, 1
+  size: 59, 51
+  orig: 59, 51
+  offset: 0, 0
+  index: -1

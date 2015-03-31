@@ -10,7 +10,7 @@ import com.badlogic.gdx.math.Vector2;
 
 public class Bullet {
 
-    private static Texture pic = new Texture(Gdx.files.internal("bullet.png"));
+    private static Texture pic = new Texture(Gdx.files.internal("bullet_2.png"));
 
     private Vector2 position;
     private Vector2 velocity;

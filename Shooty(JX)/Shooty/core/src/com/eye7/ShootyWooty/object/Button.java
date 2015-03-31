@@ -1,18 +1,18 @@
 package com.eye7.ShootyWooty.object;
 
-        import java.util.ArrayList;
+import java.util.ArrayList;
 
-        import com.badlogic.gdx.Gdx;
-        import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-        import com.badlogic.gdx.scenes.scene2d.Actor;
-        import com.badlogic.gdx.scenes.scene2d.Stage;
-        import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-        import com.badlogic.gdx.scenes.scene2d.ui.ImageButton.ImageButtonStyle;
-        import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-        import com.badlogic.gdx.scenes.scene2d.ui.Table;
-        import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-        import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-        import com.eye7.ShootyWooty.helper.MainLoader;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton.ImageButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.eye7.ShootyWooty.helper.MainLoader;
 
 /**
  * @author PT
@@ -30,7 +30,7 @@ public class Button {
     private Table table;
     private ImageButton moveButton, bulletButtonL,bulletButtonR;
 
-    private ArrayList<Drawable> buttonUP,buttonDOWN,bullet;
+    private ArrayList<Drawable> buttonUP,buttonDOWN,bulletR,bulletL;
 
 
     String moves;
@@ -55,8 +55,8 @@ public class Button {
 
         buttonUP = new ArrayList<Drawable>(); // array containing drawables for buttonMove when not pressed
         buttonDOWN = new ArrayList<Drawable>(); // array containing drawables for buttonMove when pressed
-        bullet = new ArrayList<Drawable>(); // array containing drawables for bulletButton
-
+        bulletL = new ArrayList<Drawable>(); // array containing drawables for bulletButton
+        bulletR = new ArrayList<Drawable>();
         imageButtonSytle = new ImageButtonStyle(); // imageButtonSytle for buttonMove
         imageButtonSytle2 = new ImageButtonStyle(); // imageButtonSytle for bulletButtonR
         imageButtonSytle3 = new ImageButtonStyle(); // imageButtonSytle for bulletButtonF
@@ -76,14 +76,15 @@ public class Button {
         bulletInitializer();
 
         moveButton = new ImageButton(imageButtonSytle); // create a buttons
-        moveButton.pad(10);
+        moveButton.pad(0);
         bulletButtonL = new ImageButton(imageButtonSytle2);
-        bulletButtonL.pad(10);
+        bulletButtonL.pad(0);
         bulletButtonR = new ImageButton(imageButtonSytle3);
-        bulletButtonR.pad(10);
+        bulletButtonR.pad(0);
 
         setButtonstyle(); // add button styles to array
-        setBulletStyle();
+        setBulletStyleL();
+        setBulletStyleR();
 
 
         // Buttons listener
@@ -111,8 +112,8 @@ public class Button {
             public void changed(ChangeEvent event, Actor actor) {
 
                 if (!lock) {
-                    imageButtonSytle2.up = bullet.get(nbulletL);
-                    imageButtonSytle2.down = bullet.get(nbulletL);
+                    imageButtonSytle2.up = bulletL.get(nbulletL);
+                    imageButtonSytle2.down = bulletL.get(nbulletL);
 
 //                    Gdx.app.log("Button", moves);
                     if (nbulletL == 1) {
@@ -132,8 +133,8 @@ public class Button {
             public void changed(ChangeEvent event, Actor actor) {
 
                 if (!lock) {
-                    imageButtonSytle3.up = bullet.get(nbulletR);
-                    imageButtonSytle3.down = bullet.get(nbulletR);
+                    imageButtonSytle3.up = bulletR.get(nbulletR);
+                    imageButtonSytle3.down = bulletR.get(nbulletR);
                     if (nbulletR == 1) {
                         moves = moves.substring(0, 2) + "0";
                         nbulletR = 0;
@@ -149,6 +150,7 @@ public class Button {
         });
 
         table.row();
+        table.pad(100);
         table.add(bulletButtonL);
         table.add(moveButton);
         table.add(bulletButtonR);
@@ -164,13 +166,18 @@ public class Button {
     public void bulletInitializer() {
         imageButtonSytle2.up = MainLoader.skin.getDrawable("bullet");
         imageButtonSytle2.down = MainLoader.skin.getDrawable("bullet");
-        imageButtonSytle3.up = MainLoader.skin.getDrawable("bullet");
-        imageButtonSytle3.down = MainLoader.skin.getDrawable("bullet");
+        imageButtonSytle3.up = MainLoader.skin.getDrawable("bulletR");
+        imageButtonSytle3.down = MainLoader.skin.getDrawable("bulletR");
     }
     // bullets methods
-    public void setBulletStyle(){
-        bullet.add(skin.getDrawable("bulletChosen"));
-        bullet.add(skin.getDrawable("bullet"));
+    public void setBulletStyleL(){
+        bulletL.add(skin.getDrawable("bulletChosen"));
+        bulletL.add(skin.getDrawable("bullet"));
+
+    }
+    public void setBulletStyleR(){
+        bulletR.add(skin.getDrawable("bulletChosenR"));
+        bulletR.add(skin.getDrawable("bulletR"));
 
     }
 
@@ -193,8 +200,8 @@ public class Button {
         imageButtonSytle.down = skin.getDrawable("buttonBlank.down");
         imageButtonSytle2.up = MainLoader.skin.getDrawable("bullet");
         imageButtonSytle2.down = MainLoader.skin.getDrawable("bullet");
-        imageButtonSytle3.up = MainLoader.skin.getDrawable("bullet");
-        imageButtonSytle3.down = MainLoader.skin.getDrawable("bullet");
+        imageButtonSytle3.up = MainLoader.skin.getDrawable("bulletR");
+        imageButtonSytle3.down = MainLoader.skin.getDrawable("bulletR");
 
     }
 
