@@ -18,6 +18,7 @@ public class MainScreen implements Screen {
     private DisplayMap map;
     private InputMultiplexer input;
     private Game game;
+    private float runTime;
 
     public MainScreen(Game game) {
         this.game = game;
@@ -34,9 +35,10 @@ public class MainScreen implements Screen {
     @Override
     public void render(float delta) {
 
+        runTime+=delta;
         world.update(delta); // GameWorld method that calls for any updates
 
-        renderer.render(); // GameRenderer method that tells the screen what to display
+        renderer.render(runTime); // GameRenderer method that tells the screen what to display
 
         map.render();
 

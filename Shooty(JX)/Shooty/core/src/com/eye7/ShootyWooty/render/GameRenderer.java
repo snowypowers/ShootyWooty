@@ -37,6 +37,8 @@ public class GameRenderer {
     int w = Gdx.graphics.getWidth();
     int h = Gdx.graphics.getHeight();
 
+    boolean stop;
+
     public GameRenderer(GameWorld world){
         myWorld = world;
         cam = new OrthographicCamera();
@@ -46,9 +48,10 @@ public class GameRenderer {
         shapeRenderer.setProjectionMatrix(cam.combined);
         batcher = new SpriteBatch();
         batcher.setProjectionMatrix(cam.combined);
+        stop=false;
     }
 
-    public void render(){
+    public void render(float runTime){
 
 
         Gdx.gl.glClearColor(10/255.0f, 15/255.0f, 230/255.0f, 1f);
@@ -67,6 +70,16 @@ public class GameRenderer {
         MainLoader.green.draw(batcher, "Player1 blood: "+Integer.toString(GameConstants.PLAYERS.get(1).getHealth()), 0,30);
         MainLoader.green.draw(batcher, "Player2 blood: "+Integer.toString(GameConstants.PLAYERS.get(2).getHealth()), 0,60);
 
+//        if(!stop) {
+//            batcher.draw(MainLoader.Animation_cactus1_idle.getKeyFrame(runTime,true), 100, 20, 64, 64);
+//            batcher.draw(MainLoader.Animation_cactus1_RS.getKeyFrame(runTime,true), 164,84,64,64);
+//            batcher.draw(MainLoader.Animation_cactus1_LS.getKeyFrame(runTime,true), 164,20,64,64);
+//            batcher.draw(MainLoader.Animation_cactus1_back.getKeyFrame(runTime,true), 100,84,64,64);
+//            batcher.draw(MainLoader.Animation_cactus1_front.getKeyFrame(runTime,true), 228,84,64,64);
+//            batcher.draw(MainLoader.Animation_cactus1_score.getKeyFrame(runTime,true), 228,20,64,64);
+//            batcher.draw(MainLoader.Animation_faucet.getKeyFrame(runTime,true), 292,20,64+64,64+64);
+//
+//        }
         //MainLoader.white.setScale(main.scaleX, main.scaleY);
         batcher.end();
 
