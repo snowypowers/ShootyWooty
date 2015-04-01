@@ -14,7 +14,11 @@ import com.eye7.ShootyWooty.object.Timer;
  * feed update to gameScreen
  */
 public class GameWorld {
+    private final String TAG = "GameWorld";
+
     private Stage stage;
+    private GameState gameState;
+
 
     private Button button0;
     private Button button1;
@@ -36,6 +40,8 @@ public class GameWorld {
         button1 = new Button(800, 320, stage);
         button2 = new Button(800, 210, stage);
         button3 = new Button(800, 100, stage);
+
+        gameState = gameState.DECIDING;
         timer = new Timer(timerReset);
         timer.start(); // start timer
     }
@@ -49,79 +55,79 @@ public class GameWorld {
         moves[2] = button2.getMoves();
         moves[3] = button3.getMoves();
 
-        out = "Player deciding...";
-        if (time >= 30) {
-            timer.reset();
 
+        switch (gameState) {
+            case DECIDING:
+                if (time < 30) {
+                    out = "Player deciding...";
+                } else {
+                    out = "Waiting for other players";
+                    timer.reset();
 
-            out = moves[0] +" "+ moves[1] +" "+ moves[2] +" "+ moves[3]; // this out stores player inputs
-            Gdx.app.log("GameWorld", out);
-            button0.setLock(true); // lock the button from being pressed while executing moves
-            button1.setLock(true);
-            button2.setLock(true);
-            button3.setLock(true);
-            if(actionResolver.getMultiplayer()) {
-                actionResolver.sendMessageAll("!", out);
-                while (!actionResolver.getValid()) {
-//                try {
-//                    actionResolver.wait();
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-                    continue;
-                }
+                    button0.setLock(true); // lock the button from being pressed while executing moves
+                    button1.setLock(true);
+                    button2.setLock(true);
+                    button3.setLock(true);
 
+                    Gdx.app.log("GameWorld", "Creating TurnHandler");
+                    th = new TurnHandler(actionResolver);
 
-                String OppMoves = actionResolver.getMoves();
-                //!move!move
-                //!0F00B00B01F1!1F10B11B10F1
-                Gdx.app.log("Opponent Moves", OppMoves);
-                actionResolver.setValid(false);
-//            actionResolver.setSignal(false);
-            }
-            button0.resetButton(); // reset the button display
-            button1.resetButton();
-            button2.resetButton();
-            button3.resetButton();
-            Gdx.app.log("GameWorld", "Creating TurnHandler");
-            th = new TurnHandler();
-
-            //Code to add turns to TurnHandler here
-            th.addTurn(GameConstants.PLAYER_TAG, moves);
-            th.addTurn(2, moves);
-            Gdx.app.log("GameWorld", "Starting TurnHandler");
-            th.start();
-
-            //Thread endTurn sees if current turn is complete and notifies Timer to start running again.
-            Thread endTurn = new Thread(new Runnable() {
-
-                public void run() {
-                    try {
-                        th.join();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
+                    if (actionResolver.getMultiplayer()) {
+                        String myMove = moves[0] + " " + moves[1] + " " + moves[2] + " " + moves[3];
+                        actionResolver.sendMessageAll("!", myMove);
+                        Gdx.app.log(TAG, "Sending move: " + myMove);
+                    } else {
+                        //Code to add turns to TurnHandler here (SINGLE PLAYER)
+                        for (int i = 1; i <= GameConstants.NUM_PLAYERS; i++) {
+                            th.addTurn(i, moves);
+                        }
                     }
-                    Gdx.app.log("GameWorld", "Turn End");
-                    synchronized (timerReset) {
-                        timerReset.notify();
-                    }
+
+                    Gdx.app.log("GameWorld", "Starting TurnHandler");
+                    th.start();
+                    gameState = GameState.WAITING;
+
                 }
-            });
-            endTurn.start();
+                break;
+            case WAITING:
+                if (th.isExecuting()) {
+                    button0.resetButton(); // reset the button display
+                    button1.resetButton();
+                    button2.resetButton();
+                    button3.resetButton();
 
-        }
-        if (time == 0) {
+                    //Thread endTurn sees if current turn is complete and notifies Timer to start running again.
+                    Thread endTurn = new Thread(new Runnable() {
 
-            button0.setLock(false); // release the lock
-            button1.setLock(false);
-            button2.setLock(false);
-            button3.setLock(false);
+                        public void run() {
+                            try {
+                                th.join();
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                            Gdx.app.log("GameWorld", "Turn End");
+                            synchronized (timerReset) {
+                                timerReset.notify();
+                            }
+                            button0.setLock(false); // release the lock
+                            button1.setLock(false);
+                            button2.setLock(false);
+                            button3.setLock(false);
 
-            button0.resetMoves(); // reset the moves to "0B0"
-            button1.resetMoves();
-            button2.resetMoves();
-            button3.resetMoves();
+                            button0.resetMoves(); // reset the moves to "0B0"
+                            button1.resetMoves();
+                            button2.resetMoves();
+                            button3.resetMoves();
+                            gameState = GameState.DECIDING;
+                        }
+                    });
+                    endTurn.start();
 
+                    gameState = GameState.EXECUTING;
+                }
+                break;
+            case EXECUTING:
+                break;
         }
 
         time = timer.getTime(); // get time from time thread
@@ -163,5 +169,11 @@ public class GameWorld {
     }
 
 
+}
+
+enum GameState {
+    DECIDING,
+    WAITING,
+    EXECUTING
 }
 
