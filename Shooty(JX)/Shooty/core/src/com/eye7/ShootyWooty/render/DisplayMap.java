@@ -38,7 +38,7 @@ public class DisplayMap implements InputProcessor {
     OrthogonalTiledMapRenderer tiledMapRenderer;
     GameMap gameMap;
     private ShapeRenderer shapeRenderer;
-    int zoom = 4;
+    int zoom = 2;
     int posX;
     int posY;
 
@@ -62,7 +62,7 @@ public class DisplayMap implements InputProcessor {
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 960 / zoom, 540 / zoom);
         camera.update();
-        tiledMap = new TmxMapLoader().load("maps/size10map_ui.tmx");
+        tiledMap = new TmxMapLoader().load("maps/borderedmap.tmx");
         tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap, sb);
 
         gameMap = new GameMap(tiledMap);

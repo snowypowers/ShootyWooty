@@ -47,7 +47,7 @@ public class Button {
         this.x = x; // x coordinate to set table location
         this.y = y; // y coordinate to set table location
         this.stage = stage;
-        this.moves = "0B"; // default move
+        this.moves = "0B0"; // default move
         lock = false; // lock for when moves are being execute
 
         skin = MainLoader.skin;

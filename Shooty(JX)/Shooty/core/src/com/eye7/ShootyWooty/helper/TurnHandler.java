@@ -12,10 +12,15 @@ import java.util.concurrent.Phaser;
  */
 public class TurnHandler extends Thread {
     private final String TAG = "TurnHandler";
+
+    private ActionResolver actionResolver;
     private MoveHandler[] moveHandlers = null;
     private CyclicBarrier cyclicBarrier = null;
 
-    public TurnHandler () {
+    public boolean executing = false;
+
+    public TurnHandler (ActionResolver ar) {
+        actionResolver = ar;
         /*
         Phaser has a total of 8 phases, with each turn consisting of 2 phases. Odd numbered phases are for movement and even numbered phases are for shooting
          */
@@ -31,6 +36,25 @@ public class TurnHandler extends Thread {
     }
 
     public void run() {
+        if(actionResolver.getMultiplayer()) {
+            while (!actionResolver.getValid()) {
+//                try {
+//                    actionResolver.wait();
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+                continue;
+            }
+            String[] moveArray = actionResolver.getMoves().split("!");
+            //!move!move
+            //!0F00B00B01F1!1F10B11B10F1
+            for (int i = 0; i < moveArray.length;i++) {
+                addTurn(i+1, new String[]{moveArray[i].substring(0,3), moveArray[i].substring(3,6), moveArray[i].substring(6,9), moveArray[i].substring(9,12)});
+            }
+            actionResolver.setValid(false);
+//            actionResolver.setSignal(false);
+        }
+        executing = true;
         Gdx.app.log(TAG, "Starting MoveHandlers");
         for (MoveHandler mh: moveHandlers) {
             mh.start();
@@ -44,5 +68,9 @@ public class TurnHandler extends Thread {
            }
        }
         Gdx.app.log(TAG, "Turn Ended!");
+    }
+
+    public boolean isExecuting() {
+        return executing;
     }
 }
