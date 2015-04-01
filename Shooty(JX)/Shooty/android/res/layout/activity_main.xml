@@ -33,20 +33,29 @@
     </LinearLayout>
 
     <!-- MAIN SCREEN -->
-    <LinearLayout android:id="@+id/screen_main" style="@style/LLScreen">
+    <LinearLayout android:id="@+id/screen_main" style="@style/LLScreen"
+        android:background="@drawable/homescreen">
+
         <Button android:id="@+id/button_single_player_2"
             style="@style/MainScreenButton"
-            android:text="@string/single_player" />
+            android:background="@drawable/tutorial"
+            android:layout_width="380px"
+            android:layout_height="125px" />
+
         <!--<TextView style="@style/MainScreenButtonBlurb"-->
             <!--android:text="@string/single_player_explanation" />-->
         <Button android:id="@+id/button_quick_game"
             style="@style/MainScreenButton"
-            android:text="@string/quick_game" />
+            android:background="@drawable/players2"
+            android:layout_width="380px"
+            android:layout_height="125px" />
         <!--<TextView style="@style/MainScreenButtonBlurb"-->
             <!--android:text="@string/quick_game_explanation" />-->
-        <Button android:id="@+id/button_quick_game1"
-            style="@style/MainScreenButtonBlurb"
-            android:text="@string/quick_game" />
+        <Button android:id="@+id/button_quick_game1" style="@style/MainScreenButton"
+            android:background="@drawable/players4"
+
+            android:layout_width="380px"
+            android:layout_height="125px" />
         <!--<TextView style="@style/MainScreenButtonBlurb"-->
             <!--android:text="@string/invite_players_explanation" />-->
         <!--<Button android:id="@+id/button_invite_players"-->
@@ -62,6 +71,7 @@
         <!--<Button android:id="@+id/button_sign_out"-->
             <!--style="@style/SignOutButton"-->
             <!--android:text="@string/sign_out" />-->
+
     </LinearLayout>
 
     <!-- INVITATION POPUP -->
