@@ -35,10 +35,10 @@ public class MoveHandler extends Thread{
 
 
 
-    private float PLAYER_DISTANCE = 32; // control player amount to move
+    private float PLAYER_DISTANCE = 64; // control player amount to move
     private float PLAYER_INCREMENT = 1f; // pixels per tick
 
-    private float BULLET_DISTANCE= 96; // control bullet amount to move
+    private float BULLET_DISTANCE= 128; // control bullet amount to move
     private float BULLET_INCREMENT = 5f; // pixels per tick
 
     private float bullet_distance_R;
@@ -373,8 +373,11 @@ public class MoveHandler extends Thread{
     public boolean checkPlayerHit(CircleMapObject mapObject1, CircleMapObject mapObject2) {
 
         if (Intersector.overlaps(mapObject1.getCircle(), mapObject2.getCircle())) {
-            return true;
-
+            if (mapObject2 == player.getBoundingCircle()) {
+                return false;
+            }else {
+                return true;
+            }
         }
         else return false;
     }

@@ -14,8 +14,8 @@ public class GameMap {
     private TiledMap map;
     private static Array<Rectangle> rocks=  new Array<Rectangle>();
     private MapObjects spawns;
-    public static int tileWidth = 32;
-    public static int tileHeight =32;
+    public static int tileWidth = 64;
+    public static int tileHeight =64;
     public GameMap(TiledMap tmap) {
         GameConstants.PLAYERS.clear(); // Resets the PlayerList
         this.map = tmap;
@@ -41,12 +41,12 @@ public class GameMap {
 
     }
 
-    public void render(SpriteBatch sb) {
+    public void render(SpriteBatch sb, float delta) {
         sb.enableBlending();
         sb.begin();
 
         for (Player p: GameConstants.PLAYERS.values()) {
-            p.draw(sb);
+            p.draw(sb, delta);
         }
         sb.end();
     }

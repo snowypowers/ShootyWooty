@@ -20,12 +20,12 @@ public class MainLoader {
     public static Skin skin;
 
 
-    public static Animation Animation_cactus1_idle;
-    public static Animation Animation_cactus1_RS;
-    public static Animation Animation_cactus1_LS;
-    public static Animation Animation_cactus1_back;
-    public static Animation Animation_cactus1_front;
-    public static Animation Animation_cactus1_score;
+    public static Animation animation_cactus1_idle;
+    public static Animation animation_cactus1_RS;
+    public static Animation animation_cactus1_LS;
+    public static Animation animation_cactus1_back;
+    public static Animation animation_cactus1_front;
+    public static Animation animation_cactus1_score;
 
     public static Animation Animation_faucet;
 
@@ -49,7 +49,7 @@ public class MainLoader {
             cactus_idle1+=64;
         }
 
-        Animation_cactus1_idle = new Animation(0.2f,cactus);
+        animation_cactus1_idle = new Animation(0.2f,cactus);
 
         Texture cactus1_RS = new Texture(Gdx.files.internal("Character1/Cactus1_R.png"));
         cactus1_RS.setFilter(Texture.TextureFilter.Nearest,Texture.TextureFilter.Nearest);
@@ -67,8 +67,8 @@ public class MainLoader {
             cactus_rs1+=64;
         }
 
-        Animation_cactus1_RS = new Animation(0.4f,cactus_RS);
-        Animation_cactus1_LS = new Animation(0.4f,cactus_LS);
+        animation_cactus1_RS = new Animation(0.4f,cactus_RS);
+        animation_cactus1_LS = new Animation(0.4f,cactus_LS);
 
         Texture cactus1_back = new Texture(Gdx.files.internal("Character1/Cactus1_back.png"));
         cactus1_RS.setFilter(Texture.TextureFilter.Nearest,Texture.TextureFilter.Nearest);
@@ -80,7 +80,7 @@ public class MainLoader {
             cactus_back[i].flip(false,true);
             cactus_back1+=64;
         }
-        Animation_cactus1_back = new Animation(0.4f,cactus_back);
+        animation_cactus1_back = new Animation(0.4f,cactus_back);
 
         Texture cactus1_front = new Texture(Gdx.files.internal("Character1/Cactus1_front.png"));
         cactus1_RS.setFilter(Texture.TextureFilter.Nearest,Texture.TextureFilter.Nearest);
@@ -92,7 +92,7 @@ public class MainLoader {
             cactus_front[i].flip(false,true);
             cactus_front1+=64;
         }
-        Animation_cactus1_front = new Animation(0.4f,cactus_front);
+        animation_cactus1_front = new Animation(0.4f,cactus_front);
 
 
         Texture score = new Texture(Gdx.files.internal("Character1/Cactus1_score.png"));
@@ -104,7 +104,7 @@ public class MainLoader {
             scores[i].flip(false,true);
             cactus1_score+=64;
         }
-        Animation_cactus1_score = new Animation(0.1f,scores);
+        animation_cactus1_score = new Animation(0.1f,scores);
 
         Texture faucet = new Texture(Gdx.files.internal("ShootyUI/Sprite_faucet.png"));
         faucet.setFilter(Texture.TextureFilter.Nearest,Texture.TextureFilter.Nearest);
@@ -119,4 +119,5 @@ public class MainLoader {
         Animation_faucet = new Animation(0.2f,faucets);
 
     }
+
 }

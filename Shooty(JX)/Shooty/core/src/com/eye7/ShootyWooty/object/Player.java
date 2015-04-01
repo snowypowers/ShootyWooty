@@ -2,8 +2,10 @@ package com.eye7.ShootyWooty.object;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.objects.CircleMapObject;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
@@ -34,6 +36,14 @@ public class Player {
     private CircleMapObject boundingCircle;
     private float RADIUS = 2;
 
+    private Animation animation_idle;
+    private Animation animation_north;
+    private Animation animation_south;
+    private Animation animation_west;
+    private Animation animation_east;
+    private float animationFrameTime;
+
+
 	// takes in x,y as origin
 	public Player(GameMap map, int x, int y, int d) {
         playerID = nextID;
@@ -42,6 +52,7 @@ public class Player {
 
         this.map = map; // Reference to the GameMap object in order to get the positions of other objects;
 
+        setUpSprites();
         this.pic = new Texture(Gdx.files.internal("players/player"+String.valueOf(playerID)+".png"));
 		this.x = x;
 		this.y = y;
@@ -58,7 +69,7 @@ public class Player {
         boundingCircle = new CircleMapObject(this.x,this.y,RADIUS);
 	}
 
-    public void draw(SpriteBatch sb) {
+    public void draw(SpriteBatch sb, float delta) {
         if (shootLeft) {
             bulletl.draw(sb);
         }
@@ -142,6 +153,10 @@ public class Player {
         return bulletr;
     }
 
+    public int getHealth(){
+        return health;
+    }
+
     public CircleMapObject getBoundingCircle(){
         return boundingCircle;
     }
@@ -174,10 +189,12 @@ public class Player {
             //Gdx.app.log("playerSnapR", String.valueOf(90 - Roff));
         }
     }
-    public int getHealth(){
-        return health;
-    }
 
+    private void setUpSprites() {
+        String path = "Character"+String.valueOf(playerID);
+
+
+    }
 
 
 
