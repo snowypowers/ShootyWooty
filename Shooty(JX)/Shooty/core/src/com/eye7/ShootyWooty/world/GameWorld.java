@@ -60,24 +60,25 @@ public class GameWorld {
             button1.setLock(true);
             button2.setLock(true);
             button3.setLock(true);
-            actionResolver.sendMessageAll("!",out);
-            while(!actionResolver.getValid()){
+            if(actionResolver.getMultiplayer()) {
+                actionResolver.sendMessageAll("!", out);
+                while (!actionResolver.getValid()) {
 //                try {
 //                    actionResolver.wait();
 //                } catch (InterruptedException e) {
 //                    e.printStackTrace();
 //                }
-                continue;
-            }
+                    continue;
+                }
 
 
-            String OppMoves = actionResolver.getMoves();
-            //!move!move
-            //!0F00B00B01F1!1F10B11B10F1
-            Gdx.app.log("Opponent Moves", OppMoves);
-            actionResolver.setValid(false);
+                String OppMoves = actionResolver.getMoves();
+                //!move!move
+                //!0F00B00B01F1!1F10B11B10F1
+                Gdx.app.log("Opponent Moves", OppMoves);
+                actionResolver.setValid(false);
 //            actionResolver.setSignal(false);
-
+            }
             button0.resetButton(); // reset the button display
             button1.resetButton();
             button2.resetButton();

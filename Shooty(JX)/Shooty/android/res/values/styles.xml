@@ -29,7 +29,6 @@
     <style name="LLScreen" parent="@style/GameScreen">
         <item name="android:orientation">vertical</item>
         <item name="android:gravity">center</item>
-        <item name="android:padding">30dp</item>
     </style>
 
     <style name="GameplayScreen" parent="@style/LLScreen">
@@ -38,8 +37,6 @@
 
 
     <style name="InvPopup" parent="@style/LLScreen">
-        <item name="android:background">@color/PopupColor</item>
-        <item name="android:padding">10dp</item>
         <item name="android:layout_gravity">top|right</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
@@ -53,7 +50,6 @@
         <item name="android:text">@string/game_title</item>
         <item name="android:textColor">@color/AccentColor</item>
         <item name="android:textSize">@dimen/TitleSize</item>
-        <item name="android:layout_marginBottom">40dp</item>
     </style>
 
     <style name="Blurb">

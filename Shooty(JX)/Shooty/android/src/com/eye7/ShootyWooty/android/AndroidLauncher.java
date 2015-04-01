@@ -25,7 +25,6 @@ import com.google.android.gms.games.multiplayer.OnInvitationReceivedListener;
 import com.google.android.gms.games.multiplayer.Participant;
 import com.google.android.gms.games.multiplayer.realtime.RealTimeMessage;
 import com.google.android.gms.games.multiplayer.realtime.RealTimeMessageReceivedListener;
-import com.google.android.gms.games.multiplayer.realtime.RealTimeMultiplayer;
 import com.google.android.gms.games.multiplayer.realtime.Room;
 import com.google.android.gms.games.multiplayer.realtime.RoomConfig;
 import com.google.android.gms.games.multiplayer.realtime.RoomStatusUpdateListener;
@@ -37,13 +36,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 public class AndroidLauncher extends AndroidApplication implements ActionResolver, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
         View.OnClickListener, RealTimeMessageReceivedListener,
-        RoomStatusUpdateListener, RoomUpdateListener, OnInvitationReceivedListener, RealTimeMultiplayer.ReliableMessageSentCallback{
+        RoomStatusUpdateListener, RoomUpdateListener, OnInvitationReceivedListener{
 
     /*
      * API INTEGRATION SECTION. This section contains the code that integrates
@@ -98,11 +94,6 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
     private Map<String, String> moves = new HashMap<>();
     private String curMoves = null;
     private Boolean validMoves = false;
-    private Map<String,Integer> statusMessage = new HashMap<>();
-    private int aknow = 0;
-    private boolean signalStart = false;
-    private Lock lock = new ReentrantLock();
-    private Condition execute = lock.newCondition();
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -150,27 +141,27 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
                 mSignInClicked = true;
                 mGoogleApiClient.connect();
                 break;
-            case R.id.button_sign_out:
-                // user wants to sign out
-                // sign out.
-                Log.d(TAG, "Sign-out button clicked");
-                mSignInClicked = false;
-                Games.signOut(mGoogleApiClient);
-                mGoogleApiClient.disconnect();
-                switchToScreen(R.id.screen_sign_in);
-                break;
-            case R.id.button_invite_players:
-                // show list of invitable players
-                intent = Games.RealTimeMultiplayer.getSelectOpponentsIntent(mGoogleApiClient, 1, 3);
-                switchToScreen(R.id.screen_wait);
-                startActivityForResult(intent, RC_SELECT_PLAYERS);
-                break;
-            case R.id.button_see_invitations:
-                // show list of pending invitations
-                intent = Games.Invitations.getInvitationInboxIntent(mGoogleApiClient);
-                switchToScreen(R.id.screen_wait);
-                startActivityForResult(intent, RC_INVITATION_INBOX);
-                break;
+//            case R.id.button_sign_out:
+//                // user wants to sign out
+//                // sign out.
+//                Log.d(TAG, "Sign-out button clicked");
+//                mSignInClicked = false;
+//                Games.signOut(mGoogleApiClient);
+//                mGoogleApiClient.disconnect();
+//                switchToScreen(R.id.screen_sign_in);
+//                break;
+//            case R.id.button_invite_players:
+//                // show list of invitable players
+//                intent = Games.RealTimeMultiplayer.getSelectOpponentsIntent(mGoogleApiClient, 1, 3);
+//                switchToScreen(R.id.screen_wait);
+//                startActivityForResult(intent, RC_SELECT_PLAYERS);
+//                break;
+//            case R.id.button_see_invitations:
+//                // show list of pending invitations
+//                intent = Games.Invitations.getInvitationInboxIntent(mGoogleApiClient);
+//                switchToScreen(R.id.screen_wait);
+//                startActivityForResult(intent, RC_INVITATION_INBOX);
+//                break;
             case R.id.button_accept_popup_invitation:
                 // user wants to accept the invitation shown on the invitation popup
                 // (the one we got through the OnInvitationReceivedListener).
@@ -635,7 +626,11 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
 
     // Reset game variables in preparation for a new game.
     void resetGameVars() {
-        mSecondsLeft = GAME_DURATION;
+        host = null;
+       iHost = false;
+       moves = new HashMap<>();
+       curMoves = null;
+       validMoves = false;
     }
     public void sortParticipants(){
         int i;
@@ -797,13 +792,10 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
         }
 
     }
-    public void onRealTimeMessageSent(int i, int i2, String s) {
-        Log.d(TAG, "Message Reply " + Integer.toString(i));
-        statusMessage.put(s,i);
 
+    public boolean getMultiplayer(){
+        return mMultiplayer;
     }
-
-
     /*
      * UI SECTION. Methods that implement the game's UI.
      */
@@ -811,9 +803,13 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
     // This array lists everything that's clickable, so we can install click
     // event handlers.
     final static int[] CLICKABLES = {
-            R.id.button_accept_popup_invitation, R.id.button_invite_players,
-            R.id.button_quick_game, R.id.button_see_invitations, R.id.button_sign_in,
-            R.id.button_sign_out,  R.id.button_single_player,
+            R.id.button_accept_popup_invitation,
+            //R.id.button_invite_players,
+            R.id.button_quick_game,
+            //R.id.button_see_invitations,
+            R.id.button_sign_in,
+           // R.id.button_sign_out,
+           R.id.button_single_player,
             R.id.button_single_player_2
     };
 

@@ -12,5 +12,6 @@ public interface ActionResolver {
     public void setValid(boolean v);
 //    public void setSignal(boolean v);
 //    public boolean getSignal();
+    public boolean getMultiplayer();
 
 }
