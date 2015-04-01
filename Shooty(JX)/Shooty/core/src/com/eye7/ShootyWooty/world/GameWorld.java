@@ -53,27 +53,37 @@ public class GameWorld {
         if (time >= 30) {
             timer.reset();
 
+
             out = moves[0] +" "+ moves[1] +" "+ moves[2] +" "+ moves[3]; // this out stores player inputs
             Gdx.app.log("GameWorld", out);
-            actionResolver.sendMessageHost(out);
-            while(!actionResolver.getValid()){
-                continue;
-            }
-
-            String OppMoves = actionResolver.getMoves();
-            Gdx.app.log("Opponent Moves", OppMoves);
-            actionResolver.setValid(false);
             button0.setLock(true); // lock the button from being pressed while executing moves
             button1.setLock(true);
             button2.setLock(true);
             button3.setLock(true);
+            actionResolver.sendMessageAll("!",out);
+            while(!actionResolver.getValid()){
+//                try {
+//                    actionResolver.wait();
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+                continue;
+            }
+
+
+            String OppMoves = actionResolver.getMoves();
+            //!move!move
+            //!0F00B00B01F1!1F10B11B10F1
+            Gdx.app.log("Opponent Moves", OppMoves);
+            actionResolver.setValid(false);
+//            actionResolver.setSignal(false);
 
             button0.resetButton(); // reset the button display
             button1.resetButton();
             button2.resetButton();
             button3.resetButton();
             Gdx.app.log("GameWorld", "Creating TurnHandler");
-             th = new TurnHandler();
+            th = new TurnHandler();
 
             //Code to add turns to TurnHandler here
             th.addTurn(GameConstants.PLAYER_TAG, moves);

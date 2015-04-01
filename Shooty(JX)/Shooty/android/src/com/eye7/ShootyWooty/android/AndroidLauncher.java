@@ -25,6 +25,7 @@ import com.google.android.gms.games.multiplayer.OnInvitationReceivedListener;
 import com.google.android.gms.games.multiplayer.Participant;
 import com.google.android.gms.games.multiplayer.realtime.RealTimeMessage;
 import com.google.android.gms.games.multiplayer.realtime.RealTimeMessageReceivedListener;
+import com.google.android.gms.games.multiplayer.realtime.RealTimeMultiplayer;
 import com.google.android.gms.games.multiplayer.realtime.Room;
 import com.google.android.gms.games.multiplayer.realtime.RoomConfig;
 import com.google.android.gms.games.multiplayer.realtime.RoomStatusUpdateListener;
@@ -36,10 +37,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class AndroidLauncher extends AndroidApplication implements ActionResolver, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
         View.OnClickListener, RealTimeMessageReceivedListener,
-        RoomStatusUpdateListener, RoomUpdateListener, OnInvitationReceivedListener {
+        RoomStatusUpdateListener, RoomUpdateListener, OnInvitationReceivedListener, RealTimeMultiplayer.ReliableMessageSentCallback{
 
     /*
      * API INTEGRATION SECTION. This section contains the code that integrates
@@ -91,10 +95,14 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
     private Participant host = null;
     private View gameView;
     private boolean iHost = false;
-    Map<String, String> moves = new HashMap<>();
-    String curMoves = null;
-    Boolean validMoves = false;
-
+    private Map<String, String> moves = new HashMap<>();
+    private String curMoves = null;
+    private Boolean validMoves = false;
+    private Map<String,Integer> statusMessage = new HashMap<>();
+    private int aknow = 0;
+    private boolean signalStart = false;
+    private Lock lock = new ReentrantLock();
+    private Condition execute = lock.newCondition();
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -659,6 +667,17 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
 
     }
     public boolean getValid(){
+//        if (!(statusMessage.size()==mParticipants.size())||!validMoves)
+//            return false;
+//        for(Participant p: mParticipants){
+//            if (statusMessage.get(p.getParticipantId())!=0){
+//                return false;
+//            }
+//        }
+//        Log.d(TAG, "Message valid " + Integer.toString(statusMessage.size()));
+//        aknow = 0;
+//        statusMessage = new HashMap<>();
+//        return signalStart;
         return validMoves;
     }
     public void setValid(boolean v){
@@ -667,7 +686,12 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
     public String getMoves(){
         return curMoves;
     }
-
+    //    public void setSignal(boolean v){
+//        signalStart = v;
+//    }
+//    public boolean getSignal(){
+//        return signalStart;
+//    }
     public Participant getHost(String s){
         Log.d(TAG, "Getting Host");
         for(Participant p : mParticipants){
@@ -687,17 +711,25 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
         sendMessageAll("$", s);
         Log.d(TAG, "Host chosen message sent "+s + mMyId);
     }
-
+    //    public Condition getExecute(){
+//        return execute;
+//    }
+//    public Lock getLock(){
+//        return lock;
+//    }
     public void readyToSend(){
         String movestoSend = "";
         for(Participant p:mParticipants){
             movestoSend += moves.get(p.getParticipantId());
         }
-        sendMessageAll("",movestoSend);
+//        sendMessageHost("@");
         curMoves = movestoSend;
+//        lock.unlock();
+//        execute.signalAll();
         validMoves = true;
         moves = new HashMap<>();
     }
+
     @Override
     public void onRealTimeMessageReceived(RealTimeMessage rtm) {
         Log.d(TAG, "Message Received");
@@ -709,48 +741,67 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
             if(host.getParticipantId().equals(mMyId))
                 iHost = true;
         }
-        if(s.charAt(0)=='!' &&  iHost){
+        if(s.charAt(0)=='!'){
             moves.put(sender,s);
             if (moves.size()==mParticipants.size()){
                 readyToSend();
             }
         }
-        else if (s.charAt(0)=='!'){
-            curMoves = s;
-            validMoves = true;
-        }
+//        else if (s.charAt(0)=='@' && iHost){
+//            aknow++;
+//            if (aknow==mParticipants.size()-1){
+//                sendMessageAll("*", "");
+//                signalStart = true;
+//            }
+//        }
+//        else if(s.charAt(0)=='*'){
+//            signalStart = true;
+//        }
         Log.d(TAG, "Message received: " + s);
 
     }
-    public void sendMessageHost(String s){
-        if(!mMultiplayer)
-            return;
-        if (!iHost) {
-            byte[] bytes = ("!" + s).getBytes();
-            Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, bytes,
-                    mRoomId, host.getParticipantId());
-        }
-        else {
-            moves.put(mMyId,"!"+s);
-        }
-    }
+    //    public void sendMessageHost(String s){
+//        if(!mMultiplayer)
+//            return;
+//        if (!iHost) {
+//            byte[] bytes = (s).getBytes();
+//            Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, bytes,
+//                    mRoomId, host.getParticipantId());
+//        }
+//    }
+//    public void sendAcknowledgement(String p, String s){
+//        Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, this, s.getBytes(),
+//                mRoomId, p);
+//    }
     public void sendMessageAll(String x, String s){
         if(!mMultiplayer)
             return;
+        if (x.equals("!")){
+//            lock.lock();
+            moves.put(mMyId,"!"+s);
+            if (moves.size()==mParticipants.size()){
+                readyToSend();
+            }
+
+//            statusMessage.put(mMyId,0);
+        }
         byte[] bytes = (x+s).getBytes();
         for (Participant p : mParticipants){
             if (p.getParticipantId().equals(mMyId))
                 continue;
             if (p.getStatus()==Participant.STATUS_LEFT)
                 continue;
-
-            int b = Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, bytes,
+            Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, bytes,
                     mRoomId, p.getParticipantId());
-            Log.d(TAG, "Message sent "+Integer.toString(b)+ p.getParticipantId());
+            Log.d(TAG, "Message sent "+ p.getParticipantId());
         }
 
     }
+    public void onRealTimeMessageSent(int i, int i2, String s) {
+        Log.d(TAG, "Message Reply " + Integer.toString(i));
+        statusMessage.put(s,i);
 
+    }
 
 
     /*
