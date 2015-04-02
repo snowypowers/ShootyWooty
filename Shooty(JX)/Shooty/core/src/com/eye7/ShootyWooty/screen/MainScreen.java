@@ -48,7 +48,7 @@ public class MainScreen implements Screen {
 
         renderer.render(runTime); // GameRenderer method that tells the screen what to display
 
-        map.render();
+        map.render(delta);
 
     }
 

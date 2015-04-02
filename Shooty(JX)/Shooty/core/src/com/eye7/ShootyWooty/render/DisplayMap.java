@@ -43,12 +43,12 @@ public class DisplayMap implements InputProcessor {
     int posY;
 
     //Map position
-    private double scaleWFactor = Gdx.graphics.getWidth() / 960;
-    private double scaleHFactor = Gdx.graphics.getHeight() / 540;
-    private int screenXStart = (int) (50 * scaleWFactor);
-    private int screenYStart = (int) (50 * scaleHFactor);
-    private int screenWidth = (int) (480 * scaleWFactor);
-    private int screenHeight = (int) (320 * scaleHFactor);
+    private double scaleWFactor = Gdx.graphics.getWidth() / 960.0;
+    private double scaleHFactor = Gdx.graphics.getHeight() / 540.0;
+    private int screenXStart = (int) (20 * scaleWFactor);
+    private int screenYStart = (int) (20 * scaleHFactor);
+    private int screenWidth = (int) (640 * scaleWFactor);
+    private int screenHeight = (int) (360 * scaleHFactor);
 
     private MapProperties mp;
     private int mapPixelWidth;
@@ -62,7 +62,7 @@ public class DisplayMap implements InputProcessor {
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 960 / zoom, 540 / zoom);
         camera.update();
-        tiledMap = new TmxMapLoader().load("maps/borderedmap.tmx");
+        tiledMap = new TmxMapLoader().load("maps/size20map.tmx");
         tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap, sb);
 
         gameMap = new GameMap(tiledMap);
@@ -77,13 +77,13 @@ public class DisplayMap implements InputProcessor {
 
     }
 
-    public void render () {
+    public void render (float delta) {
     //Define the rectangle where the map will be rendered
         Gdx.gl.glViewport(screenXStart, screenYStart, screenWidth, screenHeight);
         camera.update();
         tiledMapRenderer.setView(camera);
         tiledMapRenderer.render();
-        gameMap.render(sb);
+        gameMap.render(sb, delta);
         //sb.begin();
         //temp.draw(sb);
        // sb.end();
@@ -94,11 +94,13 @@ public class DisplayMap implements InputProcessor {
         scaleWFactor = width / 960.0;
         scaleHFactor = height / 540.0;
         Gdx.app.log(TAG, "Scaling: " + String.valueOf(scaleWFactor) + " " + String.valueOf(scaleHFactor));
-        screenXStart = (int) (50 * scaleWFactor);
-        screenYStart = (int) (50 * scaleHFactor);
-        screenWidth = (int) (480 * scaleWFactor);
-        screenHeight = (int) (320 * scaleHFactor);
+        screenXStart = (int) (20 * scaleWFactor);
+        screenYStart = (int) (20 * scaleHFactor);
+        screenWidth = (int) (640 * scaleWFactor);
+        screenHeight = (int) (360 * scaleHFactor);
         Gdx.app.log(TAG, "Resized to " + String.valueOf(screenWidth) + " by " + String.valueOf(screenHeight));
+        camera.setToOrtho(false,screenWidth / zoom, screenHeight / zoom);
+        camera.update();
     }
 
     //Input Processor Methods
@@ -132,13 +134,17 @@ public class DisplayMap implements InputProcessor {
         float y = 0;
         if (camera.position.x < (screenWidth / (2*zoom))) {
             x = (screenWidth/(2*zoom)) - camera.position.x;
+            Gdx.app.log(TAG, "Reached left edge. " + String.valueOf(camera.position.x) + " " + String.valueOf(x));
         } else if (camera.position.x > (mapPixelWidth - (screenWidth/(2*zoom)))) {
             x = (mapPixelWidth - (screenWidth/(2*zoom))) - camera.position.x;
+            Gdx.app.log(TAG, "Reached right edge. " + String.valueOf(camera.position.x) + " " + String.valueOf(x));
         }
         if (camera.position.y < (screenHeight / (2*zoom))) {
             y = (screenHeight/(2*zoom)) - camera.position.y;
+            Gdx.app.log(TAG, "Reached btm edge. " + String.valueOf(camera.position.y) + " " + String.valueOf(y));
         } else if (camera.position.y > (mapPixelHeight - (screenHeight/(2*zoom)))) {
             y = (mapPixelHeight - (screenHeight/(2*zoom))) - camera.position.y;
+            Gdx.app.log(TAG, "Reached top edge. " + String.valueOf(camera.position.y) + " " + String.valueOf(y));
         }
 
         camera.translate(x,y);
@@ -151,7 +157,7 @@ public class DisplayMap implements InputProcessor {
         if (withinScreenX(posX) && withinScreenY(posY)) {
             int newX = posX - screenX;
             int newY = screenY - posY;
-            camera.translate(newX / 4, newY / 4);
+            camera.translate(newX / zoom, newY / zoom);
             posX = screenX;
             posY = screenY;
             return true;

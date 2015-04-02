@@ -30,10 +30,10 @@ public class MoveHandler extends Thread{
 
 
 
-    private float PLAYER_DISTANCE = 32; // control player amount to move
+    private float PLAYER_DISTANCE = 64; // control player amount to move
     private float PLAYER_INCREMENT = 1f; // pixels per tick
 
-    private float BULLET_DISTANCE= 96; // control bullet amount to move
+    private float BULLET_DISTANCE= 128; // control bullet amount to move
     private float BULLET_INCREMENT = 5f; // pixels per tick
 
     private float bullet_distance_R;
@@ -152,22 +152,22 @@ public class MoveHandler extends Thread{
                 player.startShootLeft();
                 stopShootl = false;
             }
-            Gdx.app.log("MoveHandlerPlayerOutsideOutside",player.toString());
+  //          Gdx.app.log("MoveHandlerPlayerOutsideOutside",player.toString());
             while (!stopShootl || !stopShootr) {
 
                 // shoot after every move
 
                 if (!stopShootl || !stopShootr) {
                     for (int j: GameConstants.PLAYERS.keySet()) {
-                        Gdx.app.log("MoveHandlerPlayerOutside",player.toString());
-                            if (!stopShootl && checkPlayerHit(player.getBulletl().getBoundingCircle(), GameConstants.PLAYERS.get(j).getBoundingCircle()) && (GameConstants.PLAYERS.get(j).toString()!=player.toString())) {
-                                Gdx.app.log("MoveHandlerPlayer",GameConstants.PLAYERS.get(j).toString());
+   //                     Gdx.app.log("MoveHandlerPlayerOutside",player.toString());
+                            if (!stopShootl && checkPlayerHit(player.getBulletl().getBoundingCircle(), GameConstants.PLAYERS.get(j).getBoundingCircle()) && (GameConstants.PLAYERS.get(j)!=player)) {
+                              //  Gdx.app.log("MoveHandlerPlayer",GameConstants.PLAYERS.get(j).toString());
                                 bullet_distance_L = 0;
                                 bullet_distance_R = 0;
                                 GameConstants.PLAYERS.get(j).decreaseHealth();
                                 stopShootl = true;
                             }
-                            if (!stopShootr && checkPlayerHit(player.getBulletr().getBoundingCircle(), GameConstants.PLAYERS.get(j).getBoundingCircle())&& (GameConstants.PLAYERS.get(j).toString()!=player.toString())) {
+                            if (!stopShootr && checkPlayerHit(player.getBulletr().getBoundingCircle(), GameConstants.PLAYERS.get(j).getBoundingCircle())&& (GameConstants.PLAYERS.get(j)!=player)) {
                                 bullet_distance_L = 0;
                                 bullet_distance_R = 0;
                                 GameConstants.PLAYERS.get(j).decreaseHealth();
@@ -371,8 +371,11 @@ public class MoveHandler extends Thread{
     public boolean checkPlayerHit(CircleMapObject mapObject1, CircleMapObject mapObject2) {
 
         if (Intersector.overlaps(mapObject1.getCircle(), mapObject2.getCircle())) {
-            return true;
-
+            if (mapObject2 == player.getBoundingCircle()) {
+                return false;
+            }else {
+                return true;
+            }
         }
         else return false;
     }
