@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="10" height="10" tilewidth="64" tileheight="64" nextobjectid="22">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="10" height="10" tilewidth="64" tileheight="64" nextobjectid="24">
  <tileset firstgid="1" name="borderedtile64" tilewidth="64" tileheight="64">
   <image source="borderedtile64.png" width="320" height="64"/>
  </tileset>
@@ -8,7 +8,7 @@
  </tileset>
  <layer name="Background" width="10" height="10">
   <data encoding="base64" compression="zlib">
-   eJxNzkkzggEAgOHvRCGy7zHItNhF1iw1CA1ZIltjz///Az2H7+DwzLzHty0IgnYiROmgky5idNNDnF766GeAQYYYZoRRxhhngkkSTDHNKTPMMkeSeU5IkSZDlgUWWWKZFVZZY50cG2ySZ4ttdthlj30KHHDIEccUKXH+zxnlsC+4pBK+XXFNlRtuueOeGg88UueJZ1545Y0G76EPPvnimx9+afJHC1bYFfk=
+   eJwNw+c2ggEAANDvF4XsvSJp2CKEjKwQmSFkF+//Au495zYFQdBsyLAtttpmxHY77LTLbnvstc9+Bxx0yGFHHHXMcaNOOGnMKeNOmzBpyrQzzjrnvAsuuuSyGVdcNeua626Yc9Mtt82746577lvwwEOPPPbEoqeeeW7JCy8te+W1N956570VH3z0yarPvvhqzTff/fDTL7/9sW7DX//8BwecFa8=
   </data>
  </layer>
  <objectgroup name="Spawns">
@@ -24,10 +24,12 @@
   </object>
  </objectgroup>
  <objectgroup name="Rocks">
-  <object id="9" name="Rocks" x="192" y="192" width="64" height="64"/>
-  <object id="10" name="Rocks" x="128" y="448" width="64" height="64"/>
+  <object id="9" name="Rocks" x="64" y="192" width="64" height="64"/>
+  <object id="10" name="Rocks" x="64" y="448" width="128" height="64"/>
   <object id="13" name="Rocks" x="448" y="128" width="64" height="64"/>
-  <object id="14" name="Rocks" x="384" y="384" width="64" height="64"/>
+  <object id="14" name="Rocks" x="448" y="512" width="64" height="64"/>
+  <object id="22" name="Rocks" x="256" y="62" width="192" height="64"/>
+  <object id="23" name="Rocks" x="448" y="257" width="128" height="128"/>
  </objectgroup>
  <objectgroup name="Fountain">
   <object id="17" name="Fountain" x="256" y="256" width="128" height="128"/>

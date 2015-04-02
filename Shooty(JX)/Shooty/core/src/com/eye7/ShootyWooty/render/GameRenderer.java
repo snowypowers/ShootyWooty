@@ -54,7 +54,7 @@ public class GameRenderer {
     public void render(float runTime){
 
 
-        Gdx.gl.glClearColor(10/255.0f, 15/255.0f, 230/255.0f, 1f);
+        Gdx.gl.glClearColor(229/255.0f, 214/255.0f, 136/255.0f, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         //Gdx.app.log("GR:", "Width: " + String.valueOf(Gdx.graphics.getWidth()));
         //Gdx.app.log("GR:", "Height: " + String.valueOf(Gdx.graphics.getHeight()));
@@ -67,8 +67,8 @@ public class GameRenderer {
         batcher.begin();
         // render time and moves
         MainLoader.white.draw(batcher, myWorld.getOut() + "     " + myWorld.getTimeStatus()+Integer.toString(myWorld.getTime()), 0, 0);
-        MainLoader.green.draw(batcher, "Player1 blood: "+Integer.toString(GameConstants.PLAYERS.get(1).getHealth()), 0,30);
-        MainLoader.green.draw(batcher, "Player2 blood: "+Integer.toString(GameConstants.PLAYERS.get(2).getHealth()), 0,60);
+        MainLoader.green.draw(batcher, "Player1 blood: "+Integer.toString(GameConstants.PLAYERS.get(1).getHealth()), 0,60);
+        MainLoader.green.draw(batcher, "Player2 blood: "+Integer.toString(GameConstants.PLAYERS.get(2).getHealth()), 0,90);
 
 //        if(!stop) {
 //            batcher.draw(MainLoader.Animation_cactus1_idle.getKeyFrame(runTime,true), 100, 20, 64, 64);
