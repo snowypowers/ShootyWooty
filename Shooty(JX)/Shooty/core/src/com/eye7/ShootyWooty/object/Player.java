@@ -5,9 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.objects.CircleMapObject;
-import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
-import com.eye7.ShootyWooty.model.Direction;
 import com.eye7.ShootyWooty.world.GameMap;
 
 public class Player {
@@ -178,7 +176,7 @@ public class Player {
         return health;
     }
 
-
+    public String toString(){return Integer.toString(playerID);}
 
 
 }

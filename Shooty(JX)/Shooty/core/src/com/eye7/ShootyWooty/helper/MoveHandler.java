@@ -6,8 +6,6 @@ import com.badlogic.gdx.maps.objects.CircleMapObject;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.TimeUtils;
-import com.badlogic.gdx.utils.Timer;
 import com.eye7.ShootyWooty.model.GameConstants;
 import com.eye7.ShootyWooty.object.Bullet;
 import com.eye7.ShootyWooty.object.Player;
@@ -15,9 +13,6 @@ import com.eye7.ShootyWooty.world.GameMap;
 
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
-import java.util.concurrent.Phaser;
-
-import static com.badlogic.gdx.utils.Timer.Task;
 
 public class MoveHandler extends Thread{
     //Phaser
@@ -157,19 +152,22 @@ public class MoveHandler extends Thread{
                 player.startShootLeft();
                 stopShootl = false;
             }
+            Gdx.app.log("MoveHandlerPlayerOutsideOutside",player.toString());
             while (!stopShootl || !stopShootr) {
 
                 // shoot after every move
 
                 if (!stopShootl || !stopShootr) {
                     for (int j: GameConstants.PLAYERS.keySet()) {
-                            if (!stopShootl && checkPlayerHit(player.getBulletl().getBoundingCircle(), GameConstants.PLAYERS.get(j).getBoundingCircle())) {
+                        Gdx.app.log("MoveHandlerPlayerOutside",player.toString());
+                            if (!stopShootl && checkPlayerHit(player.getBulletl().getBoundingCircle(), GameConstants.PLAYERS.get(j).getBoundingCircle()) && (GameConstants.PLAYERS.get(j).toString()!=player.toString())) {
+                                Gdx.app.log("MoveHandlerPlayer",GameConstants.PLAYERS.get(j).toString());
                                 bullet_distance_L = 0;
                                 bullet_distance_R = 0;
                                 GameConstants.PLAYERS.get(j).decreaseHealth();
                                 stopShootl = true;
                             }
-                            if (!stopShootr && checkPlayerHit(player.getBulletr().getBoundingCircle(), GameConstants.PLAYERS.get(j).getBoundingCircle())) {
+                            if (!stopShootr && checkPlayerHit(player.getBulletr().getBoundingCircle(), GameConstants.PLAYERS.get(j).getBoundingCircle())&& (GameConstants.PLAYERS.get(j).toString()!=player.toString())) {
                                 bullet_distance_L = 0;
                                 bullet_distance_R = 0;
                                 GameConstants.PLAYERS.get(j).decreaseHealth();

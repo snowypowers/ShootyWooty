@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.eye7.ShootyWooty.model.GameConstants;
 
 import java.util.concurrent.CyclicBarrier;
-import java.util.concurrent.Phaser;
 
 /**
  * Created by JunXiang on 25/3/2015. Turn handler that manages and moves the pieces on board.
@@ -45,11 +44,15 @@ public class TurnHandler extends Thread {
 //                }
                 continue;
             }
-            String[] moveArray = actionResolver.getMoves().split("!");
+            String moves = actionResolver.getMoves();
+            Gdx.app.log(TAG,moves );
+            String[] moveArray = moves.split("!");
+
             //!move!move
-            //!0F00B00B01F1!1F10B11B10F1
-            for (int i = 0; i < moveArray.length;i++) {
-                addTurn(i+1, new String[]{moveArray[i].substring(0,3), moveArray[i].substring(3,6), moveArray[i].substring(6,9), moveArray[i].substring(9,12)});
+            //!0F0 0B0 0B0 1F1!1F1 0B1 1B1 0F1
+            for (int i = 1; i < moveArray.length;i++) {
+                Gdx.app.log(TAG,"THIS"+ moveArray[i] );
+                addTurn(i, moveArray[i].split(" "));
             }
             actionResolver.setValid(false);
 //            actionResolver.setSignal(false);
