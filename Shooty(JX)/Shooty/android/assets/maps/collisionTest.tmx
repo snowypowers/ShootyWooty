@@ -42,7 +42,7 @@
   </object>
   <object id="8" name="Spawn6" x="512" y="64" width="64" height="64">
    <properties>
-    <property name="direction" value="270"/>
+    <property name="direction" value="90"/>
    </properties>
    <ellipse/>
   </object>

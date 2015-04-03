@@ -86,7 +86,7 @@ public class MoveHandler extends Thread{
             while (movement[0] > 0f || movement[1] > 0f || movement[3] != 0f){
 
                 CircleMapObject collider = player.getCollider();
-                float[] oldMove = movement.clone();
+                float[] oldMove = AmountToMove(moves[pointer]);
 
                 // move along x axis
                 if (movement[0] > 0f) {
@@ -120,6 +120,7 @@ public class MoveHandler extends Thread{
                         collider.getCircle().setPosition(collider.getCircle().x,(collider.getCircle().y-movement[2]));
                         movement[1] = oldMove[1] - movement[1];
                         movement[2] = movement[2] * -1;
+                        Gdx.app.log("UPDATEDMOVE", String.valueOf(movement[0]) + " " + String.valueOf(movement[2]));
                     }
                 }
 

@@ -48,7 +48,7 @@ public class DisplayMap implements InputProcessor {
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 960 / zoom, 540 / zoom);
         camera.update();
-        tiledMap = new TmxMapLoader().load("maps/collisionTest.tmx");
+        tiledMap = new TmxMapLoader().load("maps/Oasis10.tmx");
         tiledMapRenderer = new MapRenderer(tiledMap, sb);
 
         gameMap = new GameMap(tiledMap);
