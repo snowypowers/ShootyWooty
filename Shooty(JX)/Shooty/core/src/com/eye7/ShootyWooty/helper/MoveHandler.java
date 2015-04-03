@@ -3,6 +3,9 @@ package com.eye7.ShootyWooty.helper;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.maps.objects.CircleMapObject;
+import com.badlogic.gdx.maps.objects.RectangleMapObject;
+import com.badlogic.gdx.maps.objects.RectangleMapObject;
+import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
@@ -85,11 +88,12 @@ public class MoveHandler extends Thread{
 
             while (movement[0] > 0f || movement[1] > 0f){
                 // move along x axis
-                CircleMapObject collider = player.getBoundingCircle();
+                CircleMapObject collider = player.getCollider();
+                float[] oldMove = Arrays
 
                 if (movement[0] > 0f) {
                     collider.getCircle().setPosition((collider.getCircle().x+movement[2]),collider.getCircle().y);
-                    if (!checkRock(collider)){
+                    if (!checkPlayerHit()){
                         player.incrementX(movement[2]);
                         movement[0] -= PLAYER_INCREMENT;
                         bulletl.incrementX(movement[2]); // move bullet with player
@@ -103,7 +107,7 @@ public class MoveHandler extends Thread{
                 // move along Y axis
                 if (movement[1] > 0f) {
                     collider.getCircle().setPosition(collider.getCircle().x,(collider.getCircle().y+movement[2]));
-                    if (!checkRock(collider)) {
+                    if (!checkPlayerHit()) {
                         player.incrementY(movement[2]);
                         movement[1] -= PLAYER_INCREMENT;
                         bulletl.incrementY(movement[2]);
@@ -160,23 +164,23 @@ public class MoveHandler extends Thread{
                 if (!stopShootl || !stopShootr) {
                     for (int j: GameConstants.PLAYERS.keySet()) {
    //                     Gdx.app.log("MoveHandlerPlayerOutside",player.toString());
-                            if (!stopShootl && checkPlayerHit(player.getBulletl().getBoundingCircle(), GameConstants.PLAYERS.get(j).getBoundingCircle()) && (GameConstants.PLAYERS.get(j)!=player)) {
+                            if (!stopShootl && checkPlayerHit(player.getBulletl().getCollider(), GameConstants.PLAYERS.get(j).getCollider()) && (GameConstants.PLAYERS.get(j)!=player)) {
                               //  Gdx.app.log("MoveHandlerPlayer",GameConstants.PLAYERS.get(j).toString());
                                 bullet_distance_L = 0;
                                 bullet_distance_R = 0;
                                 GameConstants.PLAYERS.get(j).decreaseHealth();
                                 stopShootl = true;
                             }
-                            if (!stopShootr && checkPlayerHit(player.getBulletr().getBoundingCircle(), GameConstants.PLAYERS.get(j).getBoundingCircle())&& (GameConstants.PLAYERS.get(j)!=player)) {
+                            if (!stopShootr && checkPlayerHit(player.getBulletr().getCollider(), GameConstants.PLAYERS.get(j).getCollider())&& (GameConstants.PLAYERS.get(j)!=player)) {
                                 bullet_distance_L = 0;
                                 bullet_distance_R = 0;
                                 GameConstants.PLAYERS.get(j).decreaseHealth();
                                 stopShootr = true;
                             }
-                            if (checkRock(player.getBulletr().getBoundingCircle())) {
+                            if (checkRock(player.getBulletr().getCollider())) {
                                 stopShootr = true;
                             }
-                            if (checkRock(player.getBulletl().getBoundingCircle())) {
+                            if (checkRock(player.getBulletl().getCollider())) {
                                 stopShootl = true;
                             }
                             if (!stopShootl || !stopShootr)
@@ -368,25 +372,45 @@ public class MoveHandler extends Thread{
         Gdx.app.log("Move Info", String.valueOf(movement[0]) +" "+ String.valueOf(movement[1]) +" "+ String.valueOf(movement[2]) +" "+ String.valueOf(movement[3]));
         return movement;
     }
-    public boolean checkPlayerHit(CircleMapObject mapObject1, CircleMapObject mapObject2) {
 
-        if (Intersector.overlaps(mapObject1.getCircle(), mapObject2.getCircle())) {
-            if (mapObject2 == player.getBoundingCircle()) {
-                return false;
-            }else {
+    //Method to check for bullets hitting stuff
+    public boolean checkBulletHit(Bullet b) {
+        //collision with rocks
+        for (Rectangle r: GameConstants.ROCKS) {
+            if (Intersector.overlaps(b.getCollider().getCircle(), r)) {
                 return true;
             }
         }
-        else return false;
+
+        //collision with players
+        for (Player p: GameConstants.PLAYERS.values()) {
+            if (Intersector.overlaps(b.getCollider().getCircle(), p.getCollider().getCircle())) {
+                p.decreaseHealth();
+                return true;
+            }
+        }
+
+       //No Collision
+        return false;
     }
-    public boolean checkRock(CircleMapObject mapObject){
-        Array<Rectangle> rocks = GameMap.getRocks();
-        for(int i=0; i<rocks.size;i++){
-            if (Intersector.overlaps(mapObject.getCircle(), rocks.get(i))){
-                return true;
 
+    // Method to check for player hitting rock
+    public boolean checkPlayerHit(){
+        //Collision with rocks
+        for (Rectangle r: GameConstants.ROCKS) {
+            if (Intersector.overlaps(player.getCollider().getCircle(), r)) {
+                player.decreaseHealth();
+                return true;
             }
         }
+
+        for (Player p: GameConstants.PLAYERS.values()) {
+            if (Intersector.overlaps(player.getCollider().getCircle(), p.getCollider().getCircle())) {
+                p.decreaseHealth();
+                return true;
+            }
+        }
+
         return false;
     }
 

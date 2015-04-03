@@ -1,10 +1,13 @@
 package com.eye7.ShootyWooty.object;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.maps.objects.CircleMapObject;
 import com.badlogic.gdx.maps.objects.CircleMapObject;
 import com.badlogic.gdx.math.Vector2;
 import com.eye7.ShootyWooty.world.GameMap;
@@ -30,7 +33,7 @@ public class Player {
     private boolean shootLeft;
     private boolean shootRight;
 
-    private CircleMapObject boundingCircle;
+    private CircleMapObject collider;
     private float RADIUS = 2;
 
     private Animation animation_idle;
@@ -40,9 +43,11 @@ public class Player {
     private Animation animation_east;
     private float animationFrameTime;
 
+    private ShapeRenderer healthBar;
+
 
 	// takes in x,y as origin
-	public Player(GameMap map, int x, int y, int d) {
+	public Player(GameMap map, CircleMapObject collider, int d) {
         playerID = nextID;
         nextID++;
         Gdx.app.log("Player", String.valueOf(playerID));
@@ -51,8 +56,10 @@ public class Player {
 
         setUpSprites();
         this.pic = new Texture(Gdx.files.internal("players/player"+String.valueOf(playerID)+".png"));
-		this.x = x;
-		this.y = y;
+
+        //Coordinates of the middle of the circle
+		this.x = collider.getCircle().x;
+		this.y = collider.getCircle().y;
         this.dir = d;
 
         health = 100;
@@ -63,7 +70,10 @@ public class Player {
         bulletl = new Bullet(this.x, this.y,this);
         bulletr = new Bullet(this.x, this.y,this);
 
-        boundingCircle = new CircleMapObject(this.x,this.y,RADIUS);
+        this.collider = collider;
+
+        healthBar = new ShapeRenderer();
+        healthBar.setAutoShapeType(true);
 	}
 
     public void draw(SpriteBatch sb, float delta) {
@@ -77,24 +87,25 @@ public class Player {
         s.setRotation(dir);
         s.setPosition(x,y);
         s.draw(sb);
+
     }
 
-    public void decreaseHealth(){
-        health-=10;
+    public synchronized void decreaseHealth(){
+        health-=20;
     }
 
 
 	// setters
 	public void incrementX(float x) {
 		this.x +=x;
-        boundingCircle.getCircle().set(this.x,this.y,RADIUS);
-//        Gdx.app.log("Player",boundingCircle.x+" X");
+        collider.getCircle().setPosition(this.x,this.y);
+//        Gdx.app.log("Player",collider.x+" X");
 	}
 
 	public void incrementY(float y) {
 		this.y += y;
-        boundingCircle.getCircle().set(this.x,this.y,RADIUS);
-//        Gdx.app.log("Player",boundingCircle.y+" Y");
+        collider.getCircle().setPosition(this.x,this.y);
+//        Gdx.app.log("Player",collider.y+" Y");
 	}
 
     public void rotate (int r) {
@@ -154,12 +165,13 @@ public class Player {
         return health;
     }
 
-    public CircleMapObject getBoundingCircle(){
-        return boundingCircle;
+    public CircleMapObject getCollider(){
+        return collider;
     }
 
     //Aligns player into the closest gridbox
     public void snapInGrid() {
+        //Snaps to 64 pixel grid
         float Xoff = x % 32;
         float Yoff = y % 32;
         int Roff = dir % 90;
