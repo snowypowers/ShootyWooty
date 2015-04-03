@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.objects.CircleMapObject;
 import com.badlogic.gdx.maps.objects.CircleMapObject;
 import com.badlogic.gdx.math.Vector2;
+import com.eye7.ShootyWooty.model.GameConstants;
 import com.eye7.ShootyWooty.world.GameMap;
 
 public class Player {
@@ -73,7 +74,7 @@ public class Player {
         this.collider = collider;
 
         healthBar = new ShapeRenderer();
-        healthBar.setAutoShapeType(true);
+        healthBar.setColor(Color.BLACK);
 	}
 
     public void draw(SpriteBatch sb, float delta) {
@@ -84,10 +85,16 @@ public class Player {
             bulletr.draw(sb);
         }
         Sprite s = new Sprite(pic);
+        s.setCenter(32,32);
         s.setRotation(dir);
         s.setPosition(x,y);
         s.draw(sb);
 
+        if (GameConstants.DEBUG) {
+            healthBar.begin(ShapeRenderer.ShapeType.Line);
+            healthBar.circle(collider.getCircle().x,collider.getCircle().y,collider.getCircle().radius);
+            healthBar.end();
+        }
     }
 
     public synchronized void decreaseHealth(){
@@ -118,6 +125,10 @@ public class Player {
         }
     }
 
+    public boolean isShooting() {
+        return (shootLeft || shootRight);
+    }
+
     public void startShootLeft() {
         shootLeft = true;
     }
@@ -127,13 +138,17 @@ public class Player {
     }
 
     public void endShootLeft() {
-        shootLeft = false;
-        bulletl.getReturn();
+        if (shootLeft) {
+            shootLeft = false;
+            bulletl.getReturn();
+        }
     }
 
     public void endShootRight() {
-        shootRight = false;
-        bulletr.getReturn();
+        if (shootRight) {
+            shootRight = false;
+            bulletr.getReturn();
+        }
     }
 	
 	// getters

@@ -51,8 +51,6 @@ public class DisplayMap implements InputProcessor {
     private int screenHeight = (int) (360 * scaleHFactor);
 
     private MapProperties mp;
-    private int mapPixelWidth;
-    private int mapPixelHeight;
 
     Player temp;
 
@@ -63,14 +61,14 @@ public class DisplayMap implements InputProcessor {
         camera.setToOrtho(false, 960 / zoom, 540 / zoom);
         camera.update();
         tiledMap = new TmxMapLoader().load("maps/Oasis10.tmx");
-        tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap, sb);
+        tiledMapRenderer = new MapRenderer(tiledMap, sb);
 
         gameMap = new GameMap(tiledMap);
         gameMap.setUpPlayers(GameConstants.NUM_PLAYERS);
 
         mp = tiledMap.getProperties();
-        mapPixelWidth = mp.get("tilewidth", Integer.class) * mp.get("width", Integer.class);
-        mapPixelHeight = mp.get("tileheight", Integer.class) * mp.get("height", Integer.class);
+        GameConstants.MAP_WIDTH = mp.get("tilewidth", Integer.class) * mp.get("width", Integer.class);
+        GameConstants.MAP_HEIGHT = mp.get("tileheight", Integer.class) * mp.get("height", Integer.class);
 
         shapeRenderer = new ShapeRenderer();
         shapeRenderer.setProjectionMatrix(camera.combined);
@@ -135,15 +133,15 @@ public class DisplayMap implements InputProcessor {
         if (camera.position.x < (screenWidth / (2*zoom))) {
             x = (screenWidth/(2*zoom)) - camera.position.x;
             Gdx.app.log(TAG, "Reached left edge. " + String.valueOf(camera.position.x) + " " + String.valueOf(x));
-        } else if (camera.position.x > (mapPixelWidth - (screenWidth/(2*zoom)))) {
-            x = (mapPixelWidth - (screenWidth/(2*zoom))) - camera.position.x;
+        } else if (camera.position.x > (GameConstants.MAP_WIDTH - (screenWidth/(2*zoom)))) {
+            x = (GameConstants.MAP_WIDTH - (screenWidth/(2*zoom))) - camera.position.x;
             Gdx.app.log(TAG, "Reached right edge. " + String.valueOf(camera.position.x) + " " + String.valueOf(x));
         }
         if (camera.position.y < (screenHeight / (2*zoom))) {
             y = (screenHeight/(2*zoom)) - camera.position.y;
             Gdx.app.log(TAG, "Reached btm edge. " + String.valueOf(camera.position.y) + " " + String.valueOf(y));
-        } else if (camera.position.y > (mapPixelHeight - (screenHeight/(2*zoom)))) {
-            y = (mapPixelHeight - (screenHeight/(2*zoom))) - camera.position.y;
+        } else if (camera.position.y > (GameConstants.MAP_HEIGHT - (screenHeight/(2*zoom)))) {
+            y = (GameConstants.MAP_HEIGHT - (screenHeight/(2*zoom))) - camera.position.y;
             Gdx.app.log(TAG, "Reached top edge. " + String.valueOf(camera.position.y) + " " + String.valueOf(y));
         }
 

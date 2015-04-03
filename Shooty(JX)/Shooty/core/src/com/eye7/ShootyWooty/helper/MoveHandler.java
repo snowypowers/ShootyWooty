@@ -14,10 +14,12 @@ import com.eye7.ShootyWooty.object.Bullet;
 import com.eye7.ShootyWooty.object.Player;
 import com.eye7.ShootyWooty.world.GameMap;
 
+import java.util.Arrays;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 
 public class MoveHandler extends Thread{
+    private final String TAG;
     //Phaser
     private CyclicBarrier cb = null;
 
@@ -42,26 +44,21 @@ public class MoveHandler extends Thread{
     private float bullet_distance_R;
     private float bullet_distance_L;
 
-    private boolean stopShootr;
-    private boolean stopShootl;
-
     private int PlayerTag;
 
     public MoveHandler(Player player, String[] moves, CyclicBarrier cb){
+        TAG = "MoveHandler of Player "+String.valueOf(player.getPlayerID());
         this.moves = moves;
         this.cb = cb;
         this.pointer = -1;
 
         //Player setup
-        this.player = player;
+        this.player =  player;
         this.bulletl = player.getBulletl();
         this.bulletr = player.getBulletr();
 
         bullet_distance_R = BULLET_DISTANCE;
         bullet_distance_L = BULLET_DISTANCE;
-
-        stopShootr = true;
-        stopShootl = true;
     }
 
     public void nextMove() {
@@ -86,11 +83,12 @@ public class MoveHandler extends Thread{
             /////////////////////////////////////////EXECUTE MOVEMENT///////////////////////////////////////
             Gdx.app.log("MoveHandler","start");
 
-            while (movement[0] > 0f || movement[1] > 0f){
-                // move along x axis
-                CircleMapObject collider = player.getCollider();
-                float[] oldMove = Arrays
+            while (movement[0] > 0f || movement[1] > 0f || movement[3] != 0f){
 
+                CircleMapObject collider = player.getCollider();
+                float[] oldMove = Arrays.copyOf(movement, movement.length);
+
+                // move along x axis
                 if (movement[0] > 0f) {
                     collider.getCircle().setPosition((collider.getCircle().x+movement[2]),collider.getCircle().y);
                     if (!checkPlayerHit()){
@@ -101,6 +99,8 @@ public class MoveHandler extends Thread{
                     }
                     else{
                         collider.getCircle().setPosition((collider.getCircle().x-movement[2]),collider.getCircle().y);
+                        movement[0] = oldMove[0] - movement[0];
+                        movement[2] = movement[2] * -1;
                     }
                 }
 
@@ -115,6 +115,8 @@ public class MoveHandler extends Thread{
                     }
                     else{
                         collider.getCircle().setPosition(collider.getCircle().x,(collider.getCircle().y-movement[2]));
+                        movement[1] = oldMove[0] - movement[1];
+                        movement[2] = movement[2] * -1;
                     }
                 }
 
@@ -149,64 +151,41 @@ public class MoveHandler extends Thread{
             bulletl.setReturn(player.getX(), player.getY());
             bulletr.setReturn(player.getX(), player.getY());
             if(moves[pointer].substring(2).equals("1")){
+                bullet_distance_R=BULLET_DISTANCE;
                 player.startShootRight();
-                stopShootr = false;
             }
             if(moves[pointer].substring(0, 1).equals("1")){
+                bullet_distance_L=BULLET_DISTANCE;
                 player.startShootLeft();
-                stopShootl = false;
             }
-  //          Gdx.app.log("MoveHandlerPlayerOutsideOutside",player.toString());
-            while (!stopShootl || !stopShootr) {
 
+            //While shooting
+            while (player.isShooting()) {
                 // shoot after every move
-
-                if (!stopShootl || !stopShootr) {
-                    for (int j: GameConstants.PLAYERS.keySet()) {
-   //                     Gdx.app.log("MoveHandlerPlayerOutside",player.toString());
-                            if (!stopShootl && checkPlayerHit(player.getBulletl().getCollider(), GameConstants.PLAYERS.get(j).getCollider()) && (GameConstants.PLAYERS.get(j)!=player)) {
-                              //  Gdx.app.log("MoveHandlerPlayer",GameConstants.PLAYERS.get(j).toString());
-                                bullet_distance_L = 0;
-                                bullet_distance_R = 0;
-                                GameConstants.PLAYERS.get(j).decreaseHealth();
-                                stopShootl = true;
-                            }
-                            if (!stopShootr && checkPlayerHit(player.getBulletr().getCollider(), GameConstants.PLAYERS.get(j).getCollider())&& (GameConstants.PLAYERS.get(j)!=player)) {
-                                bullet_distance_L = 0;
-                                bullet_distance_R = 0;
-                                GameConstants.PLAYERS.get(j).decreaseHealth();
-                                stopShootr = true;
-                            }
-                            if (checkRock(player.getBulletr().getCollider())) {
-                                stopShootr = true;
-                            }
-                            if (checkRock(player.getBulletl().getCollider())) {
-                                stopShootl = true;
-                            }
-                            if (!stopShootl || !stopShootr)
-                                shootBullets();
-                            try {
-                                Thread.sleep(20);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-                    }
+                shootBullets();
+                if (checkBulletHit(bulletl)) {
+                    bullet_distance_L = 0;
+                    player.endShootLeft();
                 }
 
-                else break;
+                if (checkBulletHit(bulletr)) {
+                    bullet_distance_R = 0;
+                    player.endShootRight();
+                }
+
+                try {
+                    Thread.sleep(20);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
 
             }
-            player.endShootLeft();
-            player.endShootRight();
-            bullet_distance_R = BULLET_DISTANCE;
-            bullet_distance_L = BULLET_DISTANCE;
-            stopShootl = true;
-            stopShootr = true;
 
             if (pointer == 3) {
                 continue;
             } else {
                 try {
+                    //Wait for all to finish executing
                     cb.await();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -222,9 +201,8 @@ public class MoveHandler extends Thread{
     // shooting method
     public void shootBullets(){
         // shoot right
-        if(moves[pointer].substring(2).equals("1")&&!stopShootr){
+        if(moves[pointer].substring(2).equals("1")){
             if(bullet_distance_R>0){
-                Gdx.app.log("PlayerDirection",Integer.toString(player.getDir()));
                 bullet_distance_R-=BULLET_INCREMENT;
                 if (player.getDir()==0)
                     bulletr.incrementX(BULLET_INCREMENT);
@@ -236,14 +214,11 @@ public class MoveHandler extends Thread{
                     bulletr.incrementY(BULLET_INCREMENT*-1);
             }
             else{
-                bullet_distance_R = BULLET_DISTANCE;
-                bulletr.getReturn();
-                stopShootr = true;
                 player.endShootRight();
             }
         }
         // shoot left
-        if(moves[pointer].substring(0, 1).equals("1")&&!stopShootl){
+        if(moves[pointer].substring(0, 1).equals("1")){
             if(bullet_distance_L>0){
                 bullet_distance_L-=BULLET_INCREMENT;
                 if (player.getDir()==0)
@@ -256,18 +231,12 @@ public class MoveHandler extends Thread{
                     bulletl.incrementY(BULLET_INCREMENT);
             }
             else{
-                bullet_distance_L=BULLET_DISTANCE;
-                bulletl.getReturn();
-                stopShootl = true;
                 player.endShootLeft();
             }
         }
 
     }
-//
-//    public void setStopShoot(boolean stop){ // setter for stop when there is collision
-//        stopShoot = stop;
-//    }
+
 
     /////////////////////////////////////METHODS FOR MOVE CONTROL//////////////////////////////////////
     public void updateMove(String[] moves){
@@ -376,8 +345,10 @@ public class MoveHandler extends Thread{
     //Method to check for bullets hitting stuff
     public boolean checkBulletHit(Bullet b) {
         //collision with rocks
-        for (Rectangle r: GameConstants.ROCKS) {
-            if (Intersector.overlaps(b.getCollider().getCircle(), r)) {
+        for (int i = 0; i < GameConstants.ROCKS.size;i++) {
+            if (Intersector.overlaps(player.getCollider().getCircle(), GameConstants.ROCKS.get(i))) {
+                Gdx.app.log(TAG, "Collision with rock at " + GameConstants.ROCKS.get(i).getX() + " " + GameConstants.ROCKS.get(i).getY());
+                player.decreaseHealth();
                 return true;
             }
         }
@@ -390,22 +361,27 @@ public class MoveHandler extends Thread{
             }
         }
 
-       //No Collision
+        //No Collision
         return false;
     }
 
     // Method to check for player hitting rock
     public boolean checkPlayerHit(){
         //Collision with rocks
-        for (Rectangle r: GameConstants.ROCKS) {
-            if (Intersector.overlaps(player.getCollider().getCircle(), r)) {
+        for (int i = 0; i < GameConstants.ROCKS.size;i++) {
+            if (Intersector.overlaps(player.getCollider().getCircle(), GameConstants.ROCKS.get(i))) {
+                Gdx.app.log(TAG, "Collision with rock at " + GameConstants.ROCKS.get(i).getX() + " " + GameConstants.ROCKS.get(i).getY());
                 player.decreaseHealth();
                 return true;
             }
         }
 
         for (Player p: GameConstants.PLAYERS.values()) {
+            if (p == player) {
+                continue; // pass if checking if hit himself
+            }
             if (Intersector.overlaps(player.getCollider().getCircle(), p.getCollider().getCircle())) {
+                Gdx.app.log(TAG, "Collision with player at " + String.valueOf(p.getCollider().getCircle().x) + " " + String.valueOf(p.getCollider().getCircle().y));
                 p.decreaseHealth();
                 return true;
             }

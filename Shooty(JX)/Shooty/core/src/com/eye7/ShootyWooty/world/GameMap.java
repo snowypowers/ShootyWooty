@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.objects.CircleMapObject;
+import com.badlogic.gdx.maps.objects.EllipseMapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Rectangle;
@@ -12,6 +13,7 @@ import com.eye7.ShootyWooty.model.GameConstants;
 import com.eye7.ShootyWooty.object.Player;
 
 public class GameMap {
+    private final String TAG = "GameMap";
     private TiledMap map;
     private static Array<Rectangle> rocks=  new Array<Rectangle>();
     private MapObjects spawns;
@@ -35,10 +37,11 @@ public class GameMap {
     }
     public void setUpPlayers(int num) {
         for (int i = 0; i < num; i++) {
-            CircleMapObject spawn = (CircleMapObject) spawns.get("Spawn" + String.valueOf(i+1));
-            Player p = new Player(this, spawn, Integer.parseInt(spawn.getProperties().get("direction").toString()));
+            EllipseMapObject spawnpoint = (EllipseMapObject) spawns.get("Spawn" + String.valueOf(i+1));
+            CircleMapObject spawn = new CircleMapObject(spawnpoint.getEllipse().x+32, spawnpoint.getEllipse().y+32, 32);
+            Player p = new Player(this, spawn, Integer.parseInt(spawnpoint.getProperties().get("direction").toString()));
             GameConstants.PLAYERS.put(p.getPlayerID(), p);
-            Gdx.app.log("Player Creation", String.valueOf(p.getPlayerID()));
+            Gdx.app.log(TAG, "Created Player: " + String.valueOf(p.getPlayerID()));
         }
 
     }

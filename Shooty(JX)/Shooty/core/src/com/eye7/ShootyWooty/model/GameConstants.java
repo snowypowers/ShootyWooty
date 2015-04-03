@@ -11,12 +11,15 @@ import java.util.HashMap;
  * Created by JunXiang on 14/3/2015.
  */
 public class GameConstants {
+    public static boolean DEBUG = true;
 
     public static int NUM_PLAYERS = 2; // Determines the number of players in the game
     public static int PLAYER_TAG = 1; // This is the client's player tag
 
     public static Timer TURN_TIMER; // The turn timer
 
+    public static float MAP_HEIGHT;
+    public static float MAP_WIDTH;
     public static HashMap<Integer, Player> PLAYERS = new HashMap<Integer, Player>(); //Array of player objects
     public static Array<Rectangle> ROCKS;
 
