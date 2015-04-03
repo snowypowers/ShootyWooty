@@ -86,7 +86,7 @@ public class MoveHandler extends Thread{
             while (movement[0] > 0f || movement[1] > 0f || movement[3] != 0f){
 
                 CircleMapObject collider = player.getCollider();
-                float[] oldMove = Arrays.copyOf(movement, movement.length);
+                float[] oldMove = movement.clone();
 
                 // move along x axis
                 if (movement[0] > 0f) {
@@ -98,9 +98,11 @@ public class MoveHandler extends Thread{
                         bulletr.incrementX(movement[2]);
                     }
                     else{
+                        Gdx.app.log("OLDMOVE", String.valueOf(oldMove[0]));
                         collider.getCircle().setPosition((collider.getCircle().x-movement[2]),collider.getCircle().y);
                         movement[0] = oldMove[0] - movement[0];
                         movement[2] = movement[2] * -1;
+                        Gdx.app.log("UPDATEDMOVE", String.valueOf(movement[0]) + " " + String.valueOf(movement[2]));
                     }
                 }
 
@@ -114,8 +116,9 @@ public class MoveHandler extends Thread{
                         bulletr.incrementY(movement[2]);
                     }
                     else{
+                        Gdx.app.log("OLDMOVE", String.valueOf(oldMove[1]));
                         collider.getCircle().setPosition(collider.getCircle().x,(collider.getCircle().y-movement[2]));
-                        movement[1] = oldMove[0] - movement[1];
+                        movement[1] = oldMove[1] - movement[1];
                         movement[2] = movement[2] * -1;
                     }
                 }
@@ -244,109 +247,110 @@ public class MoveHandler extends Thread{
     } // constantly update moves
     public float[] AmountToMove(String s) { // X,Y,increment,rotate
         int dir = player.getDir();
+        float[] output = new float[4];
         if (s.contains("F")) {
             if (dir == 0) {
-                movement[0] = 0f;
-                movement[1] = PLAYER_DISTANCE;
-                movement[2] = PLAYER_INCREMENT;
-                movement[3] = 0f;
+                output[0] = 0f;
+                output[1] = PLAYER_DISTANCE;
+                output[2] = PLAYER_INCREMENT;
+                output[3] = 0f;
             } else if (dir == 90) {
-                movement[0] = PLAYER_DISTANCE;
-                movement[1] = 0f;
-                movement[2] = -PLAYER_INCREMENT;
-                movement[3] = 0f;
+                output[0] = PLAYER_DISTANCE;
+                output[1] = 0f;
+                output[2] = -PLAYER_INCREMENT;
+                output[3] = 0f;
             } else if (dir == 180) {
-                movement[0] = 0f;
-                movement[1] = PLAYER_DISTANCE;
-                movement[2] = -PLAYER_INCREMENT;
-                movement[3] = 0f;
+                output[0] = 0f;
+                output[1] = PLAYER_DISTANCE;
+                output[2] = -PLAYER_INCREMENT;
+                output[3] = 0f;
             } else if (dir == 270) {
-                movement[0] = PLAYER_DISTANCE;
-                movement[1] = 0f;
-                movement[2] = PLAYER_INCREMENT;
-                movement[3] = 0f;
+                output[0] = PLAYER_DISTANCE;
+                output[1] = 0f;
+                output[2] = PLAYER_INCREMENT;
+                output[3] = 0f;
             }
         } else if (s.contains("R")) {
             if (dir == 0) {
-                movement[0] = PLAYER_DISTANCE;
-                movement[1] = 0f;
-                movement[2] = PLAYER_INCREMENT;
-                movement[3] = -90f;
+                output[0] = PLAYER_DISTANCE;
+                output[1] = 0f;
+                output[2] = PLAYER_INCREMENT;
+                output[3] = -90f;
             } else if (dir == 90) {
-                movement[0] = 0f;
-                movement[1] = PLAYER_DISTANCE;
-                movement[2] = PLAYER_INCREMENT;
-                movement[3] = -90f;
+                output[0] = 0f;
+                output[1] = PLAYER_DISTANCE;
+                output[2] = PLAYER_INCREMENT;
+                output[3] = -90f;
             } else if (dir == 180) {
-                movement[0] = PLAYER_DISTANCE;
-                movement[1] = 0f;
-                movement[2] = -PLAYER_INCREMENT;
-                movement[3] = -90f;
+                output[0] = PLAYER_DISTANCE;
+                output[1] = 0f;
+                output[2] = -PLAYER_INCREMENT;
+                output[3] = -90f;
             } else if (dir == 270) {
-                movement[0] = 0f;
-                movement[1] = PLAYER_DISTANCE;
-                movement[2] = -PLAYER_INCREMENT;
-                movement[3] = -90f;
+                output[0] = 0f;
+                output[1] = PLAYER_DISTANCE;
+                output[2] = -PLAYER_INCREMENT;
+                output[3] = -90f;
             }
         } else if (s.contains("L")) {
             if (dir == 0) {
-                movement[0] = PLAYER_DISTANCE;
-                movement[1] = 0f;
-                movement[2] = -PLAYER_INCREMENT;
-                movement[3] = 90f;
+                output[0] = PLAYER_DISTANCE;
+                output[1] = 0f;
+                output[2] = -PLAYER_INCREMENT;
+                output[3] = 90f;
             } else if (dir == 90) {
-                movement[0] = 0f;
-                movement[1] = PLAYER_DISTANCE;
-                movement[2] = -PLAYER_INCREMENT;
-                movement[3] = 90f;
+                output[0] = 0f;
+                output[1] = PLAYER_DISTANCE;
+                output[2] = -PLAYER_INCREMENT;
+                output[3] = 90f;
             } else if (dir == 180) {
-                movement[0] = PLAYER_DISTANCE;
-                movement[1] = 0f;
-                movement[2] = PLAYER_INCREMENT;
-                movement[3] = 90f;
+                output[0] = PLAYER_DISTANCE;
+                output[1] = 0f;
+                output[2] = PLAYER_INCREMENT;
+                output[3] = 90f;
             } else if (dir == 270) {
-                movement[0] = 0f;
-                movement[1] = PLAYER_DISTANCE;
-                movement[2] = PLAYER_INCREMENT;
-                movement[3] = 90f;
+                output[0] = 0f;
+                output[1] = PLAYER_DISTANCE;
+                output[2] = PLAYER_INCREMENT;
+                output[3] = 90f;
             }
         } else if (s.contains("D")) {
             if (dir == 0) {
-                movement[0] = 0f;
-                movement[1] = PLAYER_DISTANCE;
-                movement[2] = PLAYER_INCREMENT;
-                movement[3] = 0f;
+                output[0] = 0f;
+                output[1] = PLAYER_DISTANCE;
+                output[2] = PLAYER_INCREMENT;
+                output[3] = 0f;
             } else if (dir == 90) {
-                movement[0] = PLAYER_DISTANCE;
-                movement[1] = 0f;
-                movement[2] = PLAYER_INCREMENT;
-                movement[3] = 0f;
+                output[0] = PLAYER_DISTANCE;
+                output[1] = 0f;
+                output[2] = PLAYER_INCREMENT;
+                output[3] = 0f;
             } else if (dir == 180) {
-                movement[0] = 0f;
-                movement[1] = -PLAYER_DISTANCE;
-                movement[2] = PLAYER_INCREMENT;
-                movement[3] = 0f;
+                output[0] = 0f;
+                output[1] = -PLAYER_DISTANCE;
+                output[2] = PLAYER_INCREMENT;
+                output[3] = 0f;
             } else if (dir == 270) {
-                movement[0] = -PLAYER_DISTANCE;
-                movement[1] = 0f;
-                movement[2] = PLAYER_INCREMENT;
-                movement[3] = 0f;
+                output[0] = -PLAYER_DISTANCE;
+                output[1] = 0f;
+                output[2] = PLAYER_INCREMENT;
+                output[3] = 0f;
             }
         } else if (s.contains("B")) {
-            movement[0] = 0f;
-            movement[1] = 0f;
-            movement[2] = 0f;
-            movement[3] = 0f;
+            output[0] = 0f;
+            output[1] = 0f;
+            output[2] = 0f;
+            output[3] = 0f;
         }
-        Gdx.app.log("Move Info", String.valueOf(movement[0]) +" "+ String.valueOf(movement[1]) +" "+ String.valueOf(movement[2]) +" "+ String.valueOf(movement[3]));
-        return movement;
+        Gdx.app.log("Move Info Player" + String.valueOf(player.getPlayerID()), String.valueOf(output[0]) +" "+ String.valueOf(output[1]) +" "+ String.valueOf(output[2]) +" "+ String.valueOf(output[3]));
+        return output;
     }
 
     //Method to check for bullets hitting stuff
     public boolean checkBulletHit(Bullet b) {
         //collision with rocks
         for (int i = 0; i < GameConstants.ROCKS.size;i++) {
-            if (Intersector.overlaps(player.getCollider().getCircle(), GameConstants.ROCKS.get(i))) {
+            if (Intersector.overlaps(b.getCollider().getCircle(), GameConstants.ROCKS.get(i))) {
                 Gdx.app.log(TAG, "Collision with rock at " + GameConstants.ROCKS.get(i).getX() + " " + GameConstants.ROCKS.get(i).getY());
                 player.decreaseHealth();
                 return true;
@@ -355,6 +359,9 @@ public class MoveHandler extends Thread{
 
         //collision with players
         for (Player p: GameConstants.PLAYERS.values()) {
+            if (p == player) {
+                continue; // pass if checking if hit himself
+            }
             if (Intersector.overlaps(b.getCollider().getCircle(), p.getCollider().getCircle())) {
                 p.decreaseHealth();
                 return true;

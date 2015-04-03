@@ -16,6 +16,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
+import com.eye7.ShootyWooty.model.GameConstants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,8 +31,8 @@ public class MapRenderer extends OrthogonalTiledMapRenderer {
     private ShapeRenderer colliderRender;
 
     public MapRenderer (TiledMap map, SpriteBatch sb) {
-        super(map);
-        this.spriteBatch = sb;
+        super(map, sb);
+        spriteBatch = sb;
         sprites = new ArrayList<Sprite>();
         colliderRender = new ShapeRenderer();
         colliderRender.setColor(Color.BLACK);
@@ -44,7 +45,6 @@ public class MapRenderer extends OrthogonalTiledMapRenderer {
     @Override
     public void render() {
         beginRender();
-        colliderRender.begin(ShapeRenderer.ShapeType.Line);
 
         int currentLayer = 0;
         for (MapLayer layer : map.getLayers()) {
@@ -55,16 +55,23 @@ public class MapRenderer extends OrthogonalTiledMapRenderer {
                     if(currentLayer == drawSpritesAfterLayer){
                         //render the rest here
                     }
-                } else {
-                    for (MapObject object : layer.getObjects()) {
-                        colliderRender.rect(object.getProperties().get("x", Float.class),object.getProperties().get("y", Float.class), object.getProperties().get("width", Float.class),object.getProperties().get("height", Float.class));
-                        renderObject(object);
+                } else if (layer.getName().contains("Rocks")) {
+                    if (GameConstants.DEBUG) {
+                        endRender();
+                        colliderRender.setProjectionMatrix(spriteBatch.getProjectionMatrix());
+                        colliderRender.begin(ShapeRenderer.ShapeType.Line);
+                        for (MapObject object : layer.getObjects()) {
+                            colliderRender.rect(object.getProperties().get("x", Float.class), object.getProperties().get("y", Float.class), object.getProperties().get("width", Float.class), object.getProperties().get("height", Float.class));
+                            renderObject(object);
 
+                        }
+                        colliderRender.end();
+                        beginRender();
                     }
                 }
             }
         }
-        colliderRender.end();
+
         endRender();
     }
 }

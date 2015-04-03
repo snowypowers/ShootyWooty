@@ -1,26 +1,14 @@
 package com.eye7.ShootyWooty.render;
 
-        import com.badlogic.gdx.ApplicationAdapter;
         import com.badlogic.gdx.Gdx;
-        import com.badlogic.gdx.Input;
         import com.badlogic.gdx.InputProcessor;
-        import com.badlogic.gdx.graphics.GL20;
         import com.badlogic.gdx.graphics.OrthographicCamera;
-        import com.badlogic.gdx.graphics.Texture;
-        import com.badlogic.gdx.graphics.g2d.Sprite;
         import com.badlogic.gdx.graphics.g2d.SpriteBatch;
         import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-        import com.badlogic.gdx.maps.MapLayer;
-        import com.badlogic.gdx.maps.MapObjects;
         import com.badlogic.gdx.maps.MapProperties;
-        import com.badlogic.gdx.maps.objects.RectangleMapObject;
         import com.badlogic.gdx.maps.tiled.TiledMap;
-        import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
-        import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
         import com.badlogic.gdx.maps.tiled.TmxMapLoader;
         import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-        import com.badlogic.gdx.math.Vector2;
-        import com.badlogic.gdx.scenes.scene2d.Actor;
         import com.eye7.ShootyWooty.model.GameConstants;
         import com.eye7.ShootyWooty.object.Player;
         import com.eye7.ShootyWooty.world.GameMap;
@@ -60,7 +48,7 @@ public class DisplayMap implements InputProcessor {
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 960 / zoom, 540 / zoom);
         camera.update();
-        tiledMap = new TmxMapLoader().load("maps/Oasis10.tmx");
+        tiledMap = new TmxMapLoader().load("maps/collisionTest.tmx");
         tiledMapRenderer = new MapRenderer(tiledMap, sb);
 
         gameMap = new GameMap(tiledMap);

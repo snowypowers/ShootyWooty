@@ -68,8 +68,8 @@ public class Player {
 		position = new Vector2(x, y);
 		velocity = new Vector2(0, 0);
 
-        bulletl = new Bullet(this.x, this.y,this);
-        bulletr = new Bullet(this.x, this.y,this);
+        bulletl = new Bullet(270, this.x, this.y,this);
+        bulletr = new Bullet(90, this.x, this.y,this);
 
         this.collider = collider;
 
@@ -85,16 +85,18 @@ public class Player {
             bulletr.draw(sb);
         }
         Sprite s = new Sprite(pic);
-        s.setCenter(32,32);
+        s.setCenter(x,y);
         s.setRotation(dir);
-        s.setPosition(x,y);
+        //s.setPosition(x,y);
         s.draw(sb);
-
+        sb.end();
         if (GameConstants.DEBUG) {
+            healthBar.setProjectionMatrix(sb.getProjectionMatrix());
             healthBar.begin(ShapeRenderer.ShapeType.Line);
             healthBar.circle(collider.getCircle().x,collider.getCircle().y,collider.getCircle().radius);
             healthBar.end();
         }
+        sb.begin();
     }
 
     public synchronized void decreaseHealth(){
