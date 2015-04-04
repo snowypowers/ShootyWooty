@@ -15,6 +15,7 @@ import com.eye7.ShootyWooty.model.GameConstants;
  * Created by JunXiang on 3/3/2015.
  */
 public class MainLoader {
+    private final String TAG = "MainLoader";
     public static BitmapFont white, green;
     public static TextureAtlas atlas;
     public static Skin skin;

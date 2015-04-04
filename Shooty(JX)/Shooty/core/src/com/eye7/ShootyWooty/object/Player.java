@@ -14,6 +14,7 @@ import com.eye7.ShootyWooty.model.GameConstants;
 import com.eye7.ShootyWooty.world.GameMap;
 
 public class Player {
+    private final String TAG;
     public static int nextID = 1;
 
     public GameMap map;
@@ -28,11 +29,13 @@ public class Player {
 	private Vector2 position;
 	private Vector2 velocity;
 
-
     private Bullet bulletl;
     private Bullet bulletr;
     private boolean shootLeft;
     private boolean shootRight;
+
+    private int score;
+    private int water;
 
     private CircleMapObject collider;
     private float RADIUS = 2;
@@ -44,14 +47,14 @@ public class Player {
     private Animation animation_east;
     private float animationFrameTime;
 
-    private ShapeRenderer healthBar;
+    private ShapeRenderer sr;
 
 
 	// takes in x,y as origin
 	public Player(GameMap map, CircleMapObject collider, int d) {
+        TAG = "Player" + String.valueOf(nextID);
         playerID = nextID;
         nextID++;
-        Gdx.app.log("Player", String.valueOf(playerID));
 
         this.map = map; // Reference to the GameMap object in order to get the positions of other objects;
 
@@ -73,8 +76,8 @@ public class Player {
 
         this.collider = collider;
 
-        healthBar = new ShapeRenderer();
-        healthBar.setColor(Color.BLACK);
+        sr = new ShapeRenderer();
+
 	}
 
     public void draw(SpriteBatch sb, float delta) {
@@ -90,17 +93,31 @@ public class Player {
         //s.setPosition(x,y);
         s.draw(sb);
         sb.end();
+        //Draw stuff here
         if (GameConstants.DEBUG) {
-            healthBar.setProjectionMatrix(sb.getProjectionMatrix());
-            healthBar.begin(ShapeRenderer.ShapeType.Line);
-            healthBar.circle(collider.getCircle().x,collider.getCircle().y,collider.getCircle().radius);
-            healthBar.end();
+            sr.setColor(Color.BLACK);
+            sr.setProjectionMatrix(sb.getProjectionMatrix());
+            sr.begin(ShapeRenderer.ShapeType.Line);
+            sr.circle(collider.getCircle().x,collider.getCircle().y,collider.getCircle().radius);
+            sr.end();
         }
         sb.begin();
     }
 
-    public synchronized void decreaseHealth(){
-        health-=20;
+    public synchronized void decreaseHealth(int dmg){
+        health-=dmg;
+        water = 0;
+        if (health < 0) {
+            health = 0;
+        }
+    }
+
+    public synchronized void collectWater() {
+        water += 1;
+         if (water == 3) {
+             score += 1;
+             water = 0;
+         }
     }
 
 
@@ -108,13 +125,13 @@ public class Player {
 	public void incrementX(float x) {
 		this.x +=x;
         collider.getCircle().setPosition(this.x,this.y);
-//        Gdx.app.log("Player",collider.x+" X");
+//        Gdx.app.log(TAG,collider.x+" X");
 	}
 
 	public void incrementY(float y) {
 		this.y += y;
         collider.getCircle().setPosition(this.x,this.y);
-//        Gdx.app.log("Player",collider.y+" Y");
+//        Gdx.app.log(TAG,collider.y+" Y");
 	}
 
     public void rotate (int r) {
@@ -194,25 +211,18 @@ public class Player {
         int Roff = dir % 90;
         if (Xoff < 16) {
             incrementX(-Xoff);
-            //Gdx.app.log("playerSnapX", String.valueOf(-Xoff));
         } else {
             incrementX(32 - Xoff);
-            //Gdx.app.log("playerSnapX", String.valueOf(32 - Xoff));
         }
-
         if (Yoff < 16) {
             incrementY(-Yoff);
-            //Gdx.app.log("playerSnapY", String.valueOf(-Yoff));
         } else {
             incrementY(32 - Yoff);
-            //Gdx.app.log("playerSnapY", String.valueOf(32 -Yoff));
         }
         if (Roff < 45) {
             rotate(-Roff);
-            //Gdx.app.log("playerSnapR", String.valueOf(-Roff));
         } else {
             rotate(90 - Roff);
-            //Gdx.app.log("playerSnapR", String.valueOf(90 - Roff));
         }
     }
 

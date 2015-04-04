@@ -16,19 +16,44 @@ public class GameMap {
     private final String TAG = "GameMap";
     private TiledMap map;
     private static Array<Rectangle> rocks=  new Array<Rectangle>();
+    private static Array<Rectangle> water=  new Array<Rectangle>();
     private MapObjects spawns;
-    public static int tileWidth = 64;
-    public static int tileHeight =64;
+
     public GameMap(TiledMap tmap) {
         GameConstants.PLAYERS.clear(); // Resets the PlayerList
         this.map = tmap;
+        //Get rocks
         MapObjects rockslist = map.getLayers().get("Rocks").getObjects();
         for (int i = 0; i < rockslist.getCount(); i++) {
             RectangleMapObject obj = (RectangleMapObject) rockslist.get(i);
             Rectangle rect= obj.getRectangle();
             rocks.add(new Rectangle(rect.x, rect.y, rect.width, rect.height));
         }
+        //Add rocks to border of map
+        for (int i = 0; i < GameConstants.MAP_WIDTH / 64;i++) {
+            //Northern Edge
+            rocks.add(new Rectangle(i*64, -GameConstants.TILE_SIZE, GameConstants.TILE_SIZE, GameConstants.TILE_SIZE));
+            //Southern Edge
+            rocks.add(new Rectangle(i*64, GameConstants.MAP_HEIGHT, GameConstants.TILE_SIZE, GameConstants.TILE_SIZE));
+        }
+        for (int i = 0; i < GameConstants.MAP_HEIGHT / 64;i++) {
+            //Western Edge
+            rocks.add(new Rectangle(-GameConstants.TILE_SIZE, i*64, GameConstants.TILE_SIZE, GameConstants.TILE_SIZE));
+            //Eastern Edge
+            rocks.add(new Rectangle( GameConstants.MAP_WIDTH, i*64, GameConstants.TILE_SIZE, GameConstants.TILE_SIZE));
+        }
         GameConstants.ROCKS = rocks;
+
+        //Get water
+        MapObjects waterlist = map.getLayers().get("Water").getObjects();
+        for (int i = 0; i < waterlist.getCount(); i++) {
+            RectangleMapObject obj = (RectangleMapObject) rockslist.get(i);
+            Rectangle rect= obj.getRectangle();
+            water.add(new Rectangle(rect.x, rect.y, rect.width, rect.height));
+        }
+        GameConstants.WATER = water;
+
+        //Get spawns
         this.spawns = map.getLayers().get("Spawns").getObjects();
 
     }

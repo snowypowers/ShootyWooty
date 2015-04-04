@@ -18,10 +18,12 @@ public class GameConstants {
 
     public static Timer TURN_TIMER; // The turn timer
 
+    public static float TILE_SIZE;
     public static float MAP_HEIGHT;
     public static float MAP_WIDTH;
     public static HashMap<Integer, Player> PLAYERS = new HashMap<Integer, Player>(); //Array of player objects
     public static Array<Rectangle> ROCKS;
+    public static Array<Rectangle> WATER;
 
     public static float SCALE_X;
     public static float SCALE_Y;

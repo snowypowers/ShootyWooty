@@ -18,6 +18,11 @@ import java.util.Arrays;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 
+/*
+ * MoveHandler. Created by TurnHandler to handle moves for each player.
+ * Each moveHandler is attached to a player and executes the moves according to the Cyclic Barrier found in TurnHandler.
+ * Contains methods to check for collisions with players, rocks and water.
+ */
 public class MoveHandler extends Thread{
     private final String TAG;
     //Phaser
@@ -35,11 +40,11 @@ public class MoveHandler extends Thread{
 
 
 
-    private float PLAYER_DISTANCE = 64; // control player amount to move
-    private float PLAYER_INCREMENT = 1f; // pixels per tick
+    private final float PLAYER_DISTANCE = 64; // control player amount to move
+    private final float PLAYER_INCREMENT = 1f; // pixels per tick
 
-    private float BULLET_DISTANCE= 128; // control bullet amount to move
-    private float BULLET_INCREMENT = 5f; // pixels per tick
+    private final float BULLET_DISTANCE= 128; // control bullet amount to move
+    private final float BULLET_INCREMENT = 5f; // pixels per tick
 
     private float bullet_distance_R;
     private float bullet_distance_L;
@@ -69,6 +74,7 @@ public class MoveHandler extends Thread{
     }
 
     public void run() {
+
         try {
             cb.await();
         } catch (InterruptedException e) {
@@ -81,7 +87,7 @@ public class MoveHandler extends Thread{
         for (int i = 0; i < 4;i++) {
             nextMove();//Initalises the moves
             /////////////////////////////////////////EXECUTE MOVEMENT///////////////////////////////////////
-            Gdx.app.log("MoveHandler","start");
+            Gdx.app.log("Move Info Player" + String.valueOf(player.getPlayerID()), String.valueOf(movement[0]) +" "+ String.valueOf(movement[1]) +" "+ String.valueOf(movement[2]) +" "+ String.valueOf(movement[3]));
 
             while (movement[0] > 0f || movement[1] > 0f || movement[3] != 0f){
 
@@ -185,6 +191,11 @@ public class MoveHandler extends Thread{
 
             }
 
+            /////////////////////////////////////////MISC EFFECTS///////////////////////////////////////
+            if (checkInWater()) {
+                player.collectWater();
+            }
+
             if (pointer == 3) {
                 continue;
             } else {
@@ -198,6 +209,8 @@ public class MoveHandler extends Thread{
                 }
             }
         }
+        /////////////////////////////////////////END OF TURN///////////////////////////////////////
+
         Gdx.app.log("MoveHandler", "End!");
     }
     /////////////////////////////////////METHODS FOR BULLET CONTROL///////////////////////////////////
@@ -250,92 +263,92 @@ public class MoveHandler extends Thread{
         int dir = player.getDir();
         float[] output = new float[4];
         if (s.contains("F")) {
-            if (dir == 0) {
+            if (dir == 0) {//FACING NORTH
                 output[0] = 0f;
                 output[1] = PLAYER_DISTANCE;
                 output[2] = PLAYER_INCREMENT;
                 output[3] = 0f;
-            } else if (dir == 90) {
+            } else if (dir == 90) {//FACING WEST
                 output[0] = PLAYER_DISTANCE;
                 output[1] = 0f;
                 output[2] = -PLAYER_INCREMENT;
                 output[3] = 0f;
-            } else if (dir == 180) {
+            } else if (dir == 180) {//FACING SOUTH
                 output[0] = 0f;
                 output[1] = PLAYER_DISTANCE;
                 output[2] = -PLAYER_INCREMENT;
                 output[3] = 0f;
-            } else if (dir == 270) {
+            } else if (dir == 270) {//FACING EAST
                 output[0] = PLAYER_DISTANCE;
                 output[1] = 0f;
                 output[2] = PLAYER_INCREMENT;
                 output[3] = 0f;
             }
         } else if (s.contains("R")) {
-            if (dir == 0) {
+            if (dir == 0) {//FACING NORTH
                 output[0] = PLAYER_DISTANCE;
                 output[1] = 0f;
                 output[2] = PLAYER_INCREMENT;
                 output[3] = -90f;
-            } else if (dir == 90) {
+            } else if (dir == 90) {//FACING WEST
                 output[0] = 0f;
                 output[1] = PLAYER_DISTANCE;
                 output[2] = PLAYER_INCREMENT;
                 output[3] = -90f;
-            } else if (dir == 180) {
+            } else if (dir == 180) {//FACING SOUTH
                 output[0] = PLAYER_DISTANCE;
                 output[1] = 0f;
                 output[2] = -PLAYER_INCREMENT;
                 output[3] = -90f;
-            } else if (dir == 270) {
+            } else if (dir == 270) {//FACING EAST
                 output[0] = 0f;
                 output[1] = PLAYER_DISTANCE;
                 output[2] = -PLAYER_INCREMENT;
                 output[3] = -90f;
             }
         } else if (s.contains("L")) {
-            if (dir == 0) {
+            if (dir == 0) {//FACING NORTH
                 output[0] = PLAYER_DISTANCE;
                 output[1] = 0f;
                 output[2] = -PLAYER_INCREMENT;
                 output[3] = 90f;
-            } else if (dir == 90) {
+            } else if (dir == 90) {//FACING WEST
                 output[0] = 0f;
                 output[1] = PLAYER_DISTANCE;
                 output[2] = -PLAYER_INCREMENT;
                 output[3] = 90f;
-            } else if (dir == 180) {
+            } else if (dir == 180) {//FACING SOUTH
                 output[0] = PLAYER_DISTANCE;
                 output[1] = 0f;
                 output[2] = PLAYER_INCREMENT;
                 output[3] = 90f;
-            } else if (dir == 270) {
+            } else if (dir == 270) {//FACING EAST
                 output[0] = 0f;
                 output[1] = PLAYER_DISTANCE;
                 output[2] = PLAYER_INCREMENT;
                 output[3] = 90f;
             }
         } else if (s.contains("D")) {
-            if (dir == 0) {
+            if (dir == 0) {//FACING NORTH
                 output[0] = 0f;
                 output[1] = PLAYER_DISTANCE;
-                output[2] = PLAYER_INCREMENT;
-                output[3] = 0f;
-            } else if (dir == 90) {
+                output[2] = -PLAYER_INCREMENT;
+                output[3] = 180f;
+            } else if (dir == 90) {//FACING WEST
                 output[0] = PLAYER_DISTANCE;
                 output[1] = 0f;
                 output[2] = PLAYER_INCREMENT;
-                output[3] = 0f;
-            } else if (dir == 180) {
+                output[3] = 180f;
+            } else if (dir == 180) {//FACING SOUTH
                 output[0] = 0f;
-                output[1] = -PLAYER_DISTANCE;
+                output[1] = PLAYER_DISTANCE;
                 output[2] = PLAYER_INCREMENT;
-                output[3] = 0f;
-            } else if (dir == 270) {
-                output[0] = -PLAYER_DISTANCE;
+                output[3] = 180f;
+            } else if (dir == 270) {//FACING EAST
+                output[0] = PLAYER_DISTANCE;
                 output[1] = 0f;
-                output[2] = PLAYER_INCREMENT;
-                output[3] = 0f;
+                output[2] = -PLAYER_INCREMENT;
+                output[3] = 180f;
             }
         } else if (s.contains("B")) {
             output[0] = 0f;
@@ -343,7 +356,7 @@ public class MoveHandler extends Thread{
             output[2] = 0f;
             output[3] = 0f;
         }
-        Gdx.app.log("Move Info Player" + String.valueOf(player.getPlayerID()), String.valueOf(output[0]) +" "+ String.valueOf(output[1]) +" "+ String.valueOf(output[2]) +" "+ String.valueOf(output[3]));
+
         return output;
     }
 
@@ -353,7 +366,6 @@ public class MoveHandler extends Thread{
         for (int i = 0; i < GameConstants.ROCKS.size;i++) {
             if (Intersector.overlaps(b.getCollider().getCircle(), GameConstants.ROCKS.get(i))) {
                 Gdx.app.log(TAG, "Collision with rock at " + GameConstants.ROCKS.get(i).getX() + " " + GameConstants.ROCKS.get(i).getY());
-                player.decreaseHealth();
                 return true;
             }
         }
@@ -364,7 +376,7 @@ public class MoveHandler extends Thread{
                 continue; // pass if checking if hit himself
             }
             if (Intersector.overlaps(b.getCollider().getCircle(), p.getCollider().getCircle())) {
-                p.decreaseHealth();
+                p.decreaseHealth(20);
                 return true;
             }
         }
@@ -379,7 +391,7 @@ public class MoveHandler extends Thread{
         for (int i = 0; i < GameConstants.ROCKS.size;i++) {
             if (Intersector.overlaps(player.getCollider().getCircle(), GameConstants.ROCKS.get(i))) {
                 Gdx.app.log(TAG, "Collision with rock at " + GameConstants.ROCKS.get(i).getX() + " " + GameConstants.ROCKS.get(i).getY());
-                player.decreaseHealth();
+                player.decreaseHealth(10);
                 return true;
             }
         }
@@ -390,11 +402,21 @@ public class MoveHandler extends Thread{
             }
             if (Intersector.overlaps(player.getCollider().getCircle(), p.getCollider().getCircle())) {
                 Gdx.app.log(TAG, "Collision with player at " + String.valueOf(p.getCollider().getCircle().x) + " " + String.valueOf(p.getCollider().getCircle().y));
-                p.decreaseHealth();
+                player.decreaseHealth(10);
+                p.decreaseHealth(10);
                 return true;
             }
         }
 
+        return false;
+    }
+
+    public boolean checkInWater() {
+        for (int i = 0; i < GameConstants.WATER.size;i++) {
+         if (Intersector.overlaps(player.getCollider().getCircle(), GameConstants.WATER.get(i))) {
+             return true;
+         }
+        }
         return false;
     }
 

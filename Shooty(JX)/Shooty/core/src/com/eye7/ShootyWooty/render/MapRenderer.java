@@ -35,7 +35,7 @@ public class MapRenderer extends OrthogonalTiledMapRenderer {
         spriteBatch = sb;
         sprites = new ArrayList<Sprite>();
         colliderRender = new ShapeRenderer();
-        colliderRender.setColor(Color.BLACK);
+
     }
 
     public void addSprite(Sprite sprite){
@@ -50,14 +50,29 @@ public class MapRenderer extends OrthogonalTiledMapRenderer {
         for (MapLayer layer : map.getLayers()) {
             if (layer.isVisible()) {
                 if (layer instanceof TiledMapTileLayer) {
-                    renderTileLayer((TiledMapTileLayer)layer);
+                    renderTileLayer((TiledMapTileLayer) layer);
                     currentLayer++;
-                    if(currentLayer == drawSpritesAfterLayer){
+                    if (currentLayer == drawSpritesAfterLayer) {
                         //render the rest here
                     }
-                } else if (layer.getName().contains("Rocks")) {
+                } else if (layer.getName().contains("Rocks")) { // Renders all rock squares
                     if (GameConstants.DEBUG) {
                         endRender();
+                        colliderRender.setColor(Color.BLACK);
+                        colliderRender.setProjectionMatrix(spriteBatch.getProjectionMatrix());
+                        colliderRender.begin(ShapeRenderer.ShapeType.Line);
+                        for (Rectangle r : GameConstants.ROCKS) {
+                            colliderRender.rect(r.getX(), r.getY(), r.getWidth(), r.getHeight());
+                            //renderObject(object);
+
+                        }
+                        colliderRender.end();
+                        beginRender();
+                    }
+                } else if (layer.getName().contains("Water")) { // Renders all water squares
+                    if (GameConstants.DEBUG) {
+                        endRender();
+                        colliderRender.setColor(Color.BLUE);
                         colliderRender.setProjectionMatrix(spriteBatch.getProjectionMatrix());
                         colliderRender.begin(ShapeRenderer.ShapeType.Line);
                         for (MapObject object : layer.getObjects()) {
@@ -75,3 +90,4 @@ public class MapRenderer extends OrthogonalTiledMapRenderer {
         endRender();
     }
 }
+

@@ -8,6 +8,7 @@ import com.badlogic.gdx.maps.objects.CircleMapObject;
 import com.badlogic.gdx.math.Vector2;
 
 public class Bullet {
+    private final String TAG;
 
     //Texture for bullet
     private Texture pic = new Texture(Gdx.files.internal("bullet_L.png"));
@@ -26,6 +27,12 @@ public class Bullet {
     private float RADIUS = 3;
 
     public Bullet(int dir, float x, float y, Player player){
+        if (dir == 90) {
+            TAG = "RightBullet, Player" + player.getPlayerID();
+        } else {
+            TAG = "LeftBullet, Player" + player.getPlayerID();
+        }
+
         this.dir = dir;
         this.x = x;
         this.y = y;
@@ -56,7 +63,7 @@ public class Bullet {
         returnY = y;
     }
 
-    // getters
+    // getters-
     public float getX(){
         return x;
     }

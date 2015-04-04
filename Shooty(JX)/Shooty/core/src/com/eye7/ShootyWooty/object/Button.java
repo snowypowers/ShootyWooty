@@ -21,6 +21,7 @@ import com.eye7.ShootyWooty.helper.MainLoader;
  * string accordingly
  */
 public class Button {
+    private final String TAG = "Button";
 
     private int x;
     private int y;
@@ -68,7 +69,7 @@ public class Button {
 
 
     public void show() {
-        Gdx.app.log("GameScreen", "show called");
+        Gdx.app.log(TAG, "show called");
 
         table.setBounds(x, y, 20, 20); // table that holds the button
 
@@ -95,9 +96,9 @@ public class Button {
                 if (!lock) { // record input when not locked
                     imageButtonSytle.up = buttonUP.get(nMove);
                     imageButtonSytle.down = buttonDOWN.get(nMove);
-//                    Gdx.app.log("Button", moves.substring(0, 1));
+//                    Gdx.app.log(TAG, moves.substring(0, 1));
                     moves = moves.substring(0, 1) + movements[nMove] + moves.substring(2, 3);
-//                    Gdx.app.log("Button", moves + " after");
+//                    Gdx.app.log(TAG, moves + " after");
                     if (nMove == buttonUP.size() - 1) {
                         nMove = 0;
                     } else {
@@ -115,7 +116,7 @@ public class Button {
                     imageButtonSytle2.up = bulletL.get(nbulletL);
                     imageButtonSytle2.down = bulletL.get(nbulletL);
 
-//                    Gdx.app.log("Button", moves);
+//                    Gdx.app.log(TAG, moves);
                     if (nbulletL == 1) {
                         moves = "0" + moves.substring(1,3);
                         nbulletL = 0;
@@ -138,11 +139,11 @@ public class Button {
                     if (nbulletR == 1) {
                         moves = moves.substring(0, 2) + "0";
                         nbulletR = 0;
-//                        Gdx.app.log("Button", moves);
+//                        Gdx.app.log(TAG, moves);
                     } else {
                         moves = moves.substring(0, 2) + "1";
                         nbulletR += 1;
-//                        Gdx.app.log("Button", moves);
+//                        Gdx.app.log(TAG, moves);
                     }
                 }
             }
@@ -233,7 +234,7 @@ public class Button {
 
     public void onClick() {
         // TODO Auto-generated method stub
-        Gdx.app.log("Button", "click");
+        Gdx.app.log(TAG, "click");
     }
 
 
