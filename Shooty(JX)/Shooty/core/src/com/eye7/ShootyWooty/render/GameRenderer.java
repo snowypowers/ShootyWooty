@@ -71,14 +71,54 @@ public class GameRenderer {
         MainLoader.green.draw(batcher, "Player2 blood: "+Integer.toString(GameConstants.PLAYERS.get(2).getHealth()), 0,90);
 
 //        if(!stop) {
-//            batcher.draw(MainLoader.Animation_cactus1_idle.getKeyFrame(runTime,true), 100, 20, 64, 64);
-//            batcher.draw(MainLoader.Animation_cactus1_RS.getKeyFrame(runTime,true), 164,84,64,64);
-//            batcher.draw(MainLoader.Animation_cactus1_LS.getKeyFrame(runTime,true), 164,20,64,64);
-//            batcher.draw(MainLoader.Animation_cactus1_back.getKeyFrame(runTime,true), 100,84,64,64);
-//            batcher.draw(MainLoader.Animation_cactus1_front.getKeyFrame(runTime,true), 228,84,64,64);
-//            batcher.draw(MainLoader.Animation_cactus1_score.getKeyFrame(runTime,true), 228,20,64,64);
-//            batcher.draw(MainLoader.Animation_faucet.getKeyFrame(runTime,true), 292,20,64+64,64+64);
-//
+//             batcher.draw(CactusLoader.animation_cactus1_idle.getKeyFrame(runTime,true), 100, 20, 64, 64);
+//            batcher.draw(CactusLoader.animation_cactus1_RS.getKeyFrame(runTime,true), 164,84,64,64);
+//              batcher.draw(CactusLoader.animation_cactus1_RS_idle.getKeyFrame(runTime,true), 164,84,64,64);
+//            batcher.draw(CactusLoader.animation_cactus1_LS.getKeyFrame(runTime,true), 164,20,64,64);
+//              batcher.draw(CactusLoader.animation_cactus1_LS_idle.getKeyFrame(runTime,true), 164,20,64,64);
+//            batcher.draw(CactusLoader.animation_cactus1_back.getKeyFrame(runTime,true), 100,84,64,64);
+//              batcher.draw(CactusLoader.animation_cactus1_back_idle.getKeyFrame(runTime,true), 100,84,64,64);
+//            batcher.draw(CactusLoader.animation_cactus1_front.getKeyFrame(runTime,true), 228,84,64,64);
+//            batcher.draw(CactusLoader.animation_cactus1_score.getKeyFrame(runTime,true), 228,20,64,64);
+//            batcher.draw(CactusLoader.animation_cactus1_shot.getKeyFrame(runTime,true), 292,20,64,64);
+//            batcher.draw(CactusLoader.animation_cactus1_lose.getKeyFrame(runTime,true), 292,84,64,64);
+//            batcher.draw(CactusLoader.Animation_faucet.getKeyFrame(runTime,true), 292+64,20,64+64,64+64);
+
+//            batcher.draw(CactusLoader.animation_cactus2_idle.getKeyFrame(runTime,true), 100, 20, 64, 64);
+//            batcher.draw(CactusLoader.animation_cactus2_RS.getKeyFrame(runTime,true), 356,20,64,64);
+//            batcher.draw(CactusLoader.animation_cactus2_RS_idle.getKeyFrame(runTime,true), 164,84,64,64);
+//            batcher.draw(CactusLoader.animation_cactus2_LS.getKeyFrame(runTime,true), 356,84,64,64);
+//            batcher.draw(CactusLoader.animation_cactus2_LS_idle.getKeyFrame(runTime,true), 164,20,64,64);
+//            batcher.draw(CactusLoader.animation_cactus2_back.getKeyFrame(runTime,true), 100,84,64,64);
+//            batcher.draw(CactusLoader.animation_cactus2_back_idle.getKeyFrame(runTime,true), 420,20,64,64);
+//            batcher.draw(CactusLoader.animation_cactus2_front.getKeyFrame(runTime,true), 228,84,64,64);
+//            batcher.draw(CactusLoader.animation_cactus2_score.getKeyFrame(runTime,true), 228,20,64,64);
+//            batcher.draw(CactusLoader.animation_cactus2_shot.getKeyFrame(runTime,true), 292,20,64,64);
+//            batcher.draw(CactusLoader.animation_cactus2_lose.getKeyFrame(runTime,true), 292,84,64,64);
+
+//              batcher.draw(CactusLoader.animation_cactus3_idle.getKeyFrame(runTime,true), 100, 20, 64, 64);
+//            batcher.draw(CactusLoader.animation_cactus3_RS.getKeyFrame(runTime,true), 356,20,64,64);
+//            batcher.draw(CactusLoader.animation_cactus3_RS_idle.getKeyFrame(runTime,true), 164,84,64,64);
+//            batcher.draw(CactusLoader.animation_cactus3_LS.getKeyFrame(runTime,true), 356,84,64,64);
+//            batcher.draw(CactusLoader.animation_cactus3_LS_idle.getKeyFrame(runTime,true), 164,20,64,64);
+//            batcher.draw(CactusLoader.animation_cactus3_back.getKeyFrame(runTime,true), 100,84,64,64);
+//            batcher.draw(CactusLoader.animation_cactus3_back_idle.getKeyFrame(runTime,true), 420,20,64,64);
+//            batcher.draw(CactusLoader.animation_cactus3_front.getKeyFrame(runTime,true), 228,84,64,64);
+//            batcher.draw(CactusLoader.animation_cactus3_score.getKeyFrame(runTime,true), 228,20,64,64);
+//            batcher.draw(CactusLoader.animation_cactus3_shot.getKeyFrame(runTime,true), 292,20,64,64);
+//            batcher.draw(CactusLoader.animation_cactus3_lose.getKeyFrame(runTime,true), 292,84,64,64);
+
+//            batcher.draw(CactusLoader.animation_cactus4_idle.getKeyFrame(runTime,true), 100, 20, 64, 64);
+//            batcher.draw(CactusLoader.animation_cactus4_RS.getKeyFrame(runTime,true), 356,20,64,64);
+//            batcher.draw(CactusLoader.animation_cactus4_RS_idle.getKeyFrame(runTime,true), 164,84,64,64);
+//            batcher.draw(CactusLoader.animation_cactus4_LS.getKeyFrame(runTime,true), 356,84,64,64);
+//            batcher.draw(CactusLoader.animation_cactus4_LS_idle.getKeyFrame(runTime,true), 164,20,64,64);
+//            batcher.draw(CactusLoader.animation_cactus4_back.getKeyFrame(runTime,true), 100,84,64,64);
+//            batcher.draw(CactusLoader.animation_cactus4_back_idle.getKeyFrame(runTime,true), 420,20,64,64);
+//            batcher.draw(CactusLoader.animation_cactus4_front.getKeyFrame(runTime,true), 228,84,64,64);
+//            batcher.draw(CactusLoader.animation_cactus4_score.getKeyFrame(runTime,true), 228,20,64,64);
+//            batcher.draw(CactusLoader.animation_cactus4_shot.getKeyFrame(runTime,true), 292,20,64,64);
+//            batcher.draw(CactusLoader.animation_cactus4_lose.getKeyFrame(runTime,true), 292,84,64,64);
 //        }
         //MainLoader.white.setScale(main.scaleX, main.scaleY);
         batcher.end();
