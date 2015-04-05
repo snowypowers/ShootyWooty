@@ -81,12 +81,32 @@
             style="@style/InvPopupButton"
             android:text="@string/accept_popup_invite" />
     </LinearLayout>
+    <LinearLayout android:id="@+id/stayLeave_popup" style="@style/InvPopup">
+        <TextView android:id="@+id/decStayLeave_text" style="@style/InvPopupText" />
+        <Button android:id="@+id/button_stay"
+            style="@style/InvPopupButton"
+            android:text="@string/cont_stay" />
+        <!--android:onClick="switchToScreen(R.id.screen_game)"-->
+
+        <Button android:id="@+id/button_leave"
+            style="@style/InvPopupButton"
+            android:text="@string/quit_game"
+            android:onClick= "leaveRoom"/>
+    </LinearLayout>
 
     <!-- "PLEASE WAIT" SCREEN -->
     <LinearLayout android:id="@+id/screen_wait" style="@style/LLScreen">
         <TextView style="@style/Blurb" android:text="@string/please_wait" />
     </LinearLayout>
-
+    <LinearLayout android:id="@+id/won" style="@style/LLScreen">
+        <TextView style="@style/Blurb" android:text="@string/you_won" android:textSize="72sp"/>
+    </LinearLayout>
+    <LinearLayout android:id="@+id/lost" style="@style/LLScreen">
+        <TextView style="@style/Blurb" android:text="@string/you_lost" android:textSize="72sp"/>
+    </LinearLayout>
+    <LinearLayout android:id="@+id/YouDrew" style="@style/LLScreen">
+        <TextView style="@style/Blurb" android:text="@string/you_drew" android:textSize="72sp"/>
+    </LinearLayout>
     <!-- GAMEPLAY SCREEN -->
     <LinearLayout android:id="@+id/screen_game" style="@style/LLScreen">
     </LinearLayout>

@@ -17,7 +17,7 @@ public class GameConstants {
     public static int PLAYER_TAG = 1; // This is the client's player tag
 
     public static Timer TURN_TIMER; // The turn timer
-
+    public static int myID;
     public static float TILE_SIZE;
     public static float MAP_HEIGHT;
     public static float MAP_WIDTH;

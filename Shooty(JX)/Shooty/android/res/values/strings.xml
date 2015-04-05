@@ -31,5 +31,11 @@
     <string name="click_me">Click me!</string>
     <string name="is_inviting_you">is challenging you to a game!</string>
     <string name="signin_other_error">There was an issue with sign in. Please try again later.</string>
+    <string name="you_won">YOU WON! </string>
+    <string name="you_lost">YOU LOST!</string>
+    <string name="you_drew">A DRAW!</string>
+    <string name="cont_stay">STAY</string>
+    <string name="quit_game">QUIT</string>
+    <!--<string name="you_drew">IT'S A DRAW!</string>-->
 
 </resources>

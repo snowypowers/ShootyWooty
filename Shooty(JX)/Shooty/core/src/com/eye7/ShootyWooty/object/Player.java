@@ -8,14 +8,13 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.objects.CircleMapObject;
-import com.badlogic.gdx.maps.objects.CircleMapObject;
 import com.badlogic.gdx.math.Vector2;
 import com.eye7.ShootyWooty.model.GameConstants;
 import com.eye7.ShootyWooty.world.GameMap;
 
 public class Player {
     private final String TAG;
-    public static int nextID = 1;
+//    public static int nextID = 1;
 
     public GameMap map;
 
@@ -51,10 +50,10 @@ public class Player {
 
 
 	// takes in x,y as origin
-	public Player(GameMap map, CircleMapObject collider, int d) {
-        TAG = "Player" + String.valueOf(nextID);
-        playerID = nextID;
-        nextID++;
+	public Player(GameMap map, CircleMapObject collider, int d, int id) {
+        TAG = "Player" + String.valueOf(id+1);
+        playerID = id+1;
+     //   nextID++;
 
         this.map = map; // Reference to the GameMap object in order to get the positions of other objects;
 
@@ -232,6 +231,8 @@ public class Player {
 
     }
 
-
+    public int getScore(){
+        return score;
+    }
 
 }
