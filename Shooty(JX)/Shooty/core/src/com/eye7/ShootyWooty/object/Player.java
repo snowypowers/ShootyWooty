@@ -102,6 +102,7 @@ public class Player {
             sr.end();
         }
         sb.begin();
+
     }
 
     public synchronized void decreaseHealth(int dmg){

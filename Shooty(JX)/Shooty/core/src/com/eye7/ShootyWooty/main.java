@@ -29,8 +29,8 @@ public class main extends Game {
         Gdx.app.log("ShootyGame", "created");
         GameConstants.SCALE_X = Gdx.graphics.getWidth() / 960.0f;
         GameConstants.SCALE_Y = Gdx.graphics.getHeight() / 540.0f;
-        CactusLoader cactusLoader = new CactusLoader(GameConstants.NUM_PLAYERS);
         MainLoader.load();
+        CactusLoader cactusLoader = new CactusLoader(GameConstants.NUM_PLAYERS);
         setScreen(new MainScreen(this, actionResolver));
         Gdx.app.log("Screen Reso:", "Width: " + String.valueOf(Gdx.graphics.getWidth()));
         Gdx.app.log("Screen Reso:", "Height: " + String.valueOf(Gdx.graphics.getHeight()));

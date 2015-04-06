@@ -15,12 +15,11 @@ import com.eye7.ShootyWooty.model.GameConstants;
  * Created by JunXiang on 3/3/2015.
  */
 public class MainLoader {
-    private final String TAG = "MainLoader";
     public static BitmapFont white, green;
-    public static TextureAtlas atlas;
-    public static Skin skin;
+    public static TextureAtlas atlas, Characters;
+    public static Skin skin, skinCharacters;
 
-    public static Animation Animation_faucet;
+    public static Animation animation_faucet;
 
     public static void load() {
         white = new BitmapFont(Gdx.files.internal("fonts/white.fnt"),true); // white font
@@ -30,18 +29,19 @@ public class MainLoader {
         atlas = new TextureAtlas(Gdx.files.internal("buttons/Gbuttons.pack")); // atlas for skin
         skin = new Skin(atlas); // skin containing drawables
 
-        Texture faucet = new Texture(Gdx.files.internal("ShootyUI/Sprite_faucet.png"));
-        faucet.setFilter(Texture.TextureFilter.Nearest,Texture.TextureFilter.Nearest);
+        Characters = new TextureAtlas(Gdx.files.internal("ShootyUI/Character.pack"));
+        skinCharacters = new Skin(Characters);
 
         TextureRegion[] faucets = new TextureRegion[11];
         int faucet_count=0;
-        for (int i = 0; i < 11 ; i++) {
-            faucets[i] = new TextureRegion(faucet,faucet_count,0,64+64,64+64);
-            faucets[i].flip(false,true);
-            faucet_count+=64+64;
+        for (int i = 1; i < 12 ; i++) {
+            faucets[i-1] = new TextureRegion(skinCharacters.getRegion("Sprite.faucet"+String.valueOf(i)));
+            faucets[i-1].flip(false,true);
         }
-        Animation_faucet = new Animation(0.2f,faucets);
+        animation_faucet = new Animation(0.2f,faucets);
+
 
     }
+
 
 }
