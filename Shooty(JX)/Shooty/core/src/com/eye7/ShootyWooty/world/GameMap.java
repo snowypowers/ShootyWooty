@@ -64,7 +64,7 @@ public class GameMap {
         for (int i = 0; i < num; i++) {
             EllipseMapObject spawnpoint = (EllipseMapObject) spawns.get("Spawn" + String.valueOf(i+1));
             CircleMapObject spawn = new CircleMapObject(spawnpoint.getEllipse().x+32, spawnpoint.getEllipse().y+32, 20);
-            Player p = new Player(this, spawn, Integer.parseInt(spawnpoint.getProperties().get("direction").toString()));
+            Player p = new Player(this, spawn, Integer.parseInt(spawnpoint.getProperties().get("direction").toString()),i);
             GameConstants.PLAYERS.put(p.getPlayerID(), p);
             Gdx.app.log(TAG, "Created Player: " + String.valueOf(p.getPlayerID()));
         }
