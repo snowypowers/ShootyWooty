@@ -173,8 +173,84 @@ public class Player {
             sr.circle(collider.getCircle().x,collider.getCircle().y,collider.getCircle().radius);
             sr.end();
         }
-        sb.begin();
 
+        //initialize the healthbars
+        Sprite healthBarBG = new Sprite(new Texture("players/healthBG.png"));
+        Sprite healthBarFG = new Sprite(new Texture("players/healthFG.png"));
+
+        //set coordinates
+        healthBarBG.setX(x-RADIUS-25);
+        healthBarBG.setY(y+RADIUS+30);
+
+        healthBarFG.setX(x-RADIUS-25);
+        healthBarFG.setY(y+RADIUS+30);
+        //set origin of healthbar to 0,0. This allows the health bar to fix the the left and decrease from the right.
+        healthBarFG.setOrigin(0,0);
+        healthBarBG.setOrigin(0,0);
+
+        //healthBar image is too big, so scaling it down
+        healthBarBG.setScale(0.7f, 1f);
+        healthBarFG.setScale(0.7f, 1f);
+
+        //connect the healthBar to the health of the player
+        healthBarFG.setScale(((float)0.7 *health)/(float)100, 1f);
+
+        //initialize the waterBars
+        int waterBarFill = score*3+water;
+
+        Sprite waterBarBG = new Sprite(new Texture("players/waterBarBG.png"));
+        Sprite waterBarFG = new Sprite(new Texture("players/waterBarFG.png"));
+
+        //set the coordinates
+        waterBarBG.setX(x+RADIUS+25);
+        waterBarBG.setY(y-RADIUS-25);
+
+        waterBarFG.setX(x+RADIUS+25);
+        waterBarFG.setY(y-RADIUS-25);
+
+        //connect the waterBar to the water content held by the player
+        waterBarFG.setScale(waterBarFill/(float)9, 1f);
+
+
+
+        sb.begin();
+        //draw the bars
+        healthBarBG.draw(sb);
+        healthBarFG.draw(sb);
+
+        waterBarBG.draw(sb);
+        waterBarFG.draw(sb);
+
+        //no of move bars
+        int moves = 4;// I will get this anvita, should range from 0 to 4
+
+        if (moves!=0){
+            Sprite nOfMoves = getNoOfMoves(moves);
+            nOfMoves.draw(sb);
+        }
+//        sb.begin();
+    }
+
+
+    //returns a sprite with the no of moves as input to the player. This will be drawn on the player.
+    //pre condition: 1<=n<=4
+    public synchronized Sprite getNoOfMoves(int n){
+        Sprite nOfMoves;
+        if(n==1){
+            nOfMoves = new Sprite(new Texture("players/1Move.png"));
+        }
+        else if(n==2){
+            nOfMoves = new Sprite(new Texture("players/2Moves.png"));
+        }
+        else if(n==3){
+            nOfMoves = new Sprite(new Texture("players/3Moves.png"));
+        }
+        else{
+            nOfMoves = new Sprite(new Texture("players/4Moves.png"));
+        }
+        nOfMoves.setX(getX()-RADIUS-22);
+        nOfMoves.setY(getY()+RADIUS+45);
+        return nOfMoves;
     }
 
     public synchronized void decreaseHealth(int dmg){
