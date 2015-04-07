@@ -61,6 +61,7 @@ public class GameWorld {
                 if (time < 30) {
                     out = "Player deciding...";
                     if (dead==true){
+                        out = "You are dead!";
                         button0.setLock(true); // lock the button from being pressed while executing moves
                         button1.setLock(true);
                         button2.setLock(true);

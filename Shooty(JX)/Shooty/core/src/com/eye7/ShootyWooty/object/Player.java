@@ -9,8 +9,11 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.objects.CircleMapObject;
 import com.badlogic.gdx.math.Vector2;
+import com.eye7.ShootyWooty.helper.CactusLoader;
 import com.eye7.ShootyWooty.model.GameConstants;
 import com.eye7.ShootyWooty.world.GameMap;
+
+import java.util.HashMap;
 
 public class Player {
     private final String TAG;
@@ -24,6 +27,12 @@ public class Player {
     private int playerID;
     private Texture pic;
     public int health;
+
+    private HashMap<String, Animation> animations = null;
+    private PlayerState playerState;
+    private PlayerState previousState;
+    private long stateDelta;
+    public Object statusLock;
 
 	private Vector2 position;
 	private Vector2 velocity;
@@ -39,12 +48,6 @@ public class Player {
     private CircleMapObject collider;
     private float RADIUS = 2;
 
-    private Animation animation_idle;
-    private Animation animation_north;
-    private Animation animation_south;
-    private Animation animation_west;
-    private Animation animation_east;
-    private float animationFrameTime;
 
     private ShapeRenderer sr;
 
@@ -57,7 +60,20 @@ public class Player {
 
         this.map = map; // Reference to the GameMap object in order to get the positions of other objects;
 
-        setUpSprites();
+        switch(playerID) {
+            case 1: animations = CactusLoader.cactus1_animations;
+                break;
+            case 2: animations = CactusLoader.cactus2_animations;
+                break;
+            case 3: animations = CactusLoader.cactus3_animations;
+                break;
+            case 4: animations = CactusLoader.cactus4_animations;
+                break;
+        }
+        this.statusLock = new Object();
+        playerState = PlayerState.IDLE;
+        previousState = PlayerState.IDLE;
+
         this.pic = new Texture(Gdx.files.internal("players/player"+String.valueOf(playerID)+".png"));
 
         //Coordinates of the middle of the circle
@@ -86,9 +102,63 @@ public class Player {
         if (shootRight) {
             bulletr.draw(sb);
         }
-        Sprite s = new Sprite(pic);
+        Sprite s = null;
+        synchronized (statusLock) {
+            //Gdx.app.log(TAG, "Rendering");
+            while (s == null) {
+                if (playerState == PlayerState.DEAD) {
+                    if (stateDelta <= animations.get("dead").getAnimationDuration()) {
+                        stateDelta += delta;
+                        s = new Sprite(animations.get("dead").getKeyFrame(stateDelta));
+                    } else {
+                        s = new Sprite(animations.get("dead").getKeyFrame(animations.get("dead").getAnimationDuration()));
+                    }
+
+                } else if (playerState == PlayerState.IDLE) {
+                    if (previousState != PlayerState.IDLE) {
+                        previousState = PlayerState.IDLE;
+                        stateDelta = 0;
+                    } else {
+                        stateDelta += delta;
+                    }
+                    s = new Sprite(animations.get(getdirection() + ".idle").getKeyFrame(stateDelta));
+
+                } else if (playerState == PlayerState.MOVING) {
+                    if (previousState != PlayerState.MOVING) {
+                        previousState = PlayerState.MOVING;
+                        stateDelta = 0;
+                    } else {
+                        stateDelta += delta;
+                    }
+                    s = new Sprite(animations.get(getdirection()).getKeyFrame(stateDelta));
+
+                } else if (playerState == PlayerState.DAMAGED) {
+                    if (stateDelta <= animations.get("shot").getAnimationDuration()) {
+                        s = new Sprite(animations.get("shot").getKeyFrame(stateDelta));
+                    } else {
+                        playerState = previousState; // Restore previous state
+                        previousState = PlayerState.DAMAGED;
+                        statusLock.notifyAll();
+                    }
+
+                } else if (playerState == PlayerState.COLLECTING_WATER) {
+                    if (previousState != PlayerState.DAMAGED) { //If not damaged
+                        if (stateDelta <= animations.get("score").getAnimationDuration()) {
+                            s = new Sprite(animations.get("score").getKeyFrame(stateDelta));
+                        } else {
+                            playerState = previousState; // Restore previous state
+                            previousState = PlayerState.COLLECTING_WATER;
+                            statusLock.notifyAll();
+                        }
+                    } else {
+                        changeAnimation(PlayerState.IDLE);
+                        s = new Sprite(animations.get(getdirection() + ".idle").getKeyFrame(stateDelta));
+                    }
+                }
+            }
+        }
+
         s.setCenter(x,y);
-        s.setRotation(dir);
         //s.setPosition(x,y);
         s.draw(sb);
         sb.end();
@@ -110,6 +180,7 @@ public class Player {
         if (health < 0) {
             health = 0;
         }
+        changeAnimation(PlayerState.DAMAGED);
     }
 
     public synchronized void collectWater() {
@@ -118,20 +189,25 @@ public class Player {
              score += 1;
              water = 0;
          }
+        changeAnimation(PlayerState.COLLECTING_WATER);
     }
 
 
 	// setters
-	public void incrementX(float x) {
+	public synchronized void incrementX(float x) {
 		this.x +=x;
         collider.getCircle().setPosition(this.x,this.y);
+        velocity = new Vector2(x,0);
 //        Gdx.app.log(TAG,collider.x+" X");
+        changeAnimation(PlayerState.MOVING);
 	}
 
-	public void incrementY(float y) {
+	public synchronized void incrementY(float y) {
 		this.y += y;
         collider.getCircle().setPosition(this.x,this.y);
+        velocity = new Vector2(0,y);
 //        Gdx.app.log(TAG,collider.y+" Y");
+        changeAnimation(PlayerState.MOVING);
 	}
 
     public void rotate (int r) {
@@ -204,7 +280,9 @@ public class Player {
     }
 
     //Aligns player into the closest gridbox
-    public void snapInGrid() {
+    //Calling this will also end player movement animation
+    public synchronized void snapInGrid() {
+        velocity = new Vector2(0,0);
         //Snaps to 64 pixel grid
         float Xoff = x % 32;
         float Yoff = y % 32;
@@ -224,6 +302,10 @@ public class Player {
         } else {
             rotate(90 - Roff);
         }
+        if (playerState != PlayerState.DEAD) {
+            changeAnimation(PlayerState.IDLE);
+        }
+
     }
 
     private void setUpSprites() {
@@ -235,5 +317,40 @@ public class Player {
     public int getScore(){
         return score;
     }
+
+    private String getdirection() {
+        if (dir == 0) {
+            return "north";
+        } else if (dir == 90) {
+            return "west";
+        } else if (dir == 180) {
+            return "south";
+        } else  {
+            return "east";
+        }
+    }
+
+    private void changeAnimation(PlayerState newState) {
+        synchronized (statusLock) {
+            if (playerState != PlayerState.DEAD) {
+                if (playerState == PlayerState.DAMAGED) { //Check if not dead
+                    previousState = newState; // Allows damaged animation to run finish
+                } else {
+                    previousState = playerState;
+                    playerState = newState;
+                    stateDelta = 0;
+                    statusLock.notifyAll();
+                }
+            }
+        }
+    }
+}
+
+enum PlayerState {
+    IDLE,
+    MOVING,
+    DAMAGED,
+    COLLECTING_WATER,
+    DEAD
 
 }

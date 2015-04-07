@@ -11,6 +11,8 @@ import java.util.HashMap;
 
 /**
  * Created by PT on 3/4/2015.
+ * Animation Strings
+ *
  */
 
 
@@ -54,7 +56,7 @@ public class CactusLoader {
             frames[i-1].flip(flipX,true);
         }
         if(flipX) {
-            name = name.replace("R","L");
+            name = name.replace("east","west");
             Gdx.app.log("null", name);
         }
         Cactus.put(name.substring(8, name.length()), new Animation(speed, frames));
@@ -62,28 +64,28 @@ public class CactusLoader {
 
     }
     public void loadC1(){
-        loader("Cactus1.idle",14,0.2f,false,cactus1_animations);
-        loader("Cactus1.RS",4,0.4f,false, cactus1_animations);
-        loader("Cactus1.RS.idle",4,0.4f,false, cactus1_animations);
-        loader("Cactus1.RS",4,0.4f,true, cactus1_animations);
-        loader("Cactus1.RS.idle",4,0.4f,true, cactus1_animations);
-        loader("Cactus1.back",4,0.3f,false,cactus1_animations);
-        loader("Cactus1.back.idle",2,0.4f,false,cactus1_animations);
-        loader("Cactus1.front",6,0.4f,false,cactus1_animations);
+        loader("Cactus1.south",6,0.4f,false,cactus1_animations);
+        loader("Cactus1.south.idle",14,0.2f,false,cactus1_animations);
+        loader("Cactus1.east",4,0.4f,false, cactus1_animations);
+        loader("Cactus1.east.idle",4,0.4f,false, cactus1_animations);
+        loader("Cactus1.east",4,0.4f,true, cactus1_animations);
+        loader("Cactus1.east.idle",4,0.4f,true, cactus1_animations);
+        loader("Cactus1.north",4,0.3f,false,cactus1_animations);
+        loader("Cactus1.north.idle",2,0.4f,false,cactus1_animations);
         loader("Cactus1.score",8,0.2f,false,cactus1_animations);
         loader("Cactus1.shot",2,0.2f,false,cactus1_animations);
         loader("Cactus1.lose",2,0.2f,false,cactus1_animations);
 
     }
     public void loadC2(){
-        loader("Cactus2.idle",9,0.2f,false,cactus2_animations);
-        loader("Cactus2.RS",4,0.3f,false,cactus2_animations);
-        loader("Cactus2.RS.idle",4,0.4f,false,cactus2_animations);
-        loader("Cactus2.RS",4,0.3f,true,cactus2_animations);
-        loader("Cactus2.RS.idle",4,0.4f,true,cactus2_animations);
-        loader("Cactus2.back",4,0.3f,false,cactus2_animations);
-        loader("Cactus2.back.idle",2,0.4f,false,cactus2_animations);
-        loader("Cactus2.front",2,0.3f,false,cactus2_animations);
+        loader("Cactus2.south",2,0.3f,false,cactus2_animations);
+        loader("Cactus2.south.idle",9,0.2f,false,cactus2_animations);
+        loader("Cactus2.east",4,0.3f,false,cactus2_animations);
+        loader("Cactus2.east.idle",4,0.4f,false,cactus2_animations);
+        loader("Cactus2.east",4,0.3f,true,cactus2_animations);
+        loader("Cactus2.east.idle",4,0.4f,true,cactus2_animations);
+        loader("Cactus2.north",4,0.3f,false,cactus2_animations);
+        loader("Cactus2.north.idle",2,0.4f,false,cactus2_animations);
         loader("Cactus2.score",6,0.4f,false,cactus2_animations);
         loader("Cactus2.shot",2,0.2f,false,cactus2_animations);
         loader("Cactus2.lose",2,0.2f,false,cactus2_animations);
@@ -91,28 +93,28 @@ public class CactusLoader {
 
     }
     public void loadC3(){
-        loader("Cactus3.idle",11,0.3f,false,cactus3_animations);
-        loader("Cactus3.RS",4,0.3f,false,cactus3_animations);
-        loader("Cactus3.RS.idle",4,0.4f,false,cactus3_animations);
-        loader("Cactus3.RS",4,0.3f,true,cactus3_animations);
-        loader("Cactus3.RS.idle",4,0.4f,true,cactus3_animations);
-        loader("Cactus3.back",2,0.4f,false,cactus3_animations);
-        loader("Cactus3.back.idle",4,0.3f,false,cactus3_animations);
-        loader("Cactus3.front",2,0.3f,false,cactus3_animations);
+        loader("Cactus3.south",2,0.3f,false,cactus3_animations);
+        loader("Cactus3.south.idle",11,0.3f,false,cactus3_animations);
+        loader("Cactus3.east",4,0.3f,false,cactus3_animations);
+        loader("Cactus3.east.idle",4,0.4f,false,cactus3_animations);
+        loader("Cactus3.east",4,0.3f,true,cactus3_animations);
+        loader("Cactus3.east.idle",4,0.4f,true,cactus3_animations);
+        loader("Cactus3.north",2,0.4f,false,cactus3_animations);
+        loader("Cactus3.north.idle",4,0.3f,false,cactus3_animations);
         loader("Cactus3.score",9,0.4f,false,cactus3_animations);
         loader("Cactus3.shot",2,0.2f,false,cactus3_animations);
         loader("Cactus3.lose",4,0.2f,false,cactus3_animations);
 
     }
     public void loadC4(){
-        loader("Cactus4.idle",9,0.3f,false,cactus4_animations);
-        loader("Cactus4.RS",4,0.3f,false,cactus4_animations);
-        loader("Cactus4.RS.idle",2,0.4f,false,cactus4_animations);
-        loader("Cactus4.RS",4,0.3f,true,cactus4_animations);
-        loader("Cactus4.RS.idle",2,0.4f,true,cactus4_animations);
-        loader("Cactus4.back",2,0.4f,false,cactus4_animations);
-        loader("Cactus4.back.idle",4,0.3f,false,cactus4_animations);
-        loader("Cactus4.front",2,0.3f,false,cactus4_animations);
+        loader("Cactus4.south",2,0.3f,false,cactus4_animations);
+        loader("Cactus4.south.idle",9,0.3f,false,cactus4_animations);
+        loader("Cactus4.east",4,0.3f,false,cactus4_animations);
+        loader("Cactus4.east.idle",2,0.4f,false,cactus4_animations);
+        loader("Cactus4.east",4,0.3f,true,cactus4_animations);
+        loader("Cactus4.east.idle",2,0.4f,true,cactus4_animations);
+        loader("Cactus4.north",2,0.4f,false,cactus4_animations);
+        loader("Cactus4.north.idle",4,0.3f,false,cactus4_animations);
         loader("Cactus4.score",7,0.4f,false,cactus4_animations);
         loader("Cactus4.shot",2,0.2f,false,cactus4_animations);
         loader("Cactus4.lose",3,0.2f,false,cactus4_animations);
