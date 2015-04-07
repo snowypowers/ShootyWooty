@@ -108,8 +108,8 @@ public class Player {
             while (s == null) {
                 if (playerState == PlayerState.DEAD) {
                     if (stateDelta <= animations.get("dead").getAnimationDuration()) {
-                        stateDelta += delta;
                         s = new Sprite(animations.get("dead").getKeyFrame(stateDelta));
+                        stateDelta += delta;
                     } else {
                         s = new Sprite(animations.get("dead").getKeyFrame(animations.get("dead").getAnimationDuration()));
                     }
@@ -135,9 +135,11 @@ public class Player {
                 } else if (playerState == PlayerState.DAMAGED) {
                     if (stateDelta <= animations.get("shot").getAnimationDuration()) {
                         s = new Sprite(animations.get("shot").getKeyFrame(stateDelta));
+                        stateDelta += delta;
                     } else {
-                        playerState = previousState; // Restore previous state
+                        playerState = PlayerState.getState(previousState); // Restore previous state
                         previousState = PlayerState.DAMAGED;
+                        Gdx.app.log(TAG,playerState.toString());
                         statusLock.notifyAll();
                     }
 
@@ -145,8 +147,9 @@ public class Player {
                     if (previousState != PlayerState.DAMAGED) { //If not damaged
                         if (stateDelta <= animations.get("score").getAnimationDuration()) {
                             s = new Sprite(animations.get("score").getKeyFrame(stateDelta));
+                            stateDelta += delta;
                         } else {
-                            playerState = previousState; // Restore previous state
+                            playerState = PlayerState.getState(previousState); // Restore previous state
                             previousState = PlayerState.COLLECTING_WATER;
                             statusLock.notifyAll();
                         }
@@ -336,7 +339,7 @@ public class Player {
                 if (playerState == PlayerState.DAMAGED) { //Check if not dead
                     previousState = newState; // Allows damaged animation to run finish
                 } else {
-                    previousState = playerState;
+                    previousState = PlayerState.getState(playerState);
                     playerState = newState;
                     stateDelta = 0;
                     statusLock.notifyAll();
@@ -351,6 +354,27 @@ enum PlayerState {
     MOVING,
     DAMAGED,
     COLLECTING_WATER,
-    DEAD
+    DEAD;
 
+    static PlayerState getState(PlayerState e) {
+        switch (e) {
+            case IDLE: return IDLE;
+            case MOVING: return MOVING;
+            case DAMAGED: return DAMAGED;
+            case COLLECTING_WATER: return COLLECTING_WATER;
+            case DEAD: return DEAD;
+            default: return null;
+        }
+    }
+
+    public String toString() {
+        switch(this) {
+            case IDLE: return "IDLE";
+            case MOVING: return "MOVING";
+            case DAMAGED: return "DAMAGED";
+            case COLLECTING_WATER: return "COLLECTING_WATER";
+            case DEAD: return "DEAD";
+            default: return "null";
+        }
+    }
 }

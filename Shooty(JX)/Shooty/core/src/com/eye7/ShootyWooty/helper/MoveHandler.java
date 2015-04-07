@@ -132,11 +132,11 @@ public class MoveHandler extends Thread{
 
                 if (movement[3] != 0f) {
                     if (movement[3] > 0f) {
-                        player.rotate(10);
-                        movement[3] -= 10f;
+                        player.rotate(90);
+                        movement[3] -= 90f;
                     } else {
-                        player.rotate(-10);
-                        movement[3] += 10f;
+                        player.rotate(-90);
+                        movement[3] += 90f;
                     }
                 }
 

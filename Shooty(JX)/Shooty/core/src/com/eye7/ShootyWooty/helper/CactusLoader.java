@@ -53,7 +53,7 @@ public class CactusLoader {
 
         for (int i = 1; i < frameNumber+1 ; i++) {
             frames[i-1] =  new TextureRegion(MainLoader.skinCharacters.getRegion(name+String.valueOf(i)));
-            frames[i-1].flip(flipX,true);
+            frames[i-1].flip(flipX,false);
         }
         if(flipX) {
             name = name.replace("east","west");
