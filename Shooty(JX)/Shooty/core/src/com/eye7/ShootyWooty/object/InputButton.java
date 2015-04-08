@@ -20,7 +20,7 @@ import com.eye7.ShootyWooty.helper.MainLoader;
  * listen to user input and change the command
  * string accordingly
  */
-public class Button {
+public class InputButton {
     private final String TAG = "Button";
 
     private int x;
@@ -46,7 +46,7 @@ public class Button {
     private int nbulletL;
     private int nbulletR;
 
-    public Button(int x, int y, Stage stage) {
+    public InputButton(int x, int y, Stage stage) {
         this.x = x; // x coordinate to set table location
         this.y = y; // y coordinate to set table location
         this.stage = stage;

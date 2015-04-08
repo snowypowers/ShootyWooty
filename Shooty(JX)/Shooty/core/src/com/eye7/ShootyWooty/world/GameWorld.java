@@ -5,7 +5,8 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.eye7.ShootyWooty.helper.ActionResolver;
 import com.eye7.ShootyWooty.helper.TurnHandler;
 import com.eye7.ShootyWooty.model.GameConstants;
-import com.eye7.ShootyWooty.object.Button;
+import com.eye7.ShootyWooty.object.InputButton;
+import com.eye7.ShootyWooty.object.InputButtons;
 import com.eye7.ShootyWooty.object.Timer;
 
 /**
@@ -20,10 +21,11 @@ public class GameWorld {
     private GameState gameState;
 
 
-    private Button button0;
-    private Button button1;
-    private Button button2;
-    private Button button3;
+    private InputButton inputButton0;
+    private InputButton inputButton1;
+    private InputButton inputButton2;
+    private InputButton inputButton3;
+    private InputButtons input;
     private String[] moves = { "0B0", "0B0", "0B0", "0B0" };
     private String out;
     private int time;
@@ -36,10 +38,16 @@ public class GameWorld {
     public GameWorld(Stage stage, ActionResolver actionResolver) {
         this.stage = stage;
         this.actionResolver = actionResolver;
-        button0 = new Button(800, 430, stage);
-        button1 = new Button(800, 320, stage);
-        button2 = new Button(800, 210, stage);
-        button3 = new Button(800, 100, stage);
+        /*
+        inputButton0 = new InputButton(800, 430, stage);
+        inputButton1 = new InputButton(800, 320, stage);
+        inputButton2 = new InputButton(800, 210, stage);
+        inputButton3 = new InputButton(800, 100, stage);
+        */
+        input = new InputButtons();
+        input.setPosition(800,225);
+        input.debug();
+        stage.addActor(input);
 
         gameState = gameState.DECIDING;
         timer = new Timer(timerReset);
@@ -50,10 +58,13 @@ public class GameWorld {
     public void update(float delta) {
         if (!GameConstants.PLAYERS.get(GameConstants.myID+1).isDead()) {
             // always get move from button even if no change
-            moves[0] = button0.getMoves();
-            moves[1] = button1.getMoves();
-            moves[2] = button2.getMoves();
-            moves[3] = button3.getMoves();
+            /*
+            moves[0] = inputButton0.getMoves();
+            moves[1] = inputButton1.getMoves();
+            moves[2] = inputButton2.getMoves();
+            moves[3] = inputButton3.getMoves();
+            */
+            moves = input.getMoves();
         }
 
 
@@ -63,11 +74,13 @@ public class GameWorld {
                     out = "Player deciding...";
                     if (GameConstants.PLAYERS.get(GameConstants.myID+1).isDead()){
                         out = "You are dead!";
-
-                        button0.setLock(true); // lock the button from being pressed while executing moves
-                        button1.setLock(true);
-                        button2.setLock(true);
-                        button3.setLock(true);
+                        /*
+                        inputButton0.setLock(true); // lock the button from being pressed while executing moves
+                        inputButton1.setLock(true);
+                        inputButton2.setLock(true);
+                        inputButton3.setLock(true);
+                        */
+                        input.setLock(true);
                     }
                     if(actionResolver.getMultiplayer() && actionResolver.getActive()!=null) {
                         int numMoves = 0;
@@ -83,11 +96,13 @@ public class GameWorld {
                 } else {
                     out = "Waiting for other players";
                     timer.reset();
-
-                    button0.setLock(true); // lock the button from being pressed while executing moves
-                    button1.setLock(true);
-                    button2.setLock(true);
-                    button3.setLock(true);
+                    /*
+                    inputButton0.setLock(true); // lock the button from being pressed while executing moves
+                    inputButton1.setLock(true);
+                    inputButton2.setLock(true);
+                    inputButton3.setLock(true);
+                    */
+                    input.setLock(true);
 
                     Gdx.app.log("GameWorld", "Creating TurnHandler");
                     th = new TurnHandler(actionResolver);
@@ -114,10 +129,13 @@ public class GameWorld {
                 break;
             case WAITING:
                 if (th.isExecuting()) {
-                    button0.resetButton(); // reset the button display
-                    button1.resetButton();
-                    button2.resetButton();
-                    button3.resetButton();
+                    /*
+                    inputButton0.resetButton(); // reset the button display
+                    inputButton1.resetButton();
+                    inputButton2.resetButton();
+                    inputButton3.resetButton();
+                    */
+                    input.reset();
 
                     //Thread endTurn sees if current turn is complete and notifies Timer to start running again.
                     Thread endTurn = new Thread(new Runnable() {
@@ -132,15 +150,19 @@ public class GameWorld {
                             synchronized (timerReset) {
                                 timerReset.notify();
                             }
-                            button0.setLock(false); // release the lock
-                            button1.setLock(false);
-                            button2.setLock(false);
-                            button3.setLock(false);
+                            /*
+                            inputButton0.setLock(false); // release the lock
+                            inputButton1.setLock(false);
+                            inputButton2.setLock(false);
+                            inputButton3.setLock(false);
 
-                            button0.resetMoves(); // reset the moves to "0B0"
-                            button1.resetMoves();
-                            button2.resetMoves();
-                            button3.resetMoves();
+                            inputButton0.resetMoves(); // reset the moves to "0B0"
+                            inputButton1.resetMoves();
+                            inputButton2.resetMoves();
+                            inputButton3.resetMoves();
+                            */
+                            input.setLock(false);
+                            input.reset();
                             gameState = GameState.DECIDING;
                         }
                     });
@@ -172,20 +194,20 @@ public class GameWorld {
         return stage;
     }
 
-    public Button getButton1() {
-        return button1;
+    public InputButton getInputButton1() {
+        return inputButton1;
     }
 
-    public Button getButton2() {
-        return button2;
+    public InputButton getInputButton2() {
+        return inputButton2;
     }
 
-    public Button getButton3() {
-        return button3;
+    public InputButton getInputButton3() {
+        return inputButton3;
     }
 
-    public Button getButton0() {
-        return button0;
+    public InputButton getInputButton0() {
+        return inputButton0;
     }
     public String getTimeStatus() {
         return timeStatus;
