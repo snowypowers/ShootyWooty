@@ -45,6 +45,12 @@ public class Player {
     private Animation animation_west;
     private Animation animation_east;
     private float animationFrameTime;
+    //Sprites for bars
+    private Sprite healthBarBG = new Sprite(new Texture("players/healthBG.png"));
+    private Sprite healthBarFG = new Sprite(new Texture("players/healthFG.png"));
+    private Sprite waterBarBG = new Sprite(new Texture("players/waterBarBG.png"));
+    private Sprite waterBarFG = new Sprite(new Texture("players/waterBarFG.png"));
+    private Sprite nOfMoves;
 
     private ShapeRenderer sr;
 
@@ -103,8 +109,7 @@ public class Player {
         }
 
         //initialize the healthbars
-        Sprite healthBarBG = new Sprite(new Texture("players/healthBG.png"));
-         Sprite healthBarFG = new Sprite(new Texture("players/healthFG.png"));
+
 
         //set coordinates
         healthBarBG.setX(x-RADIUS-25);
@@ -126,8 +131,6 @@ public class Player {
         //initialize the waterBars
         int waterBarFill = score*3+water;
 
-        Sprite waterBarBG = new Sprite(new Texture("players/waterBarBG.png"));
-        Sprite waterBarFG = new Sprite(new Texture("players/waterBarFG.png"));
 
         //set the coordinates
         waterBarBG.setX(x+RADIUS+25);
@@ -156,6 +159,7 @@ public class Player {
             Sprite nOfMoves = getNoOfMoves(moves);
             nOfMoves.draw(sb);
         }
+//        sb.end();
 //        sb.begin();
     }
 
@@ -163,7 +167,7 @@ public class Player {
     //returns a sprite with the no of moves as input to the player. This will be drawn on the player.
     //pre condition: 1<=n<=4
     public synchronized Sprite getNoOfMoves(int n){
-        Sprite nOfMoves;
+
         if(n==1){
             nOfMoves = new Sprite(new Texture("players/1Move.png"));
         }
