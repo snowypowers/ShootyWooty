@@ -82,7 +82,7 @@ public class MoveHandler extends Thread{
         } catch (BrokenBarrierException e) {
             e.printStackTrace();
         }
-        Gdx.app.log("MoveHandler", "Execution!");
+        //Gdx.app.log("MoveHandler", "Execution!");
 
         for (int i = 0; i < 4;i++) {
             nextMove();//Initalises the moves
@@ -104,11 +104,9 @@ public class MoveHandler extends Thread{
                         bulletr.incrementX(movement[2]);
                     }
                     else{
-                        Gdx.app.log("OLDMOVE", String.valueOf(oldMove[0]));
                         collider.getCircle().setPosition((collider.getCircle().x-movement[2]),collider.getCircle().y);
                         movement[0] = oldMove[0] - movement[0];
                         movement[2] = movement[2] * -1;
-                        Gdx.app.log("UPDATEDMOVE", String.valueOf(movement[0]) + " " + String.valueOf(movement[2]));
                     }
                 }
 
@@ -122,11 +120,9 @@ public class MoveHandler extends Thread{
                         bulletr.incrementY(movement[2]);
                     }
                     else{
-                        Gdx.app.log("OLDMOVE", String.valueOf(oldMove[1]));
                         collider.getCircle().setPosition(collider.getCircle().x,(collider.getCircle().y-movement[2]));
                         movement[1] = oldMove[1] - movement[1];
                         movement[2] = movement[2] * -1;
-                        Gdx.app.log("UPDATEDMOVE", String.valueOf(movement[0]) + " " + String.valueOf(movement[2]));
                     }
                 }
 
@@ -149,7 +145,9 @@ public class MoveHandler extends Thread{
             }
 
             player.snapInGrid(); // make sure the player is aligned to a grid
+
             try {
+                Thread.sleep(300);
                 cb.await();
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -192,6 +190,7 @@ public class MoveHandler extends Thread{
             }
 
             try {
+                Thread.sleep(300);
                 cb.await();
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -202,13 +201,18 @@ public class MoveHandler extends Thread{
             /////////////////////////////////////////MISC EFFECTS///////////////////////////////////////
             if (checkInWater()) {
                 player.collectWater();
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
 
             if (pointer == 3) {
                 continue;
             } else {
                 try {
-                    //Wait for all to finish executing
+                    Thread.sleep(300);
                     cb.await();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -421,10 +425,10 @@ public class MoveHandler extends Thread{
 
     public boolean checkInWater() {
         for (int i = 0; i < GameConstants.WATER.size;i++) {
-         if (Intersector.overlaps(player.getCollider().getCircle(), GameConstants.WATER.get(i))) {
-             Gdx.app.log(TAG, "ON WATER");
-             return true;
-         }
+            if (Intersector.overlaps(player.getCollider().getCircle(), GameConstants.WATER.get(i))) {
+                Gdx.app.log(TAG, "ON WATER");
+                return true;
+            }
         }
         return false;
     }

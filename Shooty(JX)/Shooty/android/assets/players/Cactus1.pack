@@ -31,6 +31,34 @@ rotate: false
   orig: 64, 64
   offset: 0, 0
   index: -1
+Cactus1.north.moving5
+rotate: false
+  xy: 256, 0
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+Cactus1.north.moving6
+rotate: false
+  xy: 320, 0
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+Cactus1.north.moving7
+rotate: false
+  xy: 384, 0
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+Cactus1.north.moving8
+rotate: false
+  xy: 448, 0
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
 Cactus1.north.idle1
 rotate: false
   xy: 0, 64
@@ -55,6 +83,34 @@ rotate: false
 Cactus1.north.idle4
 rotate: false
   xy: 192, 64
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+Cactus1.north.idle5
+rotate: false
+  xy: 256, 64
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+Cactus1.north.idle6
+rotate: false
+  xy: 320, 64
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+Cactus1.north.idle7
+rotate: false
+  xy: 384, 64
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+Cactus1.north.idle8
+rotate: false
+  xy: 448, 64
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
@@ -87,6 +143,34 @@ rotate: false
   orig: 64, 64
   offset: 0, 0
   index: -1
+Cactus1.south.moving5
+rotate: false
+  xy: 256, 128
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+Cactus1.south.moving6
+rotate: false
+  xy: 320, 128
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+Cactus1.south.moving7
+rotate: false
+  xy: 384, 128
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+Cactus1.south.moving8
+rotate: false
+  xy: 448, 128
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
 Cactus1.south.idle1
 rotate: false
   xy: 0, 192
@@ -111,6 +195,34 @@ rotate: false
 Cactus1.south.idle4
 rotate: false
   xy: 192, 192
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+Cactus1.south.idle5
+rotate: false
+  xy: 256, 192
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+Cactus1.south.idle6
+rotate: false
+  xy: 320, 192
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+Cactus1.south.idle7
+rotate: false
+  xy: 384, 192
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+Cactus1.south.idle8
+rotate: false
+  xy: 448, 192
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
@@ -143,6 +255,34 @@ rotate: false
   orig: 64, 64
   offset: 0, 0
   index: -1
+Cactus1.east.moving5
+rotate: false
+  xy: 256, 256
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+Cactus1.east.moving6
+rotate: false
+  xy: 320, 256
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+Cactus1.east.moving7
+rotate: false
+  xy: 384, 256
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+Cactus1.east.moving8
+rotate: false
+  xy: 448, 256
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
 Cactus1.east.idle1
 rotate: false
   xy: 0, 320
@@ -167,6 +307,34 @@ rotate: false
 Cactus1.east.idle4
 rotate: false
   xy: 192, 320
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+Cactus1.east.idle5
+rotate: false
+  xy: 256, 320
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+Cactus1.east.idle6
+rotate: false
+  xy: 320, 320
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+Cactus1.east.idle7
+rotate: false
+  xy: 384, 320
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+Cactus1.east.idle8
+rotate: false
+  xy: 448, 320
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
@@ -199,6 +367,34 @@ rotate: false
   orig: 64, 64
   offset: 0, 0
   index: -1
+Cactus1.west.moving5
+rotate: false
+  xy: 256, 384
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+Cactus1.west.moving6
+rotate: false
+  xy: 320, 384
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+Cactus1.west.moving7
+rotate: false
+  xy: 384, 384
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+Cactus1.west.moving8
+rotate: false
+  xy: 448, 384
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
 Cactus1.west.idle1
 rotate: false
   xy: 0, 448
@@ -223,6 +419,34 @@ rotate: false
 Cactus1.west.idle4
 rotate: false
   xy: 192, 448
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+Cactus1.west.idle5
+rotate: false
+  xy: 256, 448
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+Cactus1.west.idle6
+rotate: false
+  xy: 320, 448
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+Cactus1.west.idle7
+rotate: false
+  xy: 384, 448
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+Cactus1.west.idle8
+rotate: false
+  xy: 448, 448
   size: 64, 64
   orig: 64, 64
   offset: 0, 0

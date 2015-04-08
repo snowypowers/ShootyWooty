@@ -75,9 +75,9 @@ public class MapRenderer extends OrthogonalTiledMapRenderer {
                         colliderRender.setColor(Color.BLUE);
                         colliderRender.setProjectionMatrix(spriteBatch.getProjectionMatrix());
                         colliderRender.begin(ShapeRenderer.ShapeType.Line);
-                        for (MapObject object : layer.getObjects()) {
-                            colliderRender.rect(object.getProperties().get("x", Float.class), object.getProperties().get("y", Float.class), object.getProperties().get("width", Float.class), object.getProperties().get("height", Float.class));
-                            renderObject(object);
+                        for (Rectangle r: GameConstants.WATER) {
+                            colliderRender.rect(r.getX(), r.getY(), r.getWidth(), r.getHeight());
+                            //renderObject(object);
 
                         }
                         colliderRender.end();

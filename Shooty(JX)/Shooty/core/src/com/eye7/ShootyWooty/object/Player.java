@@ -107,11 +107,11 @@ public class Player {
             //Gdx.app.log(TAG, "Rendering");
             while (s == null) {
                 if (playerState == PlayerState.DEAD) {
-                    if (stateDelta <= animations.get("dead").getAnimationDuration()) {
-                        s = new Sprite(animations.get("dead").getKeyFrame(stateDelta));
+                    if (stateDelta <= animations.get("lose").getAnimationDuration()) {
+                        s = new Sprite(animations.get("lose").getKeyFrame(stateDelta));
                         stateDelta += delta;
                     } else {
-                        s = new Sprite(animations.get("dead").getKeyFrame(animations.get("dead").getAnimationDuration()));
+                        s = new Sprite(animations.get("lose").getKeyFrame(animations.get("lose").getAnimationDuration()));
                     }
 
                 } else if (playerState == PlayerState.IDLE) {
@@ -257,6 +257,10 @@ public class Player {
         health-=dmg;
         water = 0;
         if (health < 0) {
+            if (playerID == GameConstants.myID) {
+                //notify the game that this player has died
+                playerState = PlayerState.DEAD;
+            }
             health = 0;
         }
         changeAnimation(PlayerState.DAMAGED);
@@ -422,6 +426,10 @@ public class Player {
                 }
             }
         }
+    }
+
+    public boolean isDead() {
+        return playerState == PlayerState.DEAD;
     }
 }
 

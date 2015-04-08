@@ -69,9 +69,6 @@ public class CactusLoader {
 
     public void loader(String name, int frameNumber, float speed, HashMap<String,Animation> Cactus){
         String[] output = name.split("\\.",2);
-        for (String i: output) {
-            Gdx.app.log("CLOADER", i);
-        }
         Skin cactusSkin = null;
         if (output[0].contains("Cactus1")) {
             cactusSkin = new Skin(cactus1Skin);
@@ -95,23 +92,24 @@ public class CactusLoader {
 
     }
     public void loadC1(){
-        loader("Cactus1.north.moving",4,0.4f,cactus1_animations);
-        loader("Cactus1.north.idle",4,0.4f,cactus1_animations);
+        loader("Cactus1.north.moving",8,0.15f,cactus1_animations);
+        loader("Cactus1.north.idle",8,0.15f,cactus1_animations);
 
-        loader("Cactus1.south.moving",4,0.4f,cactus1_animations);
-        loader("Cactus1.south.idle",4,0.4f,cactus1_animations);
+        loader("Cactus1.south.moving",8,0.15f,cactus1_animations);
+        loader("Cactus1.south.idle",8,0.15f,cactus1_animations);
 
-        loader("Cactus1.east.moving",4,0.4f,cactus1_animations);
-        loader("Cactus1.east.idle",4,0.4f,cactus1_animations);
+        loader("Cactus1.east.moving",8,0.15f,cactus1_animations);
+        loader("Cactus1.east.idle",8,0.15f,cactus1_animations);
 
-        loader("Cactus1.west.moving",4,0.4f,cactus1_animations);
-        loader("Cactus1.west.idle",4,0.4f,cactus1_animations);
+        loader("Cactus1.west.moving",8,0.15f,cactus1_animations);
+        loader("Cactus1.west.idle",8,0.15f,cactus1_animations);
 
-        loader("Cactus1.score",8,0.4f,cactus1_animations);
+        loader("Cactus1.score",8,0.2f,cactus1_animations);
         loader("Cactus1.shot",2,0.2f,cactus1_animations);
         loader("Cactus1.lose",2,0.2f,cactus1_animations);
-        loader("Cactus1.emote",10,0.4f,cactus1_animations);
+        loader("Cactus1.emote",10,0.2f,cactus1_animations);
     }
+
     public void loadC2(){
         loader("Cactus2.north.moving",4,0.4f,cactus2_animations);
         loader("Cactus2.north.idle",4,0.4f,cactus2_animations);

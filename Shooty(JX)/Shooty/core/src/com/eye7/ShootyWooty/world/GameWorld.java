@@ -33,6 +33,7 @@ public class GameWorld {
     private String timeStatus;
     private TurnHandler th;
     private ActionResolver actionResolver;
+
     public GameWorld(Stage stage, ActionResolver actionResolver) {
         this.stage = stage;
         this.actionResolver = actionResolver;
@@ -48,12 +49,13 @@ public class GameWorld {
 
     // constantly call this method
     public void update(float delta) {
-
-        // always get move from button even if no change
-        moves[0] = button0.getMoves();
-        moves[1] = button1.getMoves();
-        moves[2] = button2.getMoves();
-        moves[3] = button3.getMoves();
+        if (!dead) {
+            // always get move from button even if no change
+            moves[0] = button0.getMoves();
+            moves[1] = button1.getMoves();
+            moves[2] = button2.getMoves();
+            moves[3] = button3.getMoves();
+        }
 
 
         switch (gameState) {

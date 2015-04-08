@@ -48,7 +48,7 @@ public class GameMap {
         //Get water
         MapObjects waterlist = map.getLayers().get("Water").getObjects();
         for (int i = 0; i < waterlist.getCount(); i++) {
-            RectangleMapObject obj = (RectangleMapObject) rockslist.get(i);
+            RectangleMapObject obj = (RectangleMapObject) waterlist.get(i);
             Rectangle rect= obj.getRectangle();
             water.add(new Rectangle(rect.x, rect.y, rect.width, rect.height));
         }
