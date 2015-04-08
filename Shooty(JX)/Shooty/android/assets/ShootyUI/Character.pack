@@ -80,182 +80,182 @@ Sprite.faucet9
   orig: 128, 128
   offset: 0, 0
   index: -1
-Cactus1.back1
+Cactus1.north1
   rotate: false
   xy: 131, 535
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus1.back.idle1
+Cactus1.north.idle1
   rotate: false
   xy: 131, 535
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus1.back2
+Cactus1.north2
   rotate: false
   xy: 261, 665
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus1.back3
+Cactus1.north3
   rotate: false
   xy: 391, 795
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus1.back4
+Cactus1.north4
   rotate: false
   xy: 521, 925
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus1.back.idle2
+Cactus1.north.idle2
   rotate: false
   xy: 521, 925
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus1.front1
+Cactus1.south1
   rotate: false
   xy: 1, 275
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus1.front5
+Cactus1.south5
   rotate: false
   xy: 1, 275
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus1.front2
+Cactus1.south2
   rotate: false
   xy: 131, 469
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus1.front4
+Cactus1.south4
   rotate: false
   xy: 131, 469
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus1.front3
+Cactus1.south3
   rotate: false
   xy: 587, 925
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus1.front6
+Cactus1.south6
   rotate: false
   xy: 1, 209
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus1.idle1
+Cactus1.south.idle1
   rotate: false
   xy: 131, 403
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus1.idle10
+Cactus1.south.idle10
   rotate: false
   xy: 653, 925
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus1.idle11
+Cactus1.south.idle11
   rotate: false
   xy: 1, 143
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus1.idle12
+Cactus1.south.idle12
   rotate: false
   xy: 1, 143
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus1.idle13
+Cactus1.south.idle13
   rotate: false
   xy: 1, 143
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus1.idle14
+Cactus1.south.idle14
   rotate: false
   xy: 719, 925
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus1.idle2
+Cactus1.south.idle2
   rotate: false
   xy: 1, 77
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus1.idle3
+Cactus1.south.idle3
   rotate: false
   xy: 785, 925
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus1.idle4
+Cactus1.south.idle4
   rotate: false
   xy: 1, 11
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus1.idle5
+Cactus1.south.idle5
   rotate: false
   xy: 851, 925
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus1.idle6
+Cactus1.south.idle6
   rotate: false
   xy: 917, 925
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus1.idle7
+Cactus1.south.idle7
   rotate: false
   xy: 197, 535
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus1.idle8
+Cactus1.south.idle8
   rotate: false
   xy: 197, 469
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus1.idle9
+Cactus1.south.idle9
   rotate: false
   xy: 197, 403
   size: 64, 64
@@ -276,56 +276,56 @@ Cactus1.lose2
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus1.RS1
+Cactus1.east1
   rotate: false
   xy: 67, 275
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus1.RS2
+Cactus1.east2
   rotate: false
   xy: 67, 209
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus1.RS3
+Cactus1.east3
   rotate: false
   xy: 67, 143
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus1.RS4
+Cactus1.east4
   rotate: false
   xy: 67, 77
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus1.RS.idle1
+Cactus1.east.idle1
   rotate: false
   xy: 67, 11
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus1.RS.idle2
+Cactus1.east.idle2
   rotate: false
   xy: 133, 337
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus1.RS.idle4
+Cactus1.east.idle4
   rotate: false
   xy: 133, 337
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus1.RS.idle3
+Cactus1.east.idle3
   rotate: false
   xy: 133, 271
   size: 64, 64
@@ -402,133 +402,133 @@ Cactus1.shot2
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus2.back1
+Cactus2.north1
   rotate: false
   xy: 393, 729
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus2.back.idle1
+Cactus2.north.idle1
   rotate: false
   xy: 393, 729
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus2.back2
+Cactus2.north2
   rotate: false
   xy: 393, 663
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus2.back3
+Cactus2.north3
   rotate: false
   xy: 459, 729
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus2.back4
+Cactus2.north4
   rotate: false
   xy: 459, 663
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus2.back.idle2
+Cactus2.north.idle2
   rotate: false
   xy: 459, 663
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus2.back.idle4
+Cactus2.north.idle4
   rotate: false
   xy: 459, 663
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus2.back.idle3
+Cactus2.north.idle3
   rotate: false
   xy: 263, 599
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus2.front1
+Cactus2.south1
   rotate: false
   xy: 263, 533
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus2.front2
+Cactus2.south2
   rotate: false
   xy: 263, 467
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus2.idle1
+Cactus2.south.idle1
   rotate: false
   xy: 523, 859
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus2.idle3
+Cactus2.south.idle3
   rotate: false
   xy: 523, 859
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus2.idle2
+Cactus2.south.idle2
   rotate: false
   xy: 589, 859
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus2.idle4
+Cactus2.south.idle4
   rotate: false
   xy: 655, 859
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus2.idle5
+Cactus2.south.idle5
   rotate: false
   xy: 721, 859
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus2.idle6
+Cactus2.south.idle6
   rotate: false
   xy: 787, 859
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus2.idle8
+Cactus2.south.idle8
   rotate: false
   xy: 787, 859
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus2.idle7
+Cactus2.south.idle7
   rotate: false
   xy: 853, 859
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus2.idle9
+Cactus2.south.idle9
   rotate: false
   xy: 919, 859
   size: 64, 64
@@ -549,56 +549,56 @@ Cactus2.lose2
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus2.RS1
+Cactus2.east1
   rotate: false
   xy: 395, 597
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus2.RS2
+Cactus2.east2
   rotate: false
   xy: 395, 531
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus2.RS.idle1
+Cactus2.east.idle1
   rotate: false
   xy: 395, 531
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus2.RS3
+Cactus2.east3
   rotate: false
   xy: 329, 465
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus2.RS4
+Cactus2.east4
   rotate: false
   xy: 395, 465
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus2.RS.idle2
+Cactus2.east.idle2
   rotate: false
   xy: 461, 597
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus2.RS.idle3
+Cactus2.east.idle3
   rotate: false
   xy: 461, 531
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus2.RS.idle4
+Cactus2.east.idle4
   rotate: false
   xy: 461, 465
   size: 64, 64
@@ -661,77 +661,77 @@ Cactus2.shot2
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus3.back1
+Cactus3.north1
   rotate: false
   xy: 789, 793
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus3.back2
+Cactus3.north2
   rotate: false
   xy: 789, 727
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus3.back.idle1
+Cactus3.north.idle1
   rotate: false
   xy: 855, 793
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus3.back.idle2
+Cactus3.north.idle2
   rotate: false
   xy: 855, 727
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus3.back.idle4
+Cactus3.north.idle4
   rotate: false
   xy: 855, 727
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus3.back.idle3
+Cactus3.north.idle3
   rotate: false
   xy: 921, 793
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus3.front1
+Cactus3.south1
   rotate: false
   xy: 921, 727
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus3.front2
+Cactus3.south2
   rotate: false
   xy: 527, 661
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus3.idle1
+Cactus3.south.idle1
   rotate: false
   xy: 527, 595
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus3.idle3
+Cactus3.south.idle3
   rotate: false
   xy: 527, 595
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus3.idle5
+Cactus3.south.idle5
   rotate: false
   xy: 527, 595
   size: 64, 64
@@ -745,56 +745,56 @@ Cactus3.score9
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus3.idle10
+Cactus3.south.idle10
   rotate: false
   xy: 593, 661
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus3.idle11
+Cactus3.south.idle11
   rotate: false
   xy: 527, 529
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus3.idle9
+Cactus3.south.idle9
   rotate: false
   xy: 527, 529
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus3.idle2
+Cactus3.south.idle2
   rotate: false
   xy: 593, 595
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus3.idle4
+Cactus3.south.idle4
   rotate: false
   xy: 593, 595
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus3.idle6
+Cactus3.south.idle6
   rotate: false
   xy: 659, 661
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus3.idle7
+Cactus3.south.idle7
   rotate: false
   xy: 593, 529
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus3.idle8
+Cactus3.south.idle8
   rotate: false
   xy: 659, 595
   size: 64, 64
@@ -829,56 +829,56 @@ Cactus3.lose4
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus3.RS1
+Cactus3.east1
   rotate: false
   xy: 725, 529
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus3.RS2
+Cactus3.east2
   rotate: false
   xy: 791, 595
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus3.RS4
+Cactus3.east4
   rotate: false
   xy: 791, 595
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus3.RS.idle1
+Cactus3.east.idle1
   rotate: false
   xy: 791, 595
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus3.RS3
+Cactus3.east3
   rotate: false
   xy: 857, 661
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus3.RS.idle2
+Cactus3.east.idle2
   rotate: false
   xy: 791, 529
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus3.RS.idle4
+Cactus3.east.idle4
   rotate: false
   xy: 791, 529
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus3.RS.idle3
+Cactus3.east.idle3
   rotate: false
   xy: 857, 595
   size: 64, 64
@@ -955,84 +955,84 @@ Cactus3.shot2
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus4.back1
+Cactus4.north1
   rotate: false
   xy: 923, 463
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus4.back2
+Cactus4.north2
   rotate: false
   xy: 265, 397
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus4.back.idle1
+Cactus4.north.idle1
   rotate: false
   xy: 265, 331
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus4.back.idle2
+Cactus4.north.idle2
   rotate: false
   xy: 265, 265
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus4.back.idle4
+Cactus4.north.idle4
   rotate: false
   xy: 265, 265
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus4.back.idle3
+Cactus4.north.idle3
   rotate: false
   xy: 265, 199
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus4.front1
+Cactus4.south1
   rotate: false
   xy: 265, 133
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus4.front2
+Cactus4.south2
   rotate: false
   xy: 265, 67
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus4.idle1
+Cactus4.south.idle1
   rotate: false
   xy: 331, 399
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus4.idle4
+Cactus4.south.idle4
   rotate: false
   xy: 331, 399
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus4.idle6
+Cactus4.south.idle6
   rotate: false
   xy: 331, 399
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus4.idle8
+Cactus4.south.idle8
   rotate: false
   xy: 331, 399
   size: 64, 64
@@ -1046,35 +1046,35 @@ Cactus4.score7
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus4.idle2
+Cactus4.south.idle2
   rotate: false
   xy: 331, 333
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus4.idle3
+Cactus4.south.idle3
   rotate: false
   xy: 397, 399
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus4.idle5
+Cactus4.south.idle5
   rotate: false
   xy: 331, 267
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus4.idle7
+Cactus4.south.idle7
   rotate: false
   xy: 331, 267
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus4.idle9
+Cactus4.south.idle9
   rotate: false
   xy: 331, 267
   size: 64, 64
@@ -1102,56 +1102,56 @@ Cactus4.lose3
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus4.RS1
+Cactus4.east1
   rotate: false
   xy: 331, 135
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus4.RS2
+Cactus4.east2
   rotate: false
   xy: 397, 201
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus4.RS3
+Cactus4.east3
   rotate: false
   xy: 331, 69
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus4.RS4
+Cactus4.east4
   rotate: false
   xy: 397, 135
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus4.RS.idle1
+Cactus4.east.idle1
   rotate: false
   xy: 397, 69
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus4.RS.idle2
+Cactus4.east.idle2
   rotate: false
   xy: 265, 1
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus4.RS.idle3
+Cactus4.east.idle3
   rotate: false
   xy: 331, 3
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-Cactus4.RS.idle4
+Cactus4.east.idle4
   rotate: false
   xy: 397, 3
   size: 64, 64

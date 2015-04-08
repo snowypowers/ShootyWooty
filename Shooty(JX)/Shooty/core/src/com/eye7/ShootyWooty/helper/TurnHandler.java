@@ -21,7 +21,7 @@ public class TurnHandler extends Thread {
     public TurnHandler (ActionResolver ar) {
         actionResolver = ar;
         /*
-        Phaser has a total of 8 phases, with each turn consisting of 2 phases. Odd numbered phases are for movement and even numbered phases are for shooting
+        Phaser has a total of 12 phases, with each turn consisting of 3 phases. Phases are : movement, shooting, misc
          */
         cyclicBarrier = new CyclicBarrier(GameConstants.NUM_PLAYERS);
         moveHandlers = new MoveHandler[GameConstants.NUM_PLAYERS];
