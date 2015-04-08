@@ -62,7 +62,7 @@ public class GameMap {
         return rocks;
     }
     public void setUpPlayers(int num) {
-        CactusLoader c = new CactusLoader(num);
+        //CactusLoader c = new CactusLoader(num);
         for (int i = 0; i < num; i++) {
             EllipseMapObject spawnpoint = (EllipseMapObject) spawns.get("Spawn" + String.valueOf(i+1));
             CircleMapObject spawn = new CircleMapObject(spawnpoint.getEllipse().x+32, spawnpoint.getEllipse().y+32, 20);

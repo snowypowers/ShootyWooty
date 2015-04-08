@@ -1,0 +1,383 @@
+
+Cactus1.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+Cactus1.north.moving1
+rotate: false
+  xy: 0, 0
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+Cactus1.north.moving2
+rotate: false
+  xy: 64, 0
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+Cactus1.north.moving3
+rotate: false
+  xy: 128, 0
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+Cactus1.north.moving4
+rotate: false
+  xy: 192, 0
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+Cactus1.north.idle1
+rotate: false
+  xy: 0, 64
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+Cactus1.north.idle2
+rotate: false
+  xy: 64, 64
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+Cactus1.north.idle3
+rotate: false
+  xy: 128, 64
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+Cactus1.north.idle4
+rotate: false
+  xy: 192, 64
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+Cactus1.south.moving1
+rotate: false
+  xy: 0, 128
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+Cactus1.south.moving2
+rotate: false
+  xy: 64, 128
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+Cactus1.south.moving3
+rotate: false
+  xy: 128, 128
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+Cactus1.south.moving4
+rotate: false
+  xy: 192, 128
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+Cactus1.south.idle1
+rotate: false
+  xy: 0, 192
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+Cactus1.south.idle2
+rotate: false
+  xy: 64, 192
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+Cactus1.south.idle3
+rotate: false
+  xy: 128, 192
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+Cactus1.south.idle4
+rotate: false
+  xy: 192, 192
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+Cactus1.east.moving1
+rotate: false
+  xy: 0, 256
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+Cactus1.east.moving2
+rotate: false
+  xy: 64, 256
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+Cactus1.east.moving3
+rotate: false
+  xy: 128, 256
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+Cactus1.east.moving4
+rotate: false
+  xy: 192, 256
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+Cactus1.east.idle1
+rotate: false
+  xy: 0, 320
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+Cactus1.east.idle2
+rotate: false
+  xy: 64, 320
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+Cactus1.east.idle3
+rotate: false
+  xy: 128, 320
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+Cactus1.east.idle4
+rotate: false
+  xy: 192, 320
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+Cactus1.west.moving1
+rotate: false
+  xy: 0, 384
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+Cactus1.west.moving2
+rotate: false
+  xy: 64, 384
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+Cactus1.west.moving3
+rotate: false
+  xy: 128, 384
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+Cactus1.west.moving4
+rotate: false
+  xy: 192, 384
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+Cactus1.west.idle1
+rotate: false
+  xy: 0, 448
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+Cactus1.west.idle2
+rotate: false
+  xy: 64, 448
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+Cactus1.west.idle3
+rotate: false
+  xy: 128, 448
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+Cactus1.west.idle4
+rotate: false
+  xy: 192, 448
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+Cactus1.score1
+  rotate: false
+  xy: 0, 512
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+Cactus1.score2
+  rotate: false
+  xy: 64, 512
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+Cactus1.score3
+  rotate: false
+  xy: 128, 512
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+Cactus1.score4
+  rotate: false
+  xy: 192, 512
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+Cactus1.score5
+  rotate: false
+  xy: 256, 512
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+Cactus1.score6
+  rotate: false
+  xy: 320, 512
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+Cactus1.score7
+  rotate: false
+  xy: 384, 512
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+Cactus1.score8
+  rotate: false
+  xy: 448, 512
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+Cactus1.shot1
+  rotate: false
+  xy: 0, 576
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+Cactus1.shot2
+  rotate: false
+  xy: 64, 576
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+Cactus1.lose1
+  rotate: false
+  xy: 0, 640
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+Cactus1.lose2
+  rotate: false
+  xy: 64, 640
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+Cactus1.emote1
+  rotate: false
+  xy: 0, 704
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+Cactus1.emote2
+  rotate: false
+  xy: 64, 704
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+Cactus1.emote3
+  rotate: false
+  xy: 128, 704
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+Cactus1.emote4
+  rotate: false
+  xy: 192, 704
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+Cactus1.emote5
+  rotate: false
+  xy: 256, 704
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+Cactus1.emote6
+  rotate: false
+  xy: 320, 704
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+Cactus1.emote7
+  rotate: false
+  xy: 384, 704
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+Cactus1.emote8
+  rotate: false
+  xy: 448, 704
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+Cactus1.emote9
+  rotate: false
+  xy: 512, 704
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+Cactus1.emote10
+  rotate: false
+  xy: 576, 704
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1

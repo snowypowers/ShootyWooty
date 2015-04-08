@@ -31,7 +31,7 @@ public class Player {
     private HashMap<String, Animation> animations = null;
     private PlayerState playerState;
     private PlayerState previousState;
-    private long stateDelta;
+    private float stateDelta;
     public Object statusLock;
 
 	private Vector2 position;
@@ -117,7 +117,7 @@ public class Player {
                 } else if (playerState == PlayerState.IDLE) {
                     if (previousState != PlayerState.IDLE) {
                         previousState = PlayerState.IDLE;
-                        stateDelta = 0;
+                        stateDelta = 0f;
                     } else {
                         stateDelta += delta;
                     }
@@ -126,14 +126,15 @@ public class Player {
                 } else if (playerState == PlayerState.MOVING) {
                     if (previousState != PlayerState.MOVING) {
                         previousState = PlayerState.MOVING;
-                        stateDelta = 0;
+                        stateDelta = 0f;
                     } else {
                         stateDelta += delta;
                     }
-                    s = new Sprite(animations.get(getdirection()).getKeyFrame(stateDelta));
+                    s = new Sprite(animations.get(getdirection()+ ".moving").getKeyFrame(stateDelta));
 
                 } else if (playerState == PlayerState.DAMAGED) {
                     if (stateDelta <= animations.get("shot").getAnimationDuration()) {
+                        Gdx.app.log(TAG, "CurrentDelta: " + String.valueOf(stateDelta) + "Animation length: " + String.valueOf(animations.get("shot").getAnimationDuration()));
                         s = new Sprite(animations.get("shot").getKeyFrame(stateDelta));
                         stateDelta += delta;
                     } else {
@@ -165,7 +166,6 @@ public class Player {
         //s.setPosition(x,y);
         s.draw(sb);
         sb.end();
-        //Draw stuff here
         if (GameConstants.DEBUG) {
             sr.setColor(Color.BLACK);
             sr.setProjectionMatrix(sb.getProjectionMatrix());
@@ -417,7 +417,7 @@ public class Player {
                 } else {
                     previousState = PlayerState.getState(playerState);
                     playerState = newState;
-                    stateDelta = 0;
+                    stateDelta = 0f;
                     statusLock.notifyAll();
                 }
             }

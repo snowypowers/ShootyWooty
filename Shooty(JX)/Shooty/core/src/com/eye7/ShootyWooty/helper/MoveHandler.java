@@ -191,6 +191,14 @@ public class MoveHandler extends Thread{
 
             }
 
+            try {
+                cb.await();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (BrokenBarrierException e) {
+                e.printStackTrace();
+            }
+
             /////////////////////////////////////////MISC EFFECTS///////////////////////////////////////
             if (checkInWater()) {
                 player.collectWater();
@@ -414,6 +422,7 @@ public class MoveHandler extends Thread{
     public boolean checkInWater() {
         for (int i = 0; i < GameConstants.WATER.size;i++) {
          if (Intersector.overlaps(player.getCollider().getCircle(), GameConstants.WATER.get(i))) {
+             Gdx.app.log(TAG, "ON WATER");
              return true;
          }
         }
