@@ -5,6 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.eye7.ShootyWooty.helper.ActionResolver;
 import com.eye7.ShootyWooty.helper.TurnHandler;
 import com.eye7.ShootyWooty.model.GameConstants;
+import com.eye7.ShootyWooty.object.ActionMenu;
 import com.eye7.ShootyWooty.object.InputButton;
 import com.eye7.ShootyWooty.object.InputButtons;
 import com.eye7.ShootyWooty.object.Timer;
@@ -25,7 +26,7 @@ public class GameWorld {
     private InputButton inputButton1;
     private InputButton inputButton2;
     private InputButton inputButton3;
-    private InputButtons input;
+    private ActionMenu input;
     private String[] moves = { "0B0", "0B0", "0B0", "0B0" };
     private String out;
     private int time;
@@ -44,8 +45,8 @@ public class GameWorld {
         inputButton2 = new InputButton(800, 210, stage);
         inputButton3 = new InputButton(800, 100, stage);
         */
-        input = new InputButtons();
-        input.setPosition(800,225);
+        input = new ActionMenu();
+        //input.setPosition(800,225);
         input.debug();
         stage.addActor(input);
 

@@ -11,6 +11,8 @@ import com.badlogic.gdx.utils.Array;
 import com.eye7.ShootyWooty.helper.MainLoader;
 
 public class InputButtons extends Table {
+    private final String TAG = "InputButtons";
+
     private ButtonRow row1;
     private ButtonRow row2;
     private ButtonRow row3;
@@ -86,7 +88,6 @@ class ButtonRow extends Table {
     private boolean lock;
 
     ButtonRow() {
-        this.debug();
         lock = false;
         mBPointer = 0;
 
