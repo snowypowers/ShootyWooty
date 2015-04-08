@@ -59,7 +59,7 @@ public class GameWorld {
 
         switch (gameState) {
             case DECIDING:
-                if (time < 30) {
+                if (time < 15) {
                     out = "Player deciding...";
                     if (GameConstants.PLAYERS.get(GameConstants.myID+1).isDead()){
                         out = "You are dead!";

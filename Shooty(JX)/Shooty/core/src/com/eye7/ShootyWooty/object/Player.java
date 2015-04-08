@@ -17,19 +17,23 @@ import java.util.HashMap;
 
 public class Player {
     private final String TAG;
-//    public static int nextID = 1;
 
+    //GameMap
     public GameMap map;
 
+    //Collider and Player Stats
+    private CircleMapObject collider;
 	private float x;
 	private float y;
     private int dir;
     private int playerID;
-    private Texture pic;
     public int health;
+    private int score;
+    private int water;
 
     public boolean dead = false;
 
+    //PlayerStatus and Animations
     private HashMap<String, Animation> animations = null;
     private PlayerState playerState;
     private PlayerState previousState;
@@ -37,17 +41,19 @@ public class Player {
     public Object statusLock;
 
 	private Vector2 position;
-	private Vector2 velocity;
 
+    //Bullets
     private Bullet bulletl;
     private Bullet bulletr;
     private boolean shootLeft;
     private boolean shootRight;
 
-    private int score;
-    private int water;
+    //HealthBar & WaterBar
+    private Sprite healthBarFG;
+    private Sprite healthBarBG;
+    private Sprite waterBarFG;
+    private Sprite waterBarBG;
 
-    private CircleMapObject collider;
     private float RADIUS = 2;
 
 
@@ -58,10 +64,10 @@ public class Player {
 	public Player(GameMap map, CircleMapObject collider, int d, int id) {
         TAG = "Player" + String.valueOf(id+1);
         playerID = id+1;
-     //   nextID++;
 
         this.map = map; // Reference to the GameMap object in order to get the positions of other objects;
 
+        //Set up player Sprites
         switch(playerID) {
             case 1: animations = CactusLoader.cactus1_animations;
                 break;
@@ -72,29 +78,42 @@ public class Player {
             case 4: animations = CactusLoader.cactus4_animations;
                 break;
         }
+
+        //Setup playerStates
         this.statusLock = new Object();
         playerState = PlayerState.IDLE;
         previousState = PlayerState.IDLE;
 
-        this.pic = new Texture(Gdx.files.internal("players/player"+String.valueOf(playerID)+".png"));
-
+        //Set up player position & stats
         //Coordinates of the middle of the circle
+        this.collider = collider;
 		this.x = collider.getCircle().x;
 		this.y = collider.getCircle().y;
         this.dir = d;
-
         health = 100;
+        score = 0;
+        water = 0;
 
 		position = new Vector2(x, y);
-		velocity = new Vector2(0, 0);
 
+        //Create the bullets
         bulletl = new Bullet(270, this.x, this.y,this);
         bulletr = new Bullet(90, this.x, this.y,this);
 
-        this.collider = collider;
+        //initialize the healthbar & waterbar
+        healthBarBG = new Sprite(new Texture("players/healthBG.png"));
+        healthBarFG = new Sprite(new Texture("players/healthFG.png"));
+        waterBarBG = new Sprite(new Texture("players/waterBarBG.png"));
+        waterBarFG = new Sprite(new Texture("players/waterBarFG.png"));
 
-        sr = new ShapeRenderer();
+        //set origin of healthbar to 0,0. This allows the health bar to fix the the left and decrease from the right.
+        healthBarFG.setOrigin(0,0);
+        healthBarBG.setOrigin(0,0);
 
+        //ShapeRenderer for debug
+        if (GameConstants.DEBUG) {
+            sr = new ShapeRenderer();
+        }
 
 	}
 
@@ -166,9 +185,10 @@ public class Player {
         }
 
         s.setCenter(x,y);
-        //s.setPosition(x,y);
         s.draw(sb);
         sb.end();
+
+        //Debug: Draws the collider
         if (GameConstants.DEBUG) {
             sr.setColor(Color.BLACK);
             sr.setProjectionMatrix(sb.getProjectionMatrix());
@@ -177,19 +197,13 @@ public class Player {
             sr.end();
         }
 
-        //initialize the healthbars
-        Sprite healthBarBG = new Sprite(new Texture("players/healthBG.png"));
-         Sprite healthBarFG = new Sprite(new Texture("players/healthFG.png"));
-
         //set coordinates
         healthBarBG.setX(x-RADIUS-25);
         healthBarBG.setY(y+RADIUS+30);
 
         healthBarFG.setX(x-RADIUS-25);
         healthBarFG.setY(y+RADIUS+30);
-        //set origin of healthbar to 0,0. This allows the health bar to fix the the left and decrease from the right.
-        healthBarFG.setOrigin(0,0);
-        healthBarBG.setOrigin(0,0);
+
 
         //healthBar image is too big, so scaling it down
         healthBarBG.setScale(0.7f, 1f);
@@ -201,9 +215,6 @@ public class Player {
         //initialize the waterBars
         int waterBarFill = score*3+water;
 
-        Sprite waterBarBG = new Sprite(new Texture("players/waterBarBG.png"));
-        Sprite waterBarFG = new Sprite(new Texture("players/waterBarFG.png"));
-
         //set the coordinates
         waterBarBG.setX(x+RADIUS+25);
         waterBarBG.setY(y-RADIUS-25);
@@ -214,9 +225,8 @@ public class Player {
         //connect the waterBar to the water content held by the player
         waterBarFG.setScale(waterBarFill/(float)9, 1f);
 
-
-
         sb.begin();
+
         //draw the bars
         healthBarBG.draw(sb);
         healthBarFG.draw(sb);
@@ -277,19 +287,19 @@ public class Player {
 
 	// setters
 	public synchronized void incrementX(float x) {
-		this.x +=x;
-        collider.getCircle().setPosition(this.x,this.y);
-        velocity = new Vector2(x,0);
-//        Gdx.app.log(TAG,collider.x+" X");
-        changeAnimation(PlayerState.MOVING);
+        if (!isDead()) {
+            this.x += x;
+            collider.getCircle().setPosition(this.x, this.y);
+            changeAnimation(PlayerState.MOVING);
+        }
 	}
 
 	public synchronized void incrementY(float y) {
-		this.y += y;
-        collider.getCircle().setPosition(this.x,this.y);
-        velocity = new Vector2(0,y);
-//        Gdx.app.log(TAG,collider.y+" Y");
-        changeAnimation(PlayerState.MOVING);
+        if (isDead()) {
+            this.y += y;
+            collider.getCircle().setPosition(this.x, this.y);
+            changeAnimation(PlayerState.MOVING);
+        }
 	}
 
     public void rotate (int r) {
@@ -364,7 +374,6 @@ public class Player {
     //Aligns player into the closest gridbox
     //Calling this will also end player movement animation & checks for death
     public synchronized void snapInGrid() {
-        velocity = new Vector2(0,0);
         //Snaps to 64 pixel grid
         float Xoff = x % 32;
         float Yoff = y % 32;
@@ -391,12 +400,6 @@ public class Player {
         if (playerState != PlayerState.DEAD) {
             changeAnimation(PlayerState.IDLE);
         }
-
-    }
-
-    private void setUpSprites() {
-        String path = "Character"+String.valueOf(playerID);
-
 
     }
 

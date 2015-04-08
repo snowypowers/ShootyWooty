@@ -43,7 +43,6 @@ public class MoveHandler extends Thread{
     private float bullet_distance_R;
     private float bullet_distance_L;
     private ActionResolver actionResolver;
-    private int PlayerTag;
 
     public MoveHandler(Player player, String[] moves, CyclicBarrier cb, ActionResolver actionResolver){
         TAG = "MoveHandler of Player "+String.valueOf(player.getPlayerID());
@@ -70,8 +69,7 @@ public class MoveHandler extends Thread{
     public void run() {
 
         try {
-            cb.await();
-
+            cb.await(); // Wait for all moveHandlers to initialize and arrive
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (BrokenBarrierException e) {
@@ -80,15 +78,16 @@ public class MoveHandler extends Thread{
         //Gdx.app.log("MoveHandler", "Execution!");
 
         for (int i = 0; i < 4;i++) {
-
-            nextMove();//Initalises the moves
+            nextMove();//Initializes the moves
             /////////////////////////////////////////EXECUTE MOVEMENT///////////////////////////////////////
             Gdx.app.log("Move Info Player" + String.valueOf(player.getPlayerID()), String.valueOf(movement[0]) +" "+ String.valueOf(movement[1]) +" "+ String.valueOf(movement[2]) +" "+ String.valueOf(movement[3]));
             if (!player.isDead()) {
-                while (movement[0] > 0f || movement[1] > 0f || movement[3] != 0f) {
 
-                    CircleMapObject collider = player.getCollider();
-                    float[] oldMove = AmountToMove(moves[pointer]);
+                CircleMapObject collider = player.getCollider(); //Get collider
+                float[] oldMove = AmountToMove(moves[pointer]); //Record of original move
+
+                while (movement[0] > 0f || movement[1] > 0f || movement[3] != 0f) {
+                    //Gdx.app.log("Move Info Player" + String.valueOf(player.getPlayerID()), String.valueOf(movement[0]) +" "+ String.valueOf(movement[1]) +" "+ String.valueOf(movement[2]) +" "+ String.valueOf(movement[3]));
 
                     // move along x axis
                     if (movement[0] > 0f) {
@@ -114,11 +113,9 @@ public class MoveHandler extends Thread{
                             bulletl.incrementY(movement[2]);
                             bulletr.incrementY(movement[2]);
                         } else {
-                            Gdx.app.log("OLDMOVE", String.valueOf(oldMove[1]));
                             collider.getCircle().setPosition(collider.getCircle().x, (collider.getCircle().y - movement[2]));
                             movement[1] = oldMove[1] - movement[1];
                             movement[2] = movement[2] * -1;
-                            Gdx.app.log("UPDATEDMOVE", String.valueOf(movement[0]) + " " + String.valueOf(movement[2]));
                         }
                     }
 
@@ -133,6 +130,12 @@ public class MoveHandler extends Thread{
                         }
 
                     }
+
+                    try {
+                        Thread.sleep(20);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
 
                 player.snapInGrid(); // make sure the player is aligned to a grid
@@ -140,8 +143,9 @@ public class MoveHandler extends Thread{
             }
 
             try {
+                Thread.sleep(300);
                 cb.await();
-                Gdx.app.log("MoveHandler Debugging", "After Await second");
+                //Gdx.app.log("MoveHandler Debugging", "After Await second");
 
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -201,7 +205,7 @@ public class MoveHandler extends Thread{
                 if (checkInWater()) {
                     player.collectWater();
                     try {
-                        Thread.sleep(1000);
+                        Thread.sleep(2000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -212,7 +216,6 @@ public class MoveHandler extends Thread{
                 continue;
             } else {
                 try {
-                    //Wait for all to finish executing
                     cb.await();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -268,9 +271,6 @@ public class MoveHandler extends Thread{
     }
 
     /////////////////////////////////////METHODS FOR MOVE CONTROL//////////////////////////////////////
-    public void updateMove(String[] moves){
-        this.moves=moves;
-    } // constantly update moves
     public float[] AmountToMove(String s) { // X,Y,increment,rotate
         int dir = player.getDir();
         float[] output = new float[4];
