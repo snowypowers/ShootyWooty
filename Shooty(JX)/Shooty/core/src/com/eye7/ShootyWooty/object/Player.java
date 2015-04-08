@@ -117,6 +117,9 @@ public class Player {
         healthBarFG.setOrigin(0,0);
         healthBarBG.setOrigin(0,0);
 
+        //set origin of water bar to 0,0. This allows the bar to fix to the bottom and increase to the top.
+        waterBarFG.setOrigin(0,0);
+        
         //ShapeRenderer for debug
         if (GameConstants.DEBUG) {
             sr = new ShapeRenderer();
@@ -225,7 +228,7 @@ public class Player {
         waterBarFG.setY(y-RADIUS-25);
 
         //connect the waterBar to the water content held by the player
-        waterBarFG.setScale(waterBarFill/(float)9, 1f);
+        waterBarFG.setScale(1f, waterBarFill/(float)9);
 
         sb.begin();
 

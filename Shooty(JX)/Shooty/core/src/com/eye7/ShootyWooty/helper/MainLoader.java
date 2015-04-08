@@ -32,13 +32,13 @@ public class MainLoader {
         atlas = new TextureAtlas(Gdx.files.internal("buttons/Gbuttons.pack")); // atlas for skin
         skin = new Skin(atlas); // skin containing drawables
 
-        TextureRegion[] faucets = new TextureRegion[11];
-        int faucet_count=0;
-        for (int i = 1; i < 12 ; i++) {
-            faucets[i-1] = new TextureRegion(skinCharacters.getRegion("Sprite.faucet"+String.valueOf(i)));
-            faucets[i-1].flip(false,true);
-        }
-        animation_faucet = new Animation(0.2f,faucets);
+//        TextureRegion[] faucets = new TextureRegion[11];
+//        int faucet_count=0;
+//        for (int i = 1; i < 12 ; i++) {
+//            faucets[i-1] = new TextureRegion(skinCharacters.getRegion("Sprite.faucet"+String.valueOf(i)));
+//            faucets[i-1].flip(false,true);
+//        }
+//        animation_faucet = new Animation(0.2f,faucets);
 
 
     }
