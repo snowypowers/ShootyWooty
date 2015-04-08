@@ -48,7 +48,7 @@ public class GameWorld {
 
     // constantly call this method
     public void update(float delta) {
-        if (!dead) {
+        if (!GameConstants.PLAYERS.get(GameConstants.myID+1).isDead()) {
             // always get move from button even if no change
             moves[0] = button0.getMoves();
             moves[1] = button1.getMoves();
@@ -61,12 +61,9 @@ public class GameWorld {
             case DECIDING:
                 if (time < 30) {
                     out = "Player deciding...";
-<<<<<<< HEAD
-                    if (GameConstants.PLAYERS.get(GameConstants.myID+1).dead){
-=======
-                    if (dead==true){
+                    if (GameConstants.PLAYERS.get(GameConstants.myID+1).isDead()){
                         out = "You are dead!";
->>>>>>> Animation
+
                         button0.setLock(true); // lock the button from being pressed while executing moves
                         button1.setLock(true);
                         button2.setLock(true);
