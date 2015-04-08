@@ -41,8 +41,6 @@ public class CactusLoader {
     public static HashMap<String, Animation> cactus3_animations = new HashMap<String, Animation>();
     public static HashMap<String, Animation> cactus4_animations = new HashMap<String, Animation>();
 
-    public static ArrayList<HashMap<String, Animation>> cactus_animations = null;
-
 
     public CactusLoader(int NUM_PLAYERS){
         cactus1Skin = new TextureAtlas(Gdx.files.internal("players/Cactus1.pack"));
@@ -51,18 +49,12 @@ public class CactusLoader {
         if(NUM_PLAYERS==2){
             loadC1();
             loadC2();
-//            cactus_animations.add(cactus1_animations);
-//            cactus_animations.add(cactus2_animations);
         }
         else{
             loadC1();
             loadC2();
             loadC3();
             loadC4();
-//            cactus_animations.add(cactus1_animations);
-//            cactus_animations.add(cactus2_animations);
-//            cactus_animations.add(cactus3_animations);
-//            cactus_animations.add(cactus4_animations);
         }
     }
 
@@ -81,7 +73,6 @@ public class CactusLoader {
         }
 
         Array<TextureRegion> frames = new Array<TextureRegion>();
-        //TextureRegion[] frames = new TextureRegion[frameNumber];
 
         for (int i = 1; i < frameNumber+1 ; i++) {
             frames.add(new TextureRegion(cactusSkin.getRegion(name+String.valueOf(i))));

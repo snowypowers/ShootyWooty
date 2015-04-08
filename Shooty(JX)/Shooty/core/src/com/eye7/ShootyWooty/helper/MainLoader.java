@@ -13,10 +13,13 @@ import com.eye7.ShootyWooty.model.GameConstants;
 
 /**
  * Created by JunXiang on 3/3/2015.
+ * Loader to load all assets required in game.
  */
 public class MainLoader {
+    private static String TAG = "MainLoader";
+
     public static BitmapFont white, green;
-    public static TextureAtlas atlas, Characters;
+    public static TextureAtlas atlas;
     public static Skin skin, skinCharacters;
 
     public static Animation animation_faucet;
@@ -28,9 +31,6 @@ public class MainLoader {
         green.setScale(GameConstants.SCALE_X, GameConstants.SCALE_Y);
         atlas = new TextureAtlas(Gdx.files.internal("buttons/Gbuttons.pack")); // atlas for skin
         skin = new Skin(atlas); // skin containing drawables
-
-        Characters = new TextureAtlas(Gdx.files.internal("ShootyUI/Character.pack"));
-        skinCharacters = new Skin(Characters);
 
         TextureRegion[] faucets = new TextureRegion[11];
         int faucet_count=0;

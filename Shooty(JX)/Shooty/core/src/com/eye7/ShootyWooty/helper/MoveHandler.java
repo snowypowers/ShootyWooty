@@ -145,8 +145,6 @@ public class MoveHandler extends Thread{
             try {
                 Thread.sleep(300);
                 cb.await();
-                //Gdx.app.log("MoveHandler Debugging", "After Await second");
-
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } catch (BrokenBarrierException e) {
@@ -389,6 +387,7 @@ public class MoveHandler extends Thread{
             }
             if (Intersector.overlaps(b.getCollider().getCircle(), p.getCollider().getCircle())) {
                 p.decreaseHealth(20);
+                player.hitAwarded();
                 return true;
             }
         }

@@ -56,8 +56,14 @@ public class Player {
 
     private float RADIUS = 2;
 
-
+    //Debug Renderer
     private ShapeRenderer sr;
+
+    //Achievemnts
+    private int lifeTimeKills = 0;
+    private int lifeTimeHits = 0;
+    private int lifeTimeWater = 0;
+    private int lifeTimeShotsFired = 0;
 
 
 	// takes in x,y as origin
@@ -115,6 +121,12 @@ public class Player {
             sr = new ShapeRenderer();
         }
 
+        //Setup Achievements
+        lifeTimeHits = 0;
+        lifeTimeKills = 0;
+        lifeTimeWater = 0;
+        lifeTimeShotsFired = 0;
+
 	}
 
     public void draw(SpriteBatch sb, float delta) {
@@ -137,21 +149,11 @@ public class Player {
                     }
 
                 } else if (playerState == PlayerState.IDLE) {
-                    if (previousState != PlayerState.IDLE) {
-                        previousState = PlayerState.IDLE;
-                        stateDelta = 0f;
-                    } else {
-                        stateDelta += delta;
-                    }
+                    stateDelta += delta;
                     s = new Sprite(animations.get(getdirection() + ".idle").getKeyFrame(stateDelta));
 
                 } else if (playerState == PlayerState.MOVING) {
-                    if (previousState != PlayerState.MOVING) {
-                        previousState = PlayerState.MOVING;
-                        stateDelta = 0f;
-                    } else {
-                        stateDelta += delta;
-                    }
+                    stateDelta += delta;
                     s = new Sprite(animations.get(getdirection()+ ".moving").getKeyFrame(stateDelta));
 
                 } else if (playerState == PlayerState.DAMAGED) {
@@ -275,8 +277,30 @@ public class Player {
         changeAnimation(PlayerState.DAMAGED);
     }
 
+    public synchronized void decreaseHealth(Bullet b){
+        health-= 20;
+        water = 0;
+        if (health < 0) {
+            health = 0;
+            if (playerState != PlayerState.DEAD) { //If not previously declared dead
+                b.killAwarded();
+            }
+
+        }
+        changeAnimation(PlayerState.DAMAGED);
+    }
+
+    public void hitAwarded() {
+        lifeTimeHits += 1;
+    }
+
+    public void killAwarded() {
+        lifeTimeKills += 1;
+    }
+
     public synchronized void collectWater() {
         water += 1;
+        lifeTimeWater += 1;
          if (water == 3) {
              score += 1;
              water = 0;
@@ -295,7 +319,7 @@ public class Player {
 	}
 
 	public synchronized void incrementY(float y) {
-        if (isDead()) {
+        if (!isDead()) {
             this.y += y;
             collider.getCircle().setPosition(this.x, this.y);
             changeAnimation(PlayerState.MOVING);
@@ -318,10 +342,12 @@ public class Player {
 
     public void startShootLeft() {
         shootLeft = true;
+        lifeTimeShotsFired += 1;
     }
 
     public void startShootRight() {
         shootRight = true;
+        lifeTimeShotsFired += 1;
     }
 
     public void endShootLeft() {
@@ -417,6 +443,18 @@ public class Player {
         } else  {
             return "east";
         }
+    }
+
+    //Call this to get achievments at the end of the game.
+    public HashMap<String, Integer> getAchievments() {
+        HashMap<String, Integer> a = new HashMap<String, Integer>();
+        a.put ("Kills", lifeTimeKills);
+        a.put ("Hits", lifeTimeHits);
+        a.put ("Shots Fired", lifeTimeShotsFired);
+        a.put ("Water", lifeTimeWater);
+
+        return a;
+
     }
 
     private void changeAnimation(PlayerState newState) {
