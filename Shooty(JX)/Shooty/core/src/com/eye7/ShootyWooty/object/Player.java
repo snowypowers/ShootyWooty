@@ -56,6 +56,7 @@ public class Player {
 
     private float RADIUS = 2;
 
+
     //Debug Renderer
     private ShapeRenderer sr;
 
@@ -116,6 +117,9 @@ public class Player {
         healthBarFG.setOrigin(0,0);
         healthBarBG.setOrigin(0,0);
 
+        //set origin of water bar to 0,0. This allows the bar to fix to the bottom and increase to the top.
+        waterBarFG.setOrigin(0,0);
+        
         //ShapeRenderer for debug
         if (GameConstants.DEBUG) {
             sr = new ShapeRenderer();
@@ -198,7 +202,6 @@ public class Player {
             sr.circle(collider.getCircle().x,collider.getCircle().y,collider.getCircle().radius);
             sr.end();
         }
-
         //set coordinates
         healthBarBG.setX(x-RADIUS-25);
         healthBarBG.setY(y+RADIUS+30);
@@ -225,7 +228,7 @@ public class Player {
         waterBarFG.setY(y-RADIUS-25);
 
         //connect the waterBar to the water content held by the player
-        waterBarFG.setScale(waterBarFill/(float)9, 1f);
+        waterBarFG.setScale(1f, waterBarFill/(float)9);
 
         sb.begin();
 
@@ -243,6 +246,7 @@ public class Player {
             Sprite nOfMoves = getNoOfMoves(moves);
             nOfMoves.draw(sb);
         }
+//        sb.end();
 //        sb.begin();
     }
 
