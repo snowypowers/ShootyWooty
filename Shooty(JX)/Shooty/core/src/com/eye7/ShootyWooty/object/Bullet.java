@@ -63,6 +63,10 @@ public class Bullet {
         returnY = y;
     }
 
+    public void killAwarded() {
+        player.killAwarded();
+    }
+
     // getters-
     public float getX(){
         return x;

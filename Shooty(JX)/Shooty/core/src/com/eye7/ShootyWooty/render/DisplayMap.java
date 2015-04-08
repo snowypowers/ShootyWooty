@@ -40,8 +40,6 @@ public class DisplayMap implements InputProcessor {
 
     private MapProperties mp;
 
-    Player temp;
-
     public DisplayMap () {
         sb = new SpriteBatch();
 

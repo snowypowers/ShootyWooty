@@ -33,6 +33,8 @@ public class Button {
 
     private ArrayList<Drawable> buttonUP,buttonDOWN,bulletR,bulletL;
 
+    private ChangeListener moveListen, bulletLListen, bulletRListen;
+
 
     String moves;
     private char movements[] = { 'B', 'F', 'R', 'D', 'L' };
@@ -89,7 +91,7 @@ public class Button {
 
 
         // Buttons listener
-        moveButton.addListener(new ChangeListener() {
+        moveButton.addListener( moveListen = new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
 
@@ -108,7 +110,7 @@ public class Button {
 
             }
         });
-        bulletButtonL.addListener(new ChangeListener(){
+        bulletButtonL.addListener(bulletLListen = new ChangeListener(){
             @Override
             public void changed(ChangeEvent event, Actor actor) {
 
@@ -128,7 +130,7 @@ public class Button {
             }
 
         });
-        bulletButtonR.addListener(new ChangeListener(){
+        bulletButtonR.addListener(bulletRListen = new ChangeListener(){
 
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -156,7 +158,13 @@ public class Button {
         table.add(moveButton);
         table.add(bulletButtonR);
         stage.addActor(table);
+    }
 
+    public void remove() {
+        stage.removeListener(moveListen);
+        stage.removeListener(bulletLListen);
+        stage.removeListener(bulletRListen);
+        table.remove();
     }
     // buttons methods
     public void buttonInitializer(){

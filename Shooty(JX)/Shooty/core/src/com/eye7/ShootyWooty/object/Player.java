@@ -9,80 +9,124 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.objects.CircleMapObject;
 import com.badlogic.gdx.math.Vector2;
+import com.eye7.ShootyWooty.helper.CactusLoader;
 import com.eye7.ShootyWooty.model.GameConstants;
 import com.eye7.ShootyWooty.world.GameMap;
 
+import java.util.HashMap;
+
 public class Player {
     private final String TAG;
-//    public static int nextID = 1;
 
+    //GameMap
     public GameMap map;
 
+    //Collider and Player Stats
+    private CircleMapObject collider;
 	private float x;
 	private float y;
     private int dir;
     private int playerID;
-    private Texture pic;
     public int health;
-    public boolean dead = false;
-	private Vector2 position;
-	private Vector2 velocity;
+    private int score;
+    private int water;
 
+    public boolean dead = false;
+
+    //PlayerStatus and Animations
+    private HashMap<String, Animation> animations = null;
+    private PlayerState playerState;
+    private PlayerState previousState;
+    private float stateDelta;
+    public Object statusLock;
+
+	private Vector2 position;
+
+    //Bullets
     private Bullet bulletl;
     private Bullet bulletr;
     private boolean shootLeft;
     private boolean shootRight;
 
-    private int score;
-    private int water;
+    //HealthBar & WaterBar
+    private Sprite healthBarFG;
+    private Sprite healthBarBG;
+    private Sprite waterBarFG;
+    private Sprite waterBarBG;
 
-    private CircleMapObject collider;
     private float RADIUS = 2;
 
-    private Animation animation_idle;
-    private Animation animation_north;
-    private Animation animation_south;
-    private Animation animation_west;
-    private Animation animation_east;
-    private float animationFrameTime;
-    //Sprites for bars
-    private Sprite healthBarBG = new Sprite(new Texture("players/healthBG.png"));
-    private Sprite healthBarFG = new Sprite(new Texture("players/healthFG.png"));
-    private Sprite waterBarBG = new Sprite(new Texture("players/waterBarBG.png"));
-    private Sprite waterBarFG = new Sprite(new Texture("players/waterBarFG.png"));
-    private Sprite nOfMoves;
 
+    //Debug Renderer
     private ShapeRenderer sr;
+
+    //Achievemnts
+    private int lifeTimeKills = 0;
+    private int lifeTimeHits = 0;
+    private int lifeTimeWater = 0;
+    private int lifeTimeShotsFired = 0;
 
 
 	// takes in x,y as origin
 	public Player(GameMap map, CircleMapObject collider, int d, int id) {
         TAG = "Player" + String.valueOf(id+1);
         playerID = id+1;
-     //   nextID++;
 
         this.map = map; // Reference to the GameMap object in order to get the positions of other objects;
 
-        setUpSprites();
-        this.pic = new Texture(Gdx.files.internal("players/player"+String.valueOf(playerID)+".png"));
+        //Set up player Sprites
+        switch(playerID) {
+            case 1: animations = CactusLoader.cactus1_animations;
+                break;
+            case 2: animations = CactusLoader.cactus2_animations;
+                break;
+            case 3: animations = CactusLoader.cactus3_animations;
+                break;
+            case 4: animations = CactusLoader.cactus4_animations;
+                break;
+        }
 
+        //Setup playerStates
+        this.statusLock = new Object();
+        playerState = PlayerState.IDLE;
+        previousState = PlayerState.IDLE;
+
+        //Set up player position & stats
         //Coordinates of the middle of the circle
+        this.collider = collider;
 		this.x = collider.getCircle().x;
 		this.y = collider.getCircle().y;
         this.dir = d;
-
         health = 100;
+        score = 0;
+        water = 0;
 
 		position = new Vector2(x, y);
-		velocity = new Vector2(0, 0);
 
+        //Create the bullets
         bulletl = new Bullet(270, this.x, this.y,this);
         bulletr = new Bullet(90, this.x, this.y,this);
 
-        this.collider = collider;
+        //initialize the healthbar & waterbar
+        healthBarBG = new Sprite(new Texture("players/healthBG.png"));
+        healthBarFG = new Sprite(new Texture("players/healthFG.png"));
+        waterBarBG = new Sprite(new Texture("players/waterBarBG.png"));
+        waterBarFG = new Sprite(new Texture("players/waterBarFG.png"));
 
-        sr = new ShapeRenderer();
+        //set origin of healthbar to 0,0. This allows the health bar to fix the the left and decrease from the right.
+        healthBarFG.setOrigin(0,0);
+        healthBarBG.setOrigin(0,0);
 
+        //ShapeRenderer for debug
+        if (GameConstants.DEBUG) {
+            sr = new ShapeRenderer();
+        }
+
+        //Setup Achievements
+        lifeTimeHits = 0;
+        lifeTimeKills = 0;
+        lifeTimeWater = 0;
+        lifeTimeShotsFired = 0;
 
 	}
 
@@ -93,13 +137,61 @@ public class Player {
         if (shootRight) {
             bulletr.draw(sb);
         }
-        Sprite s = new Sprite(pic);
+        Sprite s = null;
+        synchronized (statusLock) {
+            //Gdx.app.log(TAG, "Rendering");
+            while (s == null) {
+                if (playerState == PlayerState.DEAD) {
+                    if (stateDelta <= animations.get("lose").getAnimationDuration()) {
+                        s = new Sprite(animations.get("lose").getKeyFrame(stateDelta));
+                        stateDelta += delta;
+                    } else {
+                        s = new Sprite(animations.get("lose").getKeyFrame(animations.get("lose").getAnimationDuration()));
+                    }
+
+                } else if (playerState == PlayerState.IDLE) {
+                    stateDelta += delta;
+                    s = new Sprite(animations.get(getdirection() + ".idle").getKeyFrame(stateDelta));
+
+                } else if (playerState == PlayerState.MOVING) {
+                    stateDelta += delta;
+                    s = new Sprite(animations.get(getdirection()+ ".moving").getKeyFrame(stateDelta));
+
+                } else if (playerState == PlayerState.DAMAGED) {
+                    if (stateDelta <= animations.get("shot").getAnimationDuration()) {
+                        Gdx.app.log(TAG, "CurrentDelta: " + String.valueOf(stateDelta) + "Animation length: " + String.valueOf(animations.get("shot").getAnimationDuration()));
+                        s = new Sprite(animations.get("shot").getKeyFrame(stateDelta));
+                        stateDelta += delta;
+                    } else {
+                        playerState = PlayerState.getState(previousState); // Restore previous state
+                        previousState = PlayerState.DAMAGED;
+                        Gdx.app.log(TAG,playerState.toString());
+                        statusLock.notifyAll();
+                    }
+
+                } else if (playerState == PlayerState.COLLECTING_WATER) {
+                    if (previousState != PlayerState.DAMAGED) { //If not damaged
+                        if (stateDelta <= animations.get("score").getAnimationDuration()) {
+                            s = new Sprite(animations.get("score").getKeyFrame(stateDelta));
+                            stateDelta += delta;
+                        } else {
+                            playerState = PlayerState.getState(previousState); // Restore previous state
+                            previousState = PlayerState.COLLECTING_WATER;
+                            statusLock.notifyAll();
+                        }
+                    } else {
+                        changeAnimation(PlayerState.IDLE);
+                        s = new Sprite(animations.get(getdirection() + ".idle").getKeyFrame(stateDelta));
+                    }
+                }
+            }
+        }
+
         s.setCenter(x,y);
-        s.setRotation(dir);
-        //s.setPosition(x,y);
         s.draw(sb);
         sb.end();
-        //Draw stuff here
+
+        //Debug: Draws the collider
         if (GameConstants.DEBUG) {
             sr.setColor(Color.BLACK);
             sr.setProjectionMatrix(sb.getProjectionMatrix());
@@ -107,19 +199,13 @@ public class Player {
             sr.circle(collider.getCircle().x,collider.getCircle().y,collider.getCircle().radius);
             sr.end();
         }
-
-        //initialize the healthbars
-
-
         //set coordinates
         healthBarBG.setX(x-RADIUS-25);
         healthBarBG.setY(y+RADIUS+30);
 
         healthBarFG.setX(x-RADIUS-25);
         healthBarFG.setY(y+RADIUS+30);
-        //set origin of healthbar to 0,0. This allows the health bar to fix the the left and decrease from the right.
-        healthBarFG.setOrigin(0,0);
-        healthBarBG.setOrigin(0,0);
+
 
         //healthBar image is too big, so scaling it down
         healthBarBG.setScale(0.7f, 1f);
@@ -131,7 +217,6 @@ public class Player {
         //initialize the waterBars
         int waterBarFill = score*3+water;
 
-
         //set the coordinates
         waterBarBG.setX(x+RADIUS+25);
         waterBarBG.setY(y-RADIUS-25);
@@ -142,9 +227,8 @@ public class Player {
         //connect the waterBar to the water content held by the player
         waterBarFG.setScale(waterBarFill/(float)9, 1f);
 
-
-
         sb.begin();
+
         //draw the bars
         healthBarBG.draw(sb);
         healthBarFG.draw(sb);
@@ -167,7 +251,7 @@ public class Player {
     //returns a sprite with the no of moves as input to the player. This will be drawn on the player.
     //pre condition: 1<=n<=4
     public synchronized Sprite getNoOfMoves(int n){
-
+        Sprite nOfMoves;
         if(n==1){
             nOfMoves = new Sprite(new Texture("players/1Move.png"));
         }
@@ -191,28 +275,56 @@ public class Player {
         if (health < 0) {
             health = 0;
         }
+        changeAnimation(PlayerState.DAMAGED);
+    }
+
+    public synchronized void decreaseHealth(Bullet b){
+        health-= 20;
+        water = 0;
+        if (health < 0) {
+            health = 0;
+            if (playerState != PlayerState.DEAD) { //If not previously declared dead
+                b.killAwarded();
+            }
+
+        }
+        changeAnimation(PlayerState.DAMAGED);
+    }
+
+    public void hitAwarded() {
+        lifeTimeHits += 1;
+    }
+
+    public void killAwarded() {
+        lifeTimeKills += 1;
     }
 
     public synchronized void collectWater() {
         water += 1;
+        lifeTimeWater += 1;
          if (water == 3) {
              score += 1;
              water = 0;
          }
+        changeAnimation(PlayerState.COLLECTING_WATER);
     }
 
 
 	// setters
-	public void incrementX(float x) {
-		this.x +=x;
-        collider.getCircle().setPosition(this.x,this.y);
-//        Gdx.app.log(TAG,collider.x+" X");
+	public synchronized void incrementX(float x) {
+        if (!isDead()) {
+            this.x += x;
+            collider.getCircle().setPosition(this.x, this.y);
+            changeAnimation(PlayerState.MOVING);
+        }
 	}
 
-	public void incrementY(float y) {
-		this.y += y;
-        collider.getCircle().setPosition(this.x,this.y);
-//        Gdx.app.log(TAG,collider.y+" Y");
+	public synchronized void incrementY(float y) {
+        if (!isDead()) {
+            this.y += y;
+            collider.getCircle().setPosition(this.x, this.y);
+            changeAnimation(PlayerState.MOVING);
+        }
 	}
 
     public void rotate (int r) {
@@ -231,10 +343,12 @@ public class Player {
 
     public void startShootLeft() {
         shootLeft = true;
+        lifeTimeShotsFired += 1;
     }
 
     public void startShootRight() {
         shootRight = true;
+        lifeTimeShotsFired += 1;
     }
 
     public void endShootLeft() {
@@ -285,7 +399,8 @@ public class Player {
     }
 
     //Aligns player into the closest gridbox
-    public void snapInGrid() {
+    //Calling this will also end player movement animation & checks for death
+    public synchronized void snapInGrid() {
         //Snaps to 64 pixel grid
         float Xoff = x % 32;
         float Yoff = y % 32;
@@ -305,11 +420,13 @@ public class Player {
         } else {
             rotate(90 - Roff);
         }
-    }
-
-    private void setUpSprites() {
-        String path = "Character"+String.valueOf(playerID);
-
+        //Check if he is dead
+        if (health == 0) {
+            playerState = PlayerState.DEAD;
+        }
+        if (playerState != PlayerState.DEAD) {
+            changeAnimation(PlayerState.IDLE);
+        }
 
     }
 
@@ -317,4 +434,76 @@ public class Player {
         return score;
     }
 
+    private String getdirection() {
+        if (dir == 0) {
+            return "north";
+        } else if (dir == 90) {
+            return "west";
+        } else if (dir == 180) {
+            return "south";
+        } else  {
+            return "east";
+        }
+    }
+
+    //Call this to get achievments at the end of the game.
+    public HashMap<String, Integer> getAchievments() {
+        HashMap<String, Integer> a = new HashMap<String, Integer>();
+        a.put ("Kills", lifeTimeKills);
+        a.put ("Hits", lifeTimeHits);
+        a.put ("Shots Fired", lifeTimeShotsFired);
+        a.put ("Water", lifeTimeWater);
+
+        return a;
+
+    }
+
+    private void changeAnimation(PlayerState newState) {
+        synchronized (statusLock) {
+            if (playerState != PlayerState.DEAD) {
+                if (playerState == PlayerState.DAMAGED) { //Check if not dead
+                    previousState = newState; // Allows damaged animation to run finish
+                } else {
+                    previousState = PlayerState.getState(playerState);
+                    playerState = newState;
+                    stateDelta = 0f;
+                    statusLock.notifyAll();
+                }
+            }
+        }
+    }
+
+    public boolean isDead() {
+        return playerState == PlayerState.DEAD;
+    }
+}
+
+enum PlayerState {
+    IDLE,
+    MOVING,
+    DAMAGED,
+    COLLECTING_WATER,
+    DEAD;
+
+    static PlayerState getState(PlayerState e) {
+        switch (e) {
+            case IDLE: return IDLE;
+            case MOVING: return MOVING;
+            case DAMAGED: return DAMAGED;
+            case COLLECTING_WATER: return COLLECTING_WATER;
+            case DEAD: return DEAD;
+            default: return null;
+        }
+    }
+
+    public String toString() {
+        switch(this) {
+            case IDLE: return "IDLE";
+            case MOVING: return "MOVING";
+            case DAMAGED: return "DAMAGED";
+            case COLLECTING_WATER: return "COLLECTING_WATER";
+            case DEAD: return "DEAD";
+            default: return "null";
+        }
+    }
 }
