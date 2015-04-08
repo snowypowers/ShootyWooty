@@ -28,7 +28,7 @@ public class TurnHandler extends Thread {
     }
 
     public void addTurn(int playerTag, String[] moves) {
-        MoveHandler m = new MoveHandler (GameConstants.PLAYERS.get(playerTag), moves, cyclicBarrier);
+        MoveHandler m = new MoveHandler (GameConstants.PLAYERS.get(playerTag), moves, cyclicBarrier, actionResolver);
         moveHandlers[playerTag-1] = m;
 
 
@@ -63,15 +63,17 @@ public class TurnHandler extends Thread {
             mh.start();
         }
         Gdx.app.log(TAG, "Waiting...");
-       for (MoveHandler mh: moveHandlers) {
-           try {
-               mh.join();
-           } catch (InterruptedException e) {
-               e.printStackTrace();
-           }
-       }
+        for (MoveHandler mh: moveHandlers) {
+            try {
+                mh.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
         Gdx.app.log(TAG, "Turn Ended!");
+
     }
+
 
     public boolean isExecuting() {
         return executing;

@@ -24,7 +24,7 @@ public class Player {
     private int playerID;
     private Texture pic;
     public int health;
-
+    public boolean dead = false;
 	private Vector2 position;
 	private Vector2 velocity;
 
@@ -77,6 +77,7 @@ public class Player {
 
         sr = new ShapeRenderer();
 
+
 	}
 
     public void draw(SpriteBatch sb, float delta) {
@@ -103,7 +104,7 @@ public class Player {
 
         //initialize the healthbars
         Sprite healthBarBG = new Sprite(new Texture("players/healthBG.png"));
-        Sprite healthBarFG = new Sprite(new Texture("players/healthFG.png"));
+         Sprite healthBarFG = new Sprite(new Texture("players/healthFG.png"));
 
         //set coordinates
         healthBarBG.setX(x-RADIUS-25);

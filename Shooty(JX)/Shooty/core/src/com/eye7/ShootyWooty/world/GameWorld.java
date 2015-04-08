@@ -24,7 +24,6 @@ public class GameWorld {
     private Button button1;
     private Button button2;
     private Button button3;
-    private boolean dead = false;
     private String[] moves = { "0B0", "0B0", "0B0", "0B0" };
     private String out;
     private int time;
@@ -60,15 +59,21 @@ public class GameWorld {
             case DECIDING:
                 if (time < 30) {
                     out = "Player deciding...";
-                    if (dead==true){
+                    if (GameConstants.PLAYERS.get(GameConstants.myID+1).dead){
                         button0.setLock(true); // lock the button from being pressed while executing moves
                         button1.setLock(true);
                         button2.setLock(true);
                         button3.setLock(true);
                     }
                     if(actionResolver.getMultiplayer() && actionResolver.getActive()!=null) {
-                        actionResolver.sendContMessage(moves[0] + " " + moves[1] + " " + moves[2] + " " + moves[3]);
-                        String allPlayerMoves = actionResolver.getImMoves();//Continuously gets the player moves to render
+                        int numMoves = 0;
+                        for(int i =0; i<4; i++){
+                            if (!moves[i].equals(("0B0"))){
+                                numMoves++;
+                            }
+                        }
+                        actionResolver.sendContMessage(Integer.toString(numMoves));
+                        Integer[] allPlayerMoves = actionResolver.getImMoves();//Continuously gets the player moves to render
                     }
 //                    Gdx.app.log("GameWorld Cont Moves", allPlayerMoves);
                 } else {
@@ -85,7 +90,7 @@ public class GameWorld {
 
                     if (actionResolver.getMultiplayer()) {
                         String myMove = moves[0] + " " + moves[1] + " " + moves[2] + " " + moves[3];
-                        if(dead){
+                        if(GameConstants.PLAYERS.get(GameConstants.myID+1).dead){
                             myMove = "0B0 0B0 0B0 0B0";
                         }
                         actionResolver.sendMessageAll("!", myMove);
@@ -132,55 +137,6 @@ public class GameWorld {
                             button1.resetMoves();
                             button2.resetMoves();
                             button3.resetMoves();
-                            for(int i=0; i<GameConstants.NUM_PLAYERS; i++){
-                                if(GameConstants.PLAYERS.get(i+1).getHealth()==0){
-                                    if(i==GameConstants.myID) {
-                                        dead = true;
-                                        Gdx.app.log(TAG, "Sending dead message");
-                                        actionResolver.sendMessageAll("@", Integer.toString(GameConstants.myID));
-                                        if((GameConstants.NUM_PLAYERS-actionResolver.getDeadPlayers().size())>2)
-                                            actionResolver.lostGameDecide();
-                                    }
-                                    else{
-                                        actionResolver.sendMessageAll("@",Integer.toString(i) );
-                                    }
-                                }
-                            }
-
-
-                            if(GameConstants.PLAYERS.get(GameConstants.myID+1).getScore()==3){
-                                actionResolver.sendMessageAll("+",Integer.toString(GameConstants.myID));
-                                actionResolver.gameDecided("won");
-                                Gdx.app.log(TAG, "I WON");
-                            }
-                            if(actionResolver.getDeadPlayers().size()==GameConstants.NUM_PLAYERS-1){
-                                if(!dead){
-                                    //win
-                                    actionResolver.gameDecided("won");
-                                    Gdx.app.log(TAG, "I WON");
-                                }
-                                else{
-                                    //Game Over
-                                    actionResolver.gameDecided("lost");
-                                    Gdx.app.log(TAG, "I LOST");
-                                }
-                            }
-                            if(actionResolver.getDeadPlayers().size()==GameConstants.NUM_PLAYERS){
-                                if(checkDraw()==GameConstants.myID){
-                                    actionResolver.gameDecided("won");
-                                }
-                                else if(checkDraw()==-1){
-                                    actionResolver.gameDecided("draw");
-                                }
-                                else{
-                                    actionResolver.gameDecided("lost");
-                                }
-                            }
-                            if(actionResolver.getWinner()!=-1){
-                                //winner decided
-                                actionResolver.gameDecided("lost");
-                                Gdx.app.log(TAG, "I LOST");
-                            }
                             gameState = GameState.DECIDING;
                         }
                     });
@@ -230,17 +186,7 @@ public class GameWorld {
     public String getTimeStatus() {
         return timeStatus;
     }
-    public int checkDraw(){
-        int play1 = GameConstants.PLAYERS.get(actionResolver.getDeadPlayers().get((GameConstants.NUM_PLAYERS-2)+1)).getScore();
-        int play2 = GameConstants.PLAYERS.get(actionResolver.getDeadPlayers().get((GameConstants.NUM_PLAYERS-1)+1)).getScore();
-        if(play1>play2){
-            return GameConstants.NUM_PLAYERS-2;
-        }
-        if(play2>play1){
-            return GameConstants.NUM_PLAYERS-1;
-        }
-        return -1;
-    }
+
 
 }
 

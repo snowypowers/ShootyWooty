@@ -38,11 +38,13 @@ public class main extends Game {
         Gdx.app.log("ScaleY", String.valueOf(GameConstants.SCALE_Y));
     }
 
+    public void reCreate(){
+        setScreen(new MainScreen(this, actionResolver));
+    }
     @Override
     public void setScreen(Screen screen) {
         super.setScreen(screen);
         //this.getScreen().resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-
 
     }
     @Override

@@ -12,18 +12,19 @@ public interface ActionResolver {
     public boolean getValid();
     public String getMoves();
     public void setValid(boolean v);
-//    public void setSignal(boolean v);
+    //    public void setSignal(boolean v);
 //    public boolean getSignal();
     public boolean getMultiplayer();
     public int getMyID();
     public int getNumPlayers();
     public ArrayList<Integer> getDeadPlayers();
     public int getWinner();
-    public String getImMoves();
+    public Integer[] getImMoves();
     public void sendContMessage(String s);
     public String getActive();
     public void gameDecided(String s);
-    public void lostGameDecide();
+    public void leaveRoom();
+    //public void lostGameDecide();
     public boolean reset();
     public void setReset();
 

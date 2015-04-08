@@ -97,7 +97,7 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
     private int numPlayers ;
     private ArrayList<Integer> deadPlayers = new ArrayList<Integer>();
     int winner = -1;
-    private Map<String,String> imMoves = new HashMap<>();
+    private Map<String,Integer> imMoves = new HashMap<>();
     private boolean reset = false;
     private main shootyWooty;
     private boolean shootyWootyCreated = false;
@@ -202,6 +202,12 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
 //            linearLayout.addView(gameView,new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT));
 //            shootyWootyCreated = true;
 //        }
+        if(!shootyWootyCreated) {
+            mGoogleApiClient.reconnect();
+            shootyWooty.reCreate();
+            shootyWootyCreated=true;
+            Log.d(TAG, "Created again");
+        }
         RoomConfig.Builder rtmConfigBuilder = RoomConfig.builder(this);
         rtmConfigBuilder.setMessageReceivedListener(this);
         rtmConfigBuilder.setRoomStatusUpdateListener(this);
@@ -377,7 +383,7 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
     }
 
     // Leave the room.
-    void leaveRoom() {
+    public void leaveRoom() {
         Log.d(TAG, "Leaving room.");
         mSecondsLeft = 0;
         stopKeepingScreenOn();
@@ -389,7 +395,6 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
 //           // switchToScreen(R.id.screen_wait);
 //        } else {
         }
-//        shootyWooty.dispose();
         switchToMainScreen();
         reset = true;
         resetGameVars();
@@ -681,7 +686,7 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
         mMyId = null;
         imMoves = new HashMap<>();
         deadPlayers = new ArrayList<Integer>();
-//        shootyWootyCreated = false;
+        shootyWootyCreated = false;
     }
     public void setReset(){
         reset = false;
@@ -779,12 +784,14 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
     public int getWinner(){
         return winner;
     }
-    public String getImMoves(){
-        String send = "";
+    public Integer[] getImMoves(){
+        Integer[] moves = new Integer[mParticipants.size()];
+        int i=0;
         for(Participant p :mParticipants){
-            send += "!" + imMoves.get(p.getParticipantId());
+            moves[i] = imMoves.get(p.getParticipantId());
+            i++;
         }
-        return send;
+        return moves;
 
     }
     @Override
@@ -805,7 +812,7 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
             }
         }
         if(s.charAt(0)=='^'){
-            imMoves.put(sender,s.substring(1));
+            imMoves.put(sender,Integer.valueOf(s.substring(1)));
         }
 //        if(s.charAt(0)=='@'){
 //            Log.d(TAG, "Message Received Opponent dead" + s.substring(1));
@@ -821,7 +828,7 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
         if(mRoomId!=null) {
             for (Participant p : mParticipants) {
                 if (p.getParticipantId().equals(mMyId))
-                    imMoves.put(mMyId, s);
+                    imMoves.put(mMyId, Integer.valueOf(s));
                 if (p.getStatus() == Participant.STATUS_LEFT)
                     continue;
                 Games.RealTimeMultiplayer.sendUnreliableMessage(mGoogleApiClient, bytes,
@@ -901,20 +908,38 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
         };
         thread.start();
     }
-    public void lostGameDecide(){
-        Thread thread = new Thread(){
-            @Override
-            public void run() {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        findViewById(R.id.stayLeave_popup).setVisibility(View.VISIBLE);
-                    }
-                });
-            };
-        };
-        thread.start();
-    }
+//    public void lostGameDecide(){
+//
+//
+////        Thread thread = new Thread(){
+////            @Override
+////            public void run() {
+////                runOnUiThread(new Runnable() {
+////                    @Override
+////                    public void run() {
+////                        findViewById(R.id.stayLeave_popup).setVisibility(View.VISIBLE);
+////                        Button button = (Button) findViewById(R.id.button_stay);
+////                        button.setOnClickListener(new OnClickListener() {
+////                            @Override
+////                            public void onClick(View arg0) {
+////                                switchToScreen(R.id.screen_game);
+////                                findViewById(R.id.stayLeave_popup).setVisibility(View.GONE);
+////                            }
+////                        });
+////                        Button button1 = (Button) findViewById(R.id.button_leave);
+////                        button1.setOnClickListener(new OnClickListener() {
+////                            @Override
+////                            public void onClick(View arg0) {
+////                                leaveRoom();
+////                                findViewById(R.id.stayLeave_popup).setVisibility(View.GONE);
+////                            }
+////                        });
+////                    }
+////                });
+////            };
+////        };
+////        thread.start();
+//    }
     // This array lists all the individual screens our game has.
     final static int[] SCREENS = {
             R.id.screen_game, R.id.screen_main, R.id.screen_sign_in,

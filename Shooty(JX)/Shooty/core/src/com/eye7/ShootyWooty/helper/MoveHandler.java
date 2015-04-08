@@ -3,18 +3,11 @@ package com.eye7.ShootyWooty.helper;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.maps.objects.CircleMapObject;
-import com.badlogic.gdx.maps.objects.RectangleMapObject;
-import com.badlogic.gdx.maps.objects.RectangleMapObject;
-import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Intersector;
-import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.utils.Array;
 import com.eye7.ShootyWooty.model.GameConstants;
 import com.eye7.ShootyWooty.object.Bullet;
 import com.eye7.ShootyWooty.object.Player;
-import com.eye7.ShootyWooty.world.GameMap;
 
-import java.util.Arrays;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 
@@ -48,10 +41,10 @@ public class MoveHandler extends Thread{
 
     private float bullet_distance_R;
     private float bullet_distance_L;
-
+    private ActionResolver actionResolver;
     private int PlayerTag;
 
-    public MoveHandler(Player player, String[] moves, CyclicBarrier cb){
+    public MoveHandler(Player player, String[] moves, CyclicBarrier cb, ActionResolver actionResolver){
         TAG = "MoveHandler of Player "+String.valueOf(player.getPlayerID());
         this.moves = moves;
         this.cb = cb;
@@ -61,7 +54,7 @@ public class MoveHandler extends Thread{
         this.player =  player;
         this.bulletl = player.getBulletl();
         this.bulletr = player.getBulletr();
-
+        this.actionResolver = actionResolver;
         bullet_distance_R = BULLET_DISTANCE;
         bullet_distance_L = BULLET_DISTANCE;
     }
@@ -77,6 +70,139 @@ public class MoveHandler extends Thread{
 
         try {
             cb.await();
+            Gdx.app.log("MoveHandler Debugging", "After Await");
+
+
+            for (int i = 0; i < 4;i++) {
+                nextMove();//Initalises the moves
+                /////////////////////////////////////////EXECUTE MOVEMENT///////////////////////////////////////
+                Gdx.app.log("Move Info Player" + String.valueOf(player.getPlayerID()), String.valueOf(movement[0]) +" "+ String.valueOf(movement[1]) +" "+ String.valueOf(movement[2]) +" "+ String.valueOf(movement[3]));
+
+                while (movement[0] > 0f || movement[1] > 0f || movement[3] != 0f){
+
+                    CircleMapObject collider = player.getCollider();
+                    float[] oldMove = AmountToMove(moves[pointer]);
+
+                    // move along x axis
+                    if (movement[0] > 0f) {
+                        collider.getCircle().setPosition((collider.getCircle().x+movement[2]),collider.getCircle().y);
+                        if (!checkPlayerHit()){
+                            player.incrementX(movement[2]);
+                            movement[0] -= PLAYER_INCREMENT;
+                            bulletl.incrementX(movement[2]); // move bullet with player
+                            bulletr.incrementX(movement[2]);
+                        }
+                        else{
+                            Gdx.app.log("OLDMOVE", String.valueOf(oldMove[0]));
+                            collider.getCircle().setPosition((collider.getCircle().x-movement[2]),collider.getCircle().y);
+                            movement[0] = oldMove[0] - movement[0];
+                            movement[2] = movement[2] * -1;
+                            Gdx.app.log("UPDATEDMOVE", String.valueOf(movement[0]) + " " + String.valueOf(movement[2]));
+                        }
+                    }
+
+                    // move along Y axis
+                    if (movement[1] > 0f) {
+                        collider.getCircle().setPosition(collider.getCircle().x,(collider.getCircle().y+movement[2]));
+                        if (!checkPlayerHit()) {
+                            player.incrementY(movement[2]);
+                            movement[1] -= PLAYER_INCREMENT;
+                            bulletl.incrementY(movement[2]);
+                            bulletr.incrementY(movement[2]);
+                        }
+                        else{
+                            Gdx.app.log("OLDMOVE", String.valueOf(oldMove[1]));
+                            collider.getCircle().setPosition(collider.getCircle().x,(collider.getCircle().y-movement[2]));
+                            movement[1] = oldMove[1] - movement[1];
+                            movement[2] = movement[2] * -1;
+                            Gdx.app.log("UPDATEDMOVE", String.valueOf(movement[0]) + " " + String.valueOf(movement[2]));
+                        }
+                    }
+
+                    if (movement[3] != 0f) {
+                        if (movement[3] > 0f) {
+                            player.rotate(10);
+                            movement[3] -= 10f;
+                        } else {
+                            player.rotate(-10);
+                            movement[3] += 10f;
+                        }
+                    }
+
+                    try {
+                        Thread.sleep(20);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+
+                player.snapInGrid(); // make sure the player is aligned to a grid
+                try {
+                    cb.await();
+                    Gdx.app.log("MoveHandler Debugging", "After Await second");
+
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (BrokenBarrierException e) {
+                    e.printStackTrace();
+                }
+                decideWin();
+                if(!player.dead) {
+                    /////////////////////////////////////////EXECUTE SHOOTING///////////////////////////////////////
+                    bulletl.setReturn(player.getX(), player.getY());
+                    bulletr.setReturn(player.getX(), player.getY());
+                    if (moves[pointer].substring(2).equals("1")) {
+                        bullet_distance_R = BULLET_DISTANCE;
+                        player.startShootRight();
+                    }
+                    if (moves[pointer].substring(0, 1).equals("1")) {
+                        bullet_distance_L = BULLET_DISTANCE;
+                        player.startShootLeft();
+                    }
+
+                    //While shooting
+                    while (player.isShooting()) {
+                        // shoot after every move
+                        shootBullets();
+                        if (checkBulletHit(bulletl)) {
+                            bullet_distance_L = 0;
+                            player.endShootLeft();
+                        }
+
+                        if (checkBulletHit(bulletr)) {
+                            bullet_distance_R = 0;
+                            player.endShootRight();
+                        }
+
+                        try {
+                            Thread.sleep(20);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+
+                    /////////////////////////////////////////MISC EFFECTS///////////////////////////////////////
+                    if (checkInWater()) {
+                        player.collectWater();
+                    }
+
+                    if (pointer == 3) {
+                        continue;
+                    } else {
+                        try {
+                            //Wait for all to finish executing
+                            cb.await();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        } catch (BrokenBarrierException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (BrokenBarrierException e) {
@@ -84,131 +210,7 @@ public class MoveHandler extends Thread{
         }
         Gdx.app.log("MoveHandler", "Execution!");
 
-        for (int i = 0; i < 4;i++) {
-            nextMove();//Initalises the moves
-            /////////////////////////////////////////EXECUTE MOVEMENT///////////////////////////////////////
-            Gdx.app.log("Move Info Player" + String.valueOf(player.getPlayerID()), String.valueOf(movement[0]) +" "+ String.valueOf(movement[1]) +" "+ String.valueOf(movement[2]) +" "+ String.valueOf(movement[3]));
 
-            while (movement[0] > 0f || movement[1] > 0f || movement[3] != 0f){
-
-                CircleMapObject collider = player.getCollider();
-                float[] oldMove = AmountToMove(moves[pointer]);
-
-                // move along x axis
-                if (movement[0] > 0f) {
-                    collider.getCircle().setPosition((collider.getCircle().x+movement[2]),collider.getCircle().y);
-                    if (!checkPlayerHit()){
-                        player.incrementX(movement[2]);
-                        movement[0] -= PLAYER_INCREMENT;
-                        bulletl.incrementX(movement[2]); // move bullet with player
-                        bulletr.incrementX(movement[2]);
-                    }
-                    else{
-                        Gdx.app.log("OLDMOVE", String.valueOf(oldMove[0]));
-                        collider.getCircle().setPosition((collider.getCircle().x-movement[2]),collider.getCircle().y);
-                        movement[0] = oldMove[0] - movement[0];
-                        movement[2] = movement[2] * -1;
-                        Gdx.app.log("UPDATEDMOVE", String.valueOf(movement[0]) + " " + String.valueOf(movement[2]));
-                    }
-                }
-
-                // move along Y axis
-                if (movement[1] > 0f) {
-                    collider.getCircle().setPosition(collider.getCircle().x,(collider.getCircle().y+movement[2]));
-                    if (!checkPlayerHit()) {
-                        player.incrementY(movement[2]);
-                        movement[1] -= PLAYER_INCREMENT;
-                        bulletl.incrementY(movement[2]);
-                        bulletr.incrementY(movement[2]);
-                    }
-                    else{
-                        Gdx.app.log("OLDMOVE", String.valueOf(oldMove[1]));
-                        collider.getCircle().setPosition(collider.getCircle().x,(collider.getCircle().y-movement[2]));
-                        movement[1] = oldMove[1] - movement[1];
-                        movement[2] = movement[2] * -1;
-                        Gdx.app.log("UPDATEDMOVE", String.valueOf(movement[0]) + " " + String.valueOf(movement[2]));
-                    }
-                }
-
-                if (movement[3] != 0f) {
-                    if (movement[3] > 0f) {
-                        player.rotate(10);
-                        movement[3] -= 10f;
-                    } else {
-                        player.rotate(-10);
-                        movement[3] += 10f;
-                    }
-                }
-
-                try {
-                    Thread.sleep(20);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
-            }
-
-            player.snapInGrid(); // make sure the player is aligned to a grid
-            try {
-                cb.await();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (BrokenBarrierException e) {
-                e.printStackTrace();
-            }
-
-            /////////////////////////////////////////EXECUTE SHOOTING///////////////////////////////////////
-            bulletl.setReturn(player.getX(), player.getY());
-            bulletr.setReturn(player.getX(), player.getY());
-            if(moves[pointer].substring(2).equals("1")){
-                bullet_distance_R=BULLET_DISTANCE;
-                player.startShootRight();
-            }
-            if(moves[pointer].substring(0, 1).equals("1")){
-                bullet_distance_L=BULLET_DISTANCE;
-                player.startShootLeft();
-            }
-
-            //While shooting
-            while (player.isShooting()) {
-                // shoot after every move
-                shootBullets();
-                if (checkBulletHit(bulletl)) {
-                    bullet_distance_L = 0;
-                    player.endShootLeft();
-                }
-
-                if (checkBulletHit(bulletr)) {
-                    bullet_distance_R = 0;
-                    player.endShootRight();
-                }
-
-                try {
-                    Thread.sleep(20);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
-            }
-
-            /////////////////////////////////////////MISC EFFECTS///////////////////////////////////////
-            if (checkInWater()) {
-                player.collectWater();
-            }
-
-            if (pointer == 3) {
-                continue;
-            } else {
-                try {
-                    //Wait for all to finish executing
-                    cb.await();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                } catch (BrokenBarrierException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
         /////////////////////////////////////////END OF TURN///////////////////////////////////////
 
         Gdx.app.log("MoveHandler", "End!");
@@ -413,11 +415,57 @@ public class MoveHandler extends Thread{
 
     public boolean checkInWater() {
         for (int i = 0; i < GameConstants.WATER.size;i++) {
-         if (Intersector.overlaps(player.getCollider().getCircle(), GameConstants.WATER.get(i))) {
-             return true;
-         }
+            if (Intersector.overlaps(player.getCollider().getCircle(), GameConstants.WATER.get(i))) {
+                return true;
+            }
         }
         return false;
     }
-
+    public void decideWin(){
+        for(int i=0; i<GameConstants.NUM_PLAYERS; i++){
+            if(GameConstants.PLAYERS.get(i+1).getHealth()==0 && !GameConstants.PLAYERS.get(i+1).dead){
+                GameConstants.PLAYERS.get(i+1).dead = true;
+                actionResolver.sendMessageAll("@",Integer.toString(i) );
+//                if(GameConstants.PLAYERS.get(GameConstants.myID+1).dead && ((GameConstants.NUM_PLAYERS - actionResolver.getDeadPlayers().size()) > 2))
+//                    actionResolver.leaveRoom();    // Call the button
+            }
+        }
+        if(GameConstants.PLAYERS.get(GameConstants.myID+1).getScore()==3){
+            actionResolver.sendMessageAll("+",Integer.toString(GameConstants.myID));
+            actionResolver.gameDecided("won");
+        }
+        if(actionResolver.getDeadPlayers().size()==GameConstants.NUM_PLAYERS-1){
+            if(!GameConstants.PLAYERS.get(GameConstants.myID+1).dead){
+                actionResolver.gameDecided("won");
+            }
+            else{
+                actionResolver.gameDecided("lost");
+            }
+        }
+        if(actionResolver.getDeadPlayers().size()==GameConstants.NUM_PLAYERS){
+            if(checkDraw()==GameConstants.myID){
+                actionResolver.gameDecided("won");
+            }
+            else if(checkDraw()==-1){
+                actionResolver.gameDecided("draw");
+            }
+            else{
+                actionResolver.gameDecided("lost");
+            }
+        }
+        if(actionResolver.getWinner()!=-1){
+            actionResolver.gameDecided("lost");
+        }
+    }
+    public int checkDraw(){
+        int play1 = GameConstants.PLAYERS.get(actionResolver.getDeadPlayers().get((GameConstants.NUM_PLAYERS-2)+1)).getScore();
+        int play2 = GameConstants.PLAYERS.get(actionResolver.getDeadPlayers().get((GameConstants.NUM_PLAYERS-1)+1)).getScore();
+        if(play1>play2){
+            return GameConstants.NUM_PLAYERS-2;
+        }
+        if(play2>play1){
+            return GameConstants.NUM_PLAYERS-1;
+        }
+        return -1;
+    }
 }
