@@ -466,7 +466,7 @@ public class Player {
             if (playerState != PlayerState.DEAD) {
                 if (playerState == PlayerState.DAMAGED) { //Check if not dead
                     previousState = newState; // Allows damaged animation to run finish
-                } else {
+                } else if (playerState != newState) {
                     previousState = PlayerState.getState(playerState);
                     playerState = newState;
                     stateDelta = 0f;
