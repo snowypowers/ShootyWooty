@@ -31,7 +31,7 @@ public class ActionMenu extends Table {
 
 
     private boolean beingDragged;
-    private float drawerSpeed = 5f;
+    private float drawerSpeed = 10f;
 
 
     public ActionMenu() {

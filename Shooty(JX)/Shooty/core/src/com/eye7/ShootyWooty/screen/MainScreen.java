@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.eye7.ShootyWooty.helper.ActionResolver;
@@ -50,13 +51,20 @@ public class MainScreen implements Screen {
 
     @Override
     public void render(float delta) {
+        //Background Color
+        Gdx.gl.glClearColor(229/255.0f, 214/255.0f, 136/255.0f, 1f);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        //Render the map
+        map.render(delta);
 
         runTime+=delta;
         world.update(delta); // GameWorld method that calls for any updates
 
+        //Render the stage
         renderer.render(runTime); // GameRenderer method that tells the screen what to display
 
-        map.render(delta);
+
 
     }
 
