@@ -22,10 +22,16 @@ import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 public class ActionMenu extends Table {
     private final String TAG = "ActionMenu";
 
+    private static float leftEdge = 800;
+    private static float rightEdge = 1050;
+
     private Button handle;
     private Drawable handle_img;
     private InputButtons inputButtons;
-    private DragListener d;
+
+
+    private boolean beingDragged;
+    private float drawerSpeed = 5f;
 
 
     public ActionMenu() {
@@ -34,6 +40,7 @@ public class ActionMenu extends Table {
         inputButtons = new InputButtons();
         handle_img = new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("buttons/handle.png"))));
         handle = new Button(handle_img, handle_img);
+        beingDragged = false;
 
         handle.addListener( new DragListener() {
 
@@ -41,18 +48,24 @@ public class ActionMenu extends Table {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 Gdx.app.log(TAG, "Got it!");
+                beingDragged = true;
                 return true;
             }
 
             @Override
             public void touchDragged(InputEvent event,float x, float y, int pointer) {
                 float newX = getX() + x;
-                if (newX < 800) {
-                    newX = 800;
-                } else if (newX > 1050) {
-                    newX = 1050;
+                if (newX < leftEdge) {
+                    newX = leftEdge;
+                } else if (newX > rightEdge) {
+                    newX = rightEdge;
                 }
                 setX(newX);
+            }
+
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                beingDragged = false;
             }
         });
 
@@ -74,6 +87,17 @@ public class ActionMenu extends Table {
 
     public void reset() {
         inputButtons.reset();
+    }
+
+    public void act(float delta) {
+        if (!beingDragged) {
+            float midpoint = (rightEdge - leftEdge) / 2;
+            if (getX() < (leftEdge + midpoint) && getX() > leftEdge) {
+                setX(getX() - drawerSpeed);
+            } else if(getX() > (rightEdge - midpoint) && getX() < rightEdge) {
+                setX(getX() + drawerSpeed);
+            }
+        }
     }
 
 
