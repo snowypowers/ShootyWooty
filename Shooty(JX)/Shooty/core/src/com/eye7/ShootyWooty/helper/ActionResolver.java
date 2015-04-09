@@ -2,6 +2,7 @@ package com.eye7.ShootyWooty.helper;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by anvithaprashanth on 17/03/15.
@@ -22,11 +23,9 @@ public interface ActionResolver {
     public Integer[] getImMoves();
     public void sendContMessage(String s);
     public String getActive();
-    public void gameDecided(String s);
+    public void gameDecided(String s, HashMap<String ,Integer> myAchievements) throws InterruptedException;
     public void leaveRoom();
     //public void lostGameDecide();
-    public boolean reset();
-    public void setReset();
 
 
 }

@@ -22,40 +22,76 @@
 
     <!-- SIGN-IN SCREEN -->
     <LinearLayout android:id="@+id/screen_sign_in" style="@style/GameScreen">
-        <TextView style="@style/GameTitle" />
-        <TextView style="@style/GameBlurb" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/homescreen"
+                />
 
-        <Button android:id="@+id/button_single_player"
-            style="@style/MainScreenButton"
-            android:text="@string/single_player" />
+        <!--<TextView style="@style/GameTitle" />-->
+        <!--<TextView style="@style/GameBlurb" />-->
+
+        <!--<Button android:id="@+id/button_single_player"-->
+            <!--style="@style/MainScreenButton"-->
+            <!--android:text="@string/single_player" />-->
         <com.google.android.gms.common.SignInButton android:id="@+id/button_sign_in"
-            style="@style/SignInButton" />
+        style="@style/SignInButton" android:layout_centerInParent="true"/>
+        </RelativeLayout>
     </LinearLayout>
 
-    <!-- MAIN SCREEN -->
     <LinearLayout android:id="@+id/screen_main" style="@style/LLScreen"
-        android:background="@drawable/homescreen">
-
+        >
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/homescreen"
+            />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="25dp"
+            android:layout_marginLeft="15dp"
+            >
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                >
         <Button android:id="@+id/button_single_player_2"
             style="@style/MainScreenButton"
             android:background="@drawable/tutorial"
-            android:layout_width="380px"
-            android:layout_height="125px" />
-
+            android:layout_width="150dp"
+            android:layout_height="50dp" />
+            </LinearLayout>
         <!--<TextView style="@style/MainScreenButtonBlurb"-->
         <!--android:text="@string/single_player_explanation" />-->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                >
         <Button android:id="@+id/button_quick_game"
             style="@style/MainScreenButton"
             android:background="@drawable/players2"
-            android:layout_width="380px"
-            android:layout_height="125px" />
+            android:layout_width="150dp"
+            android:layout_height="50dp"
+/>
         <!--<TextView style="@style/MainScreenButtonBlurb"-->
         <!--android:text="@string/quick_game_explanation" />-->
         <Button android:id="@+id/button_quick_game1" style="@style/MainScreenButton"
             android:background="@drawable/players4"
 
-            android:layout_width="380px"
-            android:layout_height="125px" />
+            android:layout_width="150dp"
+            android:layout_height="50dp" />
         <!--<TextView style="@style/MainScreenButtonBlurb"-->
         <!--android:text="@string/invite_players_explanation" />-->
         <!--<Button android:id="@+id/button_invite_players"-->
@@ -71,8 +107,13 @@
         <!--<Button android:id="@+id/button_sign_out"-->
         <!--style="@style/SignOutButton"-->
         <!--android:text="@string/sign_out" />-->
+            </LinearLayout>
 
+
+        </LinearLayout>
+        </RelativeLayout>
     </LinearLayout>
+
 
     <!-- INVITATION POPUP -->
     <LinearLayout android:id="@+id/invitation_popup" style="@style/InvPopup">
@@ -81,31 +122,57 @@
             style="@style/InvPopupButton"
             android:text="@string/accept_popup_invite" />
     </LinearLayout>
-    <LinearLayout android:id="@+id/stayLeave_popup" style="@style/InvPopup">
-        <TextView android:id="@+id/decStayLeave_text" style="@style/InvPopupText" />
-        <Button android:id="@+id/button_stay"
-            style="@style/InvPopupButton"
-            android:text="@string/cont_stay" />
+    <!--<LinearLayout android:id="@+id/stayLeave_popup" style="@style/InvPopup">-->
+        <!--<TextView android:id="@+id/decStayLeave_text" style="@style/InvPopupText" />-->
+        <!--<Button android:id="@+id/button_stay"-->
+            <!--style="@style/InvPopupButton"-->
+            <!--android:text="@string/cont_stay" />-->
         <!--android:onClick="switchToScreen(R.id.screen_game)"-->
 
-        <Button android:id="@+id/button_leave"
-            style="@style/InvPopupButton"
-            android:text="@string/quit_game"
-            android:onClick= "leaveRoom"/>
-    </LinearLayout>
+        <!--<Button android:id="@+id/button_leave"-->
+            <!--style="@style/InvPopupButton"-->
+            <!--android:text="@string/quit_game"-->
+            <!--android:onClick= "leaveRoom"/>-->
+    <!--</LinearLayout>-->
 
     <!-- "PLEASE WAIT" SCREEN -->
     <LinearLayout android:id="@+id/screen_wait" style="@style/LLScreen">
-        <TextView style="@style/Blurb" android:text="@string/please_wait" />
+        <!--<TextView style="@style/Blurb" android:text="@string/please_wait" />-->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/homescreen"
+            />
+        </RelativeLayout>
     </LinearLayout>
     <LinearLayout android:id="@+id/won" style="@style/LLScreen">
-        <TextView style="@style/Blurb" android:text="@string/you_won" android:textSize="72sp"/>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        <!--<TextView style="@style/Blurb" android:text="@string/please_wait" />-->
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/homescreen"
+            />
+        </RelativeLayout>
     </LinearLayout>
-    <LinearLayout android:id="@+id/lost" style="@style/LLScreen">
-        <TextView style="@style/Blurb" android:text="@string/you_lost" android:textSize="72sp"/>
-    </LinearLayout>
-    <LinearLayout android:id="@+id/YouDrew" style="@style/LLScreen">
-        <TextView style="@style/Blurb" android:text="@string/you_drew" android:textSize="72sp"/>
+
+    <LinearLayout android:id="@+id/YouLost" style="@style/LLScreen">
+        <!--<TextView style="@style/Blurb" android:text="@string/please_wait" />-->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/homescreen"
+                />
+        </RelativeLayout>
     </LinearLayout>
     <!-- GAMEPLAY SCREEN -->
     <LinearLayout android:id="@+id/screen_game" style="@style/LLScreen">

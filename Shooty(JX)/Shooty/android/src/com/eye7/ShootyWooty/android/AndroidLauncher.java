@@ -51,7 +51,7 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
     final static int RC_SELECT_PLAYERS = 10000;
     final static int RC_INVITATION_INBOX = 10001;
     final static int RC_WAITING_ROOM = 10002;
-
+    final static int REQUEST_ACHIEVEMENTS = 10003;
     // Request code used to invoke sign in user interactions.
     private static final int RC_SIGN_IN = 9001;
 
@@ -89,18 +89,16 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
 //    byte[] mMsgBuf = new byte[2];
     private Participant host = null;
     private View gameView;
-    private boolean iHost = false;
     private Map<String, String> moves = new HashMap<>();
     private String curMoves = null;
     private Boolean validMoves = false;
     private int myIDNum = -1;
     private int numPlayers ;
+    private AndroidApplicationConfiguration config;
     private ArrayList<Integer> deadPlayers = new ArrayList<Integer>();
     int winner = -1;
     private Map<String,Integer> imMoves = new HashMap<>();
-    private boolean reset = false;
-    private main shootyWooty;
-    private boolean shootyWootyCreated = false;
+    LinearLayout linearLayout = null;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -118,11 +116,11 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
         for (int id : CLICKABLES) {
             findViewById(id).setOnClickListener(this);
         }
-        shootyWooty = new main(this);
-        gameView = initializeForView(shootyWooty,new AndroidApplicationConfiguration());
-        LinearLayout linearLayout = (LinearLayout) findViewById(R.id.screen_game);
+        config = new AndroidApplicationConfiguration();
+        gameView = initializeForView(new main(this),config);
+        linearLayout = (LinearLayout) findViewById(R.id.screen_game);
         linearLayout.addView(gameView,new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT));
-        shootyWootyCreated = true;
+
     }
 
     @Override
@@ -130,7 +128,7 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
         Intent intent;
 
         switch (v.getId()) {
-            case R.id.button_single_player:
+
             case R.id.button_single_player_2:
                 // play a single-player game
                 //  resetGameVars();
@@ -202,12 +200,12 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
 //            linearLayout.addView(gameView,new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT));
 //            shootyWootyCreated = true;
 //        }
-        if(!shootyWootyCreated) {
-            mGoogleApiClient.reconnect();
-            shootyWooty.reCreate();
-            shootyWootyCreated=true;
-            Log.d(TAG, "Created again");
-        }
+//        if(!shootyWootyCreated) {
+//            mGoogleApiClient.reconnect();
+//            shootyWooty.reCreate();
+//            shootyWootyCreated=true;
+//            Log.d(TAG, "Created again");
+//        }
         RoomConfig.Builder rtmConfigBuilder = RoomConfig.builder(this);
         rtmConfigBuilder.setMessageReceivedListener(this);
         rtmConfigBuilder.setRoomStatusUpdateListener(this);
@@ -260,6 +258,9 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
                     BaseGameUtil.showActivityResultError(this, requestCode, responseCode, R.string.signin_other_error);
                 }
                 break;
+            case REQUEST_ACHIEVEMENTS:
+            //    if (responseCode = RESULT_RECONNECT_REQUIRED);
+                //Adding achievements here
         }
         super.onActivityResult(requestCode, responseCode, intent);
     }
@@ -344,7 +345,7 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
         leaveRoom();
 
         // stop trying to keep the screen on
-        stopKeepingScreenOn();
+ //       stopKeepingScreenOn();
 
         if (mGoogleApiClient == null || !mGoogleApiClient.isConnected()){
             switchToScreen(R.id.screen_sign_in);
@@ -375,7 +376,7 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
     // Handle back key to make sure we cleanly leave a game if we are in the middle of one
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent e) {
-        if (keyCode == KeyEvent.KEYCODE_BACK && mCurScreen == R.id.screen_game) {
+        if (keyCode == KeyEvent.KEYCODE_BACK ) {
             leaveRoom();
             return true;
         }
@@ -387,8 +388,12 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
         Log.d(TAG, "Leaving room.");
         mSecondsLeft = 0;
         stopKeepingScreenOn();
+        if(!getMultiplayer()){
+            resetGameVars();
+        }
         if (mRoomId != null) {
             Games.RealTimeMultiplayer.leave(mGoogleApiClient, this, mRoomId);
+
             //mRoomId = null;
 //            resetGameVars();
 //            switchToMainScreen();
@@ -396,8 +401,8 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
 //        } else {
         }
         switchToMainScreen();
-        reset = true;
-        resetGameVars();
+//        reset = true;
+
     }
 
     // Show the waiting room UI to track the progress of other players as they enter the
@@ -500,6 +505,7 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
         mRoomId = room.getRoomId();
         mParticipants = room.getParticipants();
         mMyId = room.getParticipantId(Games.Players.getCurrentPlayerId(mGoogleApiClient));
+        mMultiplayer = true;
         // print out the list of participants (for debug purposes)
         Log.d(TAG, "Room ID: " + mRoomId);
         Log.d(TAG, "My ID " + mMyId);
@@ -512,12 +518,33 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
     public void onLeftRoom(int statusCode, String roomId) {
         // we have left the room; return to main screen.
         Log.d(TAG, "onLeftRoom, code " + statusCode);
-        switchToMainScreen();
+        if (mRoomId !=null) {
+            switchToMainScreen();
+//            BaseGameUtil.makeSimpleDialog(this, "Game Notification", "You have quit the game.").show();
+        }
+        resetGameVars();
     }
-
+    // Reset game variables in preparation for a new game.
+    void resetGameVars() {
+        mMultiplayer = false;
+        host = null;
+        moves = new HashMap<>();
+        curMoves = null;
+        validMoves = false;
+        myIDNum = -1;
+        winner = -1;
+        mParticipants = null;
+        mMyId = null;
+        imMoves = new HashMap<>();
+        deadPlayers = new ArrayList<Integer>();
+        linearLayout.removeViewAt(0);
+        gameView = initializeForView(new main(this),config);
+        linearLayout.addView(gameView,0,new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT));
+    }
     // Called when we get disconnected from the room. We return to the main screen.
     @Override
     public void onDisconnectedFromRoom(Room room) {
+        Games.RealTimeMultiplayer.leave(mGoogleApiClient, this, mRoomId);
         mRoomId = null;
         showGameError();
     }
@@ -577,9 +604,7 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
 //        reset = true;
 ////        resetGameVars();
 //    }
-    public boolean reset(){
-        return reset;
-    }
+
     @Override
     public void onPeerDeclined(Room room, List<String> arg1) {
         updateRoom(room);
@@ -646,6 +671,13 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
             }
             mParticipants = room.getParticipants();
             sortParticipants();
+//            if(mParticipants.size()==1){
+//                Games.RealTimeMultiplayer.leave(mGoogleApiClient, this, mRoomId);
+//                mRoomId = null;
+//                switchToScreen(R.id.screen_wait);
+//                switchToMainScreen();
+//                return;
+//            }
             if (mParticipants.get(0).getParticipantId().equals(mMyId))
                 updateHost(peers);
         }
@@ -655,6 +687,23 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
         if (room != null) {
             mParticipants = room.getParticipants();
             sortParticipants();
+        }
+        int check = 0;
+        if (mParticipants != null) {
+            if (mRoomId != null) {
+                for (Participant p : mParticipants) {
+                    String pid = p.getParticipantId();
+                    if (pid.equals(mMyId))
+                        continue;
+                    if (p.getStatus() == Participant.STATUS_JOINED) {
+                        check++;
+                    }
+                }
+            }
+
+        }
+        if (check==0){
+            leaveRoom();
         }
     }
     public int getNumPlayers(){
@@ -672,25 +721,8 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
     final static int GAME_DURATION = 20; // game duration, seconds.
     int mScore = 0; // user's current score
 
-    // Reset game variables in preparation for a new game.
-    void resetGameVars() {
-        host = null;
-        iHost = false;
-        moves = new HashMap<>();
-        curMoves = null;
-        validMoves = false;
-        myIDNum = -1;
-        winner = -1;
-        //       reset = false;
-        mParticipants = null;
-        mMyId = null;
-        imMoves = new HashMap<>();
-        deadPlayers = new ArrayList<Integer>();
-        shootyWootyCreated = false;
-    }
-    public void setReset(){
-        reset = false;
-    }
+
+
     public void sortParticipants(){
         int i;
         ArrayList<Participant> sorted = new ArrayList<>();
@@ -761,8 +793,6 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
         Random rnd = new Random();
         String s = mParticipants.get(rnd.nextInt(mParticipants.size()-1)).getParticipantId();
         host = getHost(s);
-        if(host.getParticipantId().equals(mMyId))
-            iHost = true;
         sendMessageAll("$", s);
         Log.d(TAG, "Host chosen message sent "+s + mMyId);
     }
@@ -802,8 +832,6 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
         String sender = rtm.getSenderParticipantId();
         if (s.charAt(0)=='$'){
             host = getHost(s.substring(1));
-            if(host.getParticipantId().equals(mMyId))
-                iHost = true;
         }
         if(s.charAt(0)=='!'){
             moves.put(sender,s);
@@ -879,13 +907,31 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
             R.id.button_accept_popup_invitation,
             //R.id.button_invite_players,
             R.id.button_quick_game,
+            R.id.button_quick_game1,
             //R.id.button_see_invitations,
             R.id.button_sign_in,
             // R.id.button_sign_out,
-            R.id.button_single_player,
             R.id.button_single_player_2
     };
-    public void gameDecided(String s){
+    public void addAchievements(HashMap<String, Integer> myAchievements){
+        if(myAchievements.get("Kills")==2){
+            Games.Achievements.unlock(mGoogleApiClient, "CgkI_oGooPsFEAIQAw");//level 3
+        }
+        if(myAchievements.get("Hits")>=15){
+            Games.Achievements.unlock(mGoogleApiClient, "CgkI_oGooPsFEAIQAg");// level 2
+        }
+        if(myAchievements.get("Water")>=6){
+            Games.Achievements.unlock(mGoogleApiClient, "CgkI_oGooPsFEAIQAQ");// level 1
+        }
+        if(myAchievements.get("Shots Fired")>=12){
+            Games.Achievements.unlock(mGoogleApiClient, "CgkI_oGooPsFEAIQBA");// level 4
+        }
+        if(myAchievements.get("Kills")==3){
+            Games.Achievements.unlock(mGoogleApiClient, "CgkI_oGooPsFEAIQBQ");// level 5
+        }
+        startActivityForResult(Games.Achievements.getAchievementsIntent(mGoogleApiClient), REQUEST_ACHIEVEMENTS);
+    }
+    public void gameDecided(String s, HashMap<String, Integer> myAchievements) throws InterruptedException {
         final String check = s;
         Thread thread = new Thread(){
             @Override
@@ -897,16 +943,18 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
                             switchToScreen(R.id.won);
                         }
                         else if(check.equals("lost")){
-                            switchToScreen(R.id.lost);
+                            switchToScreen(R.id.YouLost);
                         }
-                        else if(check.equals("draw")){
-                            switchToScreen(R.id.YouDrew);
-                        }
+//                        else if(check.equals("draw")){
+//                            switchToScreen(R.id.YouDrew);
+//                        }
                     }
                 });
             };
         };
         thread.start();
+        thread.join();
+
     }
 //    public void lostGameDecide(){
 //
@@ -943,7 +991,7 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
     // This array lists all the individual screens our game has.
     final static int[] SCREENS = {
             R.id.screen_game, R.id.screen_main, R.id.screen_sign_in,
-            R.id.screen_wait, R.id.won, R.id.lost, R.id.YouDrew
+            R.id.screen_wait, R.id.won, R.id.YouLost
     };
     int mCurScreen = -1;
 

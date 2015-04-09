@@ -139,7 +139,11 @@ public class MoveHandler extends Thread{
                 }
 
                 player.snapInGrid(); // make sure the player is aligned to a grid
-                decideWin();
+                try {
+                    decideWin();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
 
             try {
@@ -186,7 +190,11 @@ public class MoveHandler extends Thread{
 
                 }
                 player.snapInGrid(); // make sure the player is aligned to a grid
-                decideWin();
+                try {
+                    decideWin();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
 
             try {
@@ -430,7 +438,7 @@ public class MoveHandler extends Thread{
         }
         return false;
     }
-    public void decideWin(){
+    public void decideWin() throws InterruptedException {
         for(int i=0; i<GameConstants.NUM_PLAYERS; i++){
             if(GameConstants.PLAYERS.get(i+1).getHealth()==0 && !GameConstants.PLAYERS.get(i+1).isDead()){
                 GameConstants.PLAYERS.get(i+1).dead = true;
@@ -441,29 +449,29 @@ public class MoveHandler extends Thread{
         }
         if(GameConstants.PLAYERS.get(GameConstants.myID+1).getScore()==3){
             actionResolver.sendMessageAll("+",Integer.toString(GameConstants.myID));
-            actionResolver.gameDecided("won");
+            actionResolver.gameDecided("won",GameConstants.PLAYERS.get(GameConstants.myID+1).getAchievments());
         }
         if(actionResolver.getDeadPlayers().size()==GameConstants.NUM_PLAYERS-1){
             if(!GameConstants.PLAYERS.get(GameConstants.myID+1).dead){
-                actionResolver.gameDecided("won");
+                actionResolver.gameDecided("won",GameConstants.PLAYERS.get(GameConstants.myID+1).getAchievments());
             }
             else{
-                actionResolver.gameDecided("lost");
+                actionResolver.gameDecided("lost", GameConstants.PLAYERS.get(GameConstants.myID+1).getAchievments());
             }
         }
         if(actionResolver.getDeadPlayers().size()==GameConstants.NUM_PLAYERS){
             if(checkDraw()==GameConstants.myID){
-                actionResolver.gameDecided("won");
+                actionResolver.gameDecided("won",GameConstants.PLAYERS.get(GameConstants.myID+1).getAchievments());
             }
             else if(checkDraw()==-1){
-                actionResolver.gameDecided("draw");
+                actionResolver.gameDecided("draw",GameConstants.PLAYERS.get(GameConstants.myID+1).getAchievments() );
             }
             else{
-                actionResolver.gameDecided("lost");
+                actionResolver.gameDecided("lost", GameConstants.PLAYERS.get(GameConstants.myID+1).getAchievments());
             }
         }
         if(actionResolver.getWinner()!=-1){
-            actionResolver.gameDecided("lost");
+            actionResolver.gameDecided("lost", GameConstants.PLAYERS.get(GameConstants.myID+1).getAchievments());
         }
     }
     public int checkDraw(){
