@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.eye7.ShootyWooty.helper.ActionResolver;
+import com.eye7.ShootyWooty.helper.MainLoader;
 import com.eye7.ShootyWooty.model.GameConstants;
 import com.eye7.ShootyWooty.render.DisplayMap;
 import com.eye7.ShootyWooty.render.GameRenderer;
@@ -108,6 +109,7 @@ public class MainScreen implements Screen {
     @Override
     public void dispose() {
         stage.dispose();
+        MainLoader.waterFountain.dispose();//disposes the background music
     }
 
 }

@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.objects.CircleMapObject;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.audio.Sound;
 import com.eye7.ShootyWooty.helper.CactusLoader;
 import com.eye7.ShootyWooty.model.GameConstants;
 import com.eye7.ShootyWooty.world.GameMap;
@@ -66,8 +67,10 @@ public class Player {
     private int lifeTimeWater = 0;
     private int lifeTimeShotsFired = 0;
 
+    //add sounds for collision
+    private Sound cactiWalking = Gdx.audio.newSound(Gdx.files.internal("sounds/cactiWalking.mp3"));//add cacti footsteps
 
-	// takes in x,y as origin
+    // takes in x,y as origin
 	public Player(GameMap map, CircleMapObject collider, int d, int id) {
         TAG = "Player" + String.valueOf(id+1);
         playerID = id+1;
@@ -158,7 +161,11 @@ public class Player {
 
                 } else if (playerState == PlayerState.MOVING) {
                     stateDelta += delta;
+                    //play walking sound
+                    cactiWalking.play();
                     s = new Sprite(animations.get(getdirection()+ ".moving").getKeyFrame(stateDelta));
+
+
 
                 } else if (playerState == PlayerState.DAMAGED) {
                     if (stateDelta <= animations.get("shot").getAnimationDuration()) {

@@ -44,6 +44,7 @@ public class MoveHandler extends Thread{
     private float bullet_distance_L;
     private ActionResolver actionResolver;
 
+
     public MoveHandler(Player player, String[] moves, CyclicBarrier cb, ActionResolver actionResolver){
         TAG = "MoveHandler of Player "+String.valueOf(player.getPlayerID());
         this.moves = moves;
@@ -97,6 +98,8 @@ public class MoveHandler extends Thread{
                             movement[0] -= PLAYER_INCREMENT;
                             bulletl.incrementX(movement[2]); // move bullet with player
                             bulletr.incrementX(movement[2]);
+
+
                         } else {
                             collider.getCircle().setPosition((collider.getCircle().x - movement[2]), collider.getCircle().y);
                             movement[0] = oldMove[0] - movement[0];
@@ -112,6 +115,8 @@ public class MoveHandler extends Thread{
                             movement[1] -= PLAYER_INCREMENT;
                             bulletl.incrementY(movement[2]);
                             bulletr.incrementY(movement[2]);
+
+
                         } else {
                             collider.getCircle().setPosition(collider.getCircle().x, (collider.getCircle().y - movement[2]));
                             movement[1] = oldMove[1] - movement[1];

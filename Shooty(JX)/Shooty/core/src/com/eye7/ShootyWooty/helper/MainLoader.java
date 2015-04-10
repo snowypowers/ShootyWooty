@@ -1,6 +1,8 @@
 package com.eye7.ShootyWooty.helper;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -29,6 +31,9 @@ public class MainLoader {
 
     public static Animation animation_faucet;
 
+    //add the sounds here
+    public static Music waterFountain;
+
     public static void load() {
         white = new BitmapFont(Gdx.files.internal("fonts/white.fnt"),true); // white font
         green = new BitmapFont(Gdx.files.internal("fonts/green.fnt"),true); // green font
@@ -37,12 +42,17 @@ public class MainLoader {
         atlas = new TextureAtlas(Gdx.files.internal("buttons/Gbuttons.pack")); // atlas for skin
         skin = new Skin(atlas); // skin containing drawables
 
+        //add the background sound here
+        waterFountain = Gdx.audio.newMusic(Gdx.files.internal("sounds/waterFountain.mp3"));
+        waterFountain.setLooping(true);
+        waterFountain.setVolume(0.4f);
+        waterFountain.play();
+
 
         Array<TextureRegion> hrglass_timer = new Array<TextureRegion>();
         for (int i = 1;i < 28;i++) {
 
         }
-
 //        TextureRegion[] faucets = new TextureRegion[11];
 //        int faucet_count=0;
 //        for (int i = 1; i < 12 ; i++) {
@@ -53,6 +63,7 @@ public class MainLoader {
 
 
     }
+
 
 
 }
