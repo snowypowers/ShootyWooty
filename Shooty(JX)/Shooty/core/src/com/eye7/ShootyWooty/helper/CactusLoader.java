@@ -43,6 +43,7 @@ public class CactusLoader {
 
 
     public CactusLoader(int NUM_PLAYERS){
+
         cactus1Skin = new TextureAtlas(Gdx.files.internal("players/Cactus1.pack"));
         cactus2Skin = new TextureAtlas(Gdx.files.internal("players/Cactus2.pack"));
 

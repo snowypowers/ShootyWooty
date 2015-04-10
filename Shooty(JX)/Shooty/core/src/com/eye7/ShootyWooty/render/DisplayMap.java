@@ -76,17 +76,20 @@ public class DisplayMap implements InputProcessor {
         tiledMapRenderer.setView(camera);
         tiledMapRenderer.render();
         gameMap.render(sb, delta);
+
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
         shapeRenderer.setColor(Color.RED);
-        shapeRenderer.rect(screenXStart,screenYStart,screenWidth,screenHeight);
+        shapeRenderer.rect(screenXStart + 10,screenYStart + 10,screenWidth - 20,screenHeight - 20);
         shapeRenderer.end();
 
     }
 
     public void resize(int width, int height) {
+        //Get the scaling factor for current screen size
         scaleWFactor = width / 960.0;
         scaleHFactor = height / 540.0;
         //Gdx.app.log(TAG, "Scaling: " + String.valueOf(scaleWFactor) + " " + String.valueOf(scaleHFactor));
+        //Scales the display to fit the screen
         screenXStart = (int) (0 * scaleWFactor);
         screenYStart = (int) (0 * scaleHFactor);
         screenWidth = (int) (960 * scaleWFactor);

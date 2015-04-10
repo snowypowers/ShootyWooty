@@ -1,0 +1,61 @@
+
+hourglass2.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+hourglass.timer.26
+rotate: false
+  xy: 0, 0
+  size: 192, 192
+  orig: 192, 192
+  offset: 0, 0
+  index: -1
+hourglass.timer.27
+rotate: false
+  xy: 192, 0
+  size: 192, 192
+  orig: 192, 192
+  offset: 0, 0
+  index: -1
+hourglass.turn.1
+rotate: false
+  xy: 0, 192
+  size: 192, 192
+  orig: 192, 192
+  offset: 0, 0
+  index: -1
+hourglass.turn.2
+rotate: false
+  xy: 192, 192
+  size: 192, 192
+  orig: 192, 192
+  offset: 0, 0
+  index: -1
+hourglass.turn.3
+rotate: false
+  xy: 384, 192
+  size: 192, 192
+  orig: 192, 192
+  offset: 0, 0
+  index: -1
+hourglass.turn.4
+rotate: false
+  xy: 576, 192
+  size: 192, 192
+  orig: 192, 192
+  offset: 0, 0
+  index: -1
+hourglass.turn.5
+rotate: false
+  xy: 768, 192
+  size: 192, 192
+  orig: 192, 192
+  offset: 0, 0
+  index: -1
+hourglass.turn.6
+rotate: false
+  xy: 0, 384
+  size: 192, 192
+  orig: 192, 192
+  offset: 0, 0
+  index: -1

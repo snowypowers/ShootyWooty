@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.utils.Array;
 import com.eye7.ShootyWooty.main;
 import com.eye7.ShootyWooty.model.GameConstants;
 
@@ -22,6 +23,10 @@ public class MainLoader {
     public static TextureAtlas atlas;
     public static Skin skin, skinCharacters;
 
+
+    public static Animation hourglass_timer;
+    public static Animation hourglass_turn;
+
     public static Animation animation_faucet;
 
     public static void load() {
@@ -31,6 +36,12 @@ public class MainLoader {
         green.setScale(GameConstants.SCALE_X, GameConstants.SCALE_Y);
         atlas = new TextureAtlas(Gdx.files.internal("buttons/Gbuttons.pack")); // atlas for skin
         skin = new Skin(atlas); // skin containing drawables
+
+
+        Array<TextureRegion> hrglass_timer = new Array<TextureRegion>();
+        for (int i = 1;i < 28;i++) {
+
+        }
 
 //        TextureRegion[] faucets = new TextureRegion[11];
 //        int faucet_count=0;

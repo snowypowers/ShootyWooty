@@ -35,6 +35,8 @@ public class ActionMenu extends Table {
 
 
     public ActionMenu() {
+        //Setup Name
+        this.setName("ActionMenu");
 
         //Setup buttons
         inputButtons = new InputButtons();
@@ -97,6 +99,16 @@ public class ActionMenu extends Table {
             } else if(getX() > (rightEdge - midpoint) && getX() < rightEdge) {
                 setX(getX() + drawerSpeed);
             }
+        }
+    }
+
+    //Helper method for HourGlass to get the alpha value
+    public float getAlpha() {
+        float output = (rightEdge - getX()) / (rightEdge - leftEdge);
+        if (output < 0.2f) {
+            return 0.2f;
+        } else {
+            return output;
         }
     }
 
