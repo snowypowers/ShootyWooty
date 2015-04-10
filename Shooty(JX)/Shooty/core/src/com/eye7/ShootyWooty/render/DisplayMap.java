@@ -11,7 +11,6 @@ package com.eye7.ShootyWooty.render;
         import com.badlogic.gdx.maps.tiled.TmxMapLoader;
         import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
         import com.eye7.ShootyWooty.model.GameConstants;
-        import com.eye7.ShootyWooty.object.Player;
         import com.eye7.ShootyWooty.world.GameMap;
 
 /**
@@ -20,7 +19,9 @@ package com.eye7.ShootyWooty.render;
 public class DisplayMap implements InputProcessor {
     private static final String TAG = "DisplayMap";
 
-    SpriteBatch sb;
+    //SpriteBatch for map display
+    private SpriteBatch mapBatch;
+
     //Map
     TiledMap tiledMap;
     OrthographicCamera camera;
@@ -46,13 +47,13 @@ public class DisplayMap implements InputProcessor {
     private MapProperties mp;
 
     public DisplayMap () {
-        sb = new SpriteBatch();
+        mapBatch = new SpriteBatch();
 
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 960 / zoom, 540 / zoom);
         camera.update();
         tiledMap = new TmxMapLoader().load("maps/CorridorOfDeath.tmx");
-        tiledMapRenderer = new MapRenderer(tiledMap, sb);
+        tiledMapRenderer = new MapRenderer(tiledMap, mapBatch);
 
         mp = tiledMap.getProperties();
         GameConstants.TILE_SIZE = mp.get("tilewidth", Integer.class);
@@ -64,23 +65,23 @@ public class DisplayMap implements InputProcessor {
 
         shapeRenderer = new ShapeRenderer();
         shapeRenderer.setProjectionMatrix(camera.combined);
-
-
-
     }
 
     public void render (float delta) {
-    //Define the rectangle where the map will be rendered
-        Gdx.gl.glViewport(screenXStart, screenYStart, screenWidth, screenHeight);
+        //Define the rectangle where the map will be rendered (FULLSCREEN)
+        Gdx.gl.glViewport(0,0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        //Gdx.gl.glViewport(screenXStart, screenYStart, screenWidth, screenHeight);
         camera.update();
         tiledMapRenderer.setView(camera);
         tiledMapRenderer.render();
-        gameMap.render(sb, delta);
+        gameMap.render(mapBatch, delta);
 
+        /*
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
         shapeRenderer.setColor(Color.RED);
-        shapeRenderer.rect(screenXStart + 10,screenYStart + 10,screenWidth - 20,screenHeight - 20);
+        shapeRenderer.rect(screenXStart + 10,screenYStart + 10,Gdx.graphics.getWidth()/2 - 20,Gdx.graphics.getHeight()/2 - 20);
         shapeRenderer.end();
+        */
 
     }
 
@@ -94,7 +95,7 @@ public class DisplayMap implements InputProcessor {
         screenYStart = (int) (0 * scaleHFactor);
         screenWidth = (int) (960 * scaleWFactor);
         screenHeight = (int) (540 * scaleHFactor);
-        //Gdx.app.log(TAG, "Resized to " + String.valueOf(screenWidth) + " by " + String.valueOf(screenHeight));
+        Gdx.app.log(TAG, "Resized to " + String.valueOf(screenWidth) + " by " + String.valueOf(screenHeight));
         camera.setToOrtho(false,screenWidth / zoom, screenHeight / zoom);
         camera.update();
     }
@@ -131,29 +132,22 @@ public class DisplayMap implements InputProcessor {
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        float x = 0;
-        float y = 0;
-
         if (camera.position.x < xPad) {
             camera.position.x = xPad;
-            //Gdx.app.log(TAG, "Reached left edge. " + String.valueOf(camera.position.x) + " " + String.valueOf(x));
-        } else if (camera.position.x > (screenWidth - xPad)) {
-            camera.position.x = (screenWidth- xPad);
-            //x = (GameConstants.MAP_WIDTH - (screenWidth/(2*zoom))) - camera.position.x;
-            //Gdx.app.log(TAG, "Reached right edge. " + String.valueOf(camera.position.x) + " " + String.valueOf(x));
+            //Gdx.app.log(TAG, "Reached left edge. " + String.valueOf(camera.position.x));
+        } else if (camera.position.x > (GameConstants.MAP_WIDTH - xPad)) {
+            camera.position.x = (GameConstants.MAP_WIDTH - xPad);
+            //Gdx.app.log(TAG, "Reached right edge. " + String.valueOf(camera.position.x));
         }
+
         if (camera.position.y < yPad) {
             camera.position.y = yPad;
-            //y = (screenHeight/(2*zoom)) - camera.position.y;
-            //Gdx.app.log(TAG, "Reached btm edge. " + String.valueOf(camera.position.y) + " " + String.valueOf(y));
-        } else if (camera.position.y > (screenHeight - yPad)) {
-            camera.position.y = (screenHeight- yPad);
-            //y = (GameConstants.MAP_HEIGHT - (screenHeight/(2*zoom))) - camera.position.y;
-            //Gdx.app.log(TAG, "Reached top edge. " + String.valueOf(camera.position.y) + " " + String.valueOf(y));
+            //Gdx.app.log(TAG, "Reached btm edge. " + String.valueOf(camera.position.y));
+        } else if (camera.position.y > (GameConstants.MAP_HEIGHT - yPad)) {
+            camera.position.y = (GameConstants.MAP_HEIGHT- yPad);
+            //Gdx.app.log(TAG, "Reached top edge. " + String.valueOf(camera.position.y));
         }
         camera.update();
-        // camera.translate(x,y);
-
         return false;
     }
 
