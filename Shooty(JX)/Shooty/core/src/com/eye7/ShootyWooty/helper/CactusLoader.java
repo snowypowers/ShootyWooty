@@ -42,8 +42,6 @@ public class CactusLoader {
     public static HashMap<String, Animation> cactus3_animations = new HashMap<String, Animation>();
     public static HashMap<String, Animation> cactus4_animations = new HashMap<String, Animation>();
 
-    public static Sound moving;
-    public static Sound damaged;
 
 
     public CactusLoader(int NUM_PLAYERS){

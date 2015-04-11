@@ -59,6 +59,11 @@ public class Player {
 
     private float RADIUS = 2;
 
+    //DisplayMoves
+    private Sprite displayMoves1;
+    private Sprite displayMoves2;
+    private Sprite displayMoves3;
+    private Sprite displayMoves4;
 
     //Debug Renderer
     private ShapeRenderer sr;
@@ -71,7 +76,8 @@ public class Player {
 
     //add sounds for collision
     private Sound cactiWalking = Gdx.audio.newSound(Gdx.files.internal("sounds/cactiWalking.mp3"));//add cacti footsteps
-    private int soundController;
+    private Sound sound_damaged = Gdx.audio.newSound(Gdx.files.internal("sounds/damaged.mp3"));
+    private int currentSound;
 
     // takes in x,y as origin
 	public Player(GameMap map, CircleMapObject collider, int d, int id) {
@@ -96,6 +102,9 @@ public class Player {
         this.statusLock = new Object();
         playerState = PlayerState.IDLE;
         previousState = PlayerState.IDLE;
+
+        cactiWalking.loop(0.7f);
+        cactiWalking.pause();
 
         //Set up player position & stats
         //Coordinates of the middle of the circle
@@ -127,6 +136,12 @@ public class Player {
 
         //set origin of water bar to 0,0. This allows the bar to fix to the bottom and increase to the top.
         waterBarFG.setOrigin(0,0);
+
+        //Initialize displayMoves sprites
+        displayMoves1 = new Sprite(new Texture("players/1Move.png"));
+        displayMoves2 = new Sprite(new Texture("players/2Moves.png"));
+        displayMoves3 = new Sprite(new Texture("players/3Moves.png"));
+        displayMoves4 = new Sprite(new Texture("players/4Moves.png"));
         
         //ShapeRenderer for debug
         if (GameConstants.DEBUG) {
@@ -149,6 +164,7 @@ public class Player {
             bulletr.draw(sb);
         }
         Sprite s = null;
+        //Find the correct sprite to draw based on PlayerState
         synchronized (statusLock) {
             //Gdx.app.log(TAG, "Rendering");
             while (s == null) {
@@ -166,20 +182,19 @@ public class Player {
 
                 } else if (playerState == PlayerState.MOVING) {
                     stateDelta += delta;
-                    //play walking sound
-                    cactiWalking.play();
                     s = new Sprite(animations.get(getdirection()+ ".moving").getKeyFrame(stateDelta));
 
 
 
                 } else if (playerState == PlayerState.DAMAGED) {
                     if (stateDelta <= animations.get("shot").getAnimationDuration()) {
-                        Gdx.app.log(TAG, "CurrentDelta: " + String.valueOf(stateDelta) + "Animation length: " + String.valueOf(animations.get("shot").getAnimationDuration()));
+                        //Gdx.app.log(TAG, "CurrentDelta: " + String.valueOf(stateDelta) + "Animation length: " + String.valueOf(animations.get("shot").getAnimationDuration()));
                         s = new Sprite(animations.get("shot").getKeyFrame(stateDelta));
                         stateDelta += delta;
                     } else {
-                        playerState = PlayerState.getState(previousState); // Restore previous state
-                        previousState = PlayerState.DAMAGED;
+                        playerState = PlayerState.NONE; // Restore previous state
+                        sound_damaged.stop();
+                        changeAnimation(previousState);
                         Gdx.app.log(TAG,playerState.toString());
                         statusLock.notifyAll();
                     }
@@ -268,6 +283,7 @@ public class Player {
         waterBarFG.draw(sb);
 
         //no of move bars
+
         int moves = 4;// I will get this anvita, should range from 0 to 4
 
         if (moves!=0){
@@ -284,16 +300,16 @@ public class Player {
     public synchronized Sprite getNoOfMoves(int n){
         Sprite nOfMoves;
         if(n==1){
-            nOfMoves = new Sprite(new Texture("players/1Move.png"));
+            nOfMoves = displayMoves1;
         }
         else if(n==2){
-            nOfMoves = new Sprite(new Texture("players/2Moves.png"));
+            nOfMoves = displayMoves2;
         }
         else if(n==3){
-            nOfMoves = new Sprite(new Texture("players/3Moves.png"));
+            nOfMoves = displayMoves3;
         }
         else{
-            nOfMoves = new Sprite(new Texture("players/4Moves.png"));
+            nOfMoves = displayMoves4;
         }
         nOfMoves.setX(getX()-RADIUS-22);
         nOfMoves.setY(getY()+RADIUS+32);
@@ -499,6 +515,16 @@ public class Player {
                     playerState = newState;
                     stateDelta = 0f;
                     statusLock.notifyAll();
+                    if (newState == PlayerState.MOVING) {
+                        cactiWalking.resume();
+                    }
+                    if (newState == PlayerState.DAMAGED) {
+                        cactiWalking.pause();
+                        sound_damaged.play();
+                    }
+                    if (newState == PlayerState.IDLE) {
+                        cactiWalking.pause();
+                    }
                 }
             }
         }
@@ -511,6 +537,7 @@ public class Player {
 }
 
 enum PlayerState {
+    NONE,
     IDLE,
     MOVING,
     DAMAGED,

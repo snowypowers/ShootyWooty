@@ -48,11 +48,6 @@ public class MainLoader {
         waterFountain.setVolume(0.4f);
         waterFountain.play();
 
-
-        Array<TextureRegion> hrglass_timer = new Array<TextureRegion>();
-        for (int i = 1;i < 28;i++) {
-
-        }
 //        TextureRegion[] faucets = new TextureRegion[11];
 //        int faucet_count=0;
 //        for (int i = 1; i < 12 ; i++) {
