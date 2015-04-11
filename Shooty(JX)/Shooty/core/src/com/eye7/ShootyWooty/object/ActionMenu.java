@@ -107,6 +107,8 @@ public class ActionMenu extends Table {
         float output = (rightEdge - getX()) / (rightEdge - leftEdge);
         if (output < 0.2f) {
             return 0.2f;
+        } else if (output > 1) {
+            return 1;
         } else {
             return output;
         }
