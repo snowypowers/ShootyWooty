@@ -1,6 +1,7 @@
 package com.eye7.ShootyWooty.helper;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -40,6 +41,9 @@ public class CactusLoader {
     public static HashMap<String, Animation> cactus2_animations = new HashMap<String, Animation>();
     public static HashMap<String, Animation> cactus3_animations = new HashMap<String, Animation>();
     public static HashMap<String, Animation> cactus4_animations = new HashMap<String, Animation>();
+
+    public static Sound moving;
+    public static Sound damaged;
 
 
     public CactusLoader(int NUM_PLAYERS){

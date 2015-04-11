@@ -35,7 +35,7 @@ public class GameWorld {
         this.stage = stage;
         this.actionResolver = actionResolver;
 
-        input = new ActionMenu();
+        input = new ActionMenu(actionResolver);
         input.debug();
         stage.addActor(input);
 

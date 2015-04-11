@@ -24,10 +24,12 @@ public class Timer extends Thread {
     private int time;
     private String timeStatus = "Time: ";
 
+    private HourGlass hg;
+
     public Timer(Stage stage, Object timerReset) {
         time = 0;
         this.timerReset = timerReset;
-        HourGlass hg = new HourGlass(stage, this);
+        hg = new HourGlass(stage, this);
     }
 
     @Override
@@ -63,6 +65,7 @@ public class Timer extends Thread {
     public void reset() {
         timeStatus = "Executing Moves...";
         time = -1;
+        hg.turn();
         interrupt();
     }
 }
@@ -75,6 +78,8 @@ class HourGlass extends Actor {
     private ActionMenu actionMenu;
     private Stage stage;
     private Timer timer;
+
+    private float turnDelta = 0;
 
     public HourGlass(Stage stage, Timer t) {
         this.stage = stage;
@@ -109,8 +114,12 @@ class HourGlass extends Actor {
         //Set the alpha to the alpha given by ActionMenu
         Color c = b.getColor();
         b.setColor(c.r, c.g, c.b, a);
-        if (timer.getTime() < 30) {
+        if (timer.getTime() < 30 && timer.getTime() > 0) {
             b.draw(hourglassTimerAnimation.getKeyFrame((float) timer.getTime(), true), 0,0,192,192);
+        } else {
+            b.draw(hourglassTurnAnimation.getKeyFrame(turnDelta), 0, 0, 192, 192);
+            turnDelta += Gdx.graphics.getDeltaTime();
+
         }
     }
 
@@ -122,6 +131,10 @@ class HourGlass extends Actor {
             }
         }
         return false;
+    }
+
+    public void turn() {
+        turnDelta = 0;
     }
 
 }

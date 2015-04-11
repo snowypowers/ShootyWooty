@@ -69,6 +69,7 @@ public class Player {
 
     //add sounds for collision
     private Sound cactiWalking = Gdx.audio.newSound(Gdx.files.internal("sounds/cactiWalking.mp3"));//add cacti footsteps
+    private int soundController;
 
     // takes in x,y as origin
 	public Player(GameMap map, CircleMapObject collider, int d, int id) {
@@ -482,6 +483,7 @@ public class Player {
             }
         }
     }
+
 
     public boolean isDead() {
         return playerState == PlayerState.DEAD;

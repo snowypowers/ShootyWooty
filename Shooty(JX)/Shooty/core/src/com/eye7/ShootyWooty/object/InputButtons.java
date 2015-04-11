@@ -139,17 +139,17 @@ class ButtonRow extends Table {
             Button.ButtonStyle style = new Button.ButtonStyle();
             style.up = skin.getDrawable("button" + s + ".up");
             style.down = skin.getDrawable("button" + s + ".down");
-            style.pressedOffsetY = -8;
+            style.pressedOffsetY = -20;
             style.disabled = skin.getDrawable("buttonBlank.up");
             mBStyles.add(style);
         }
 
         rBStyle = new Button.ButtonStyle(skin.getDrawable("bulletR"), skin.getDrawable("bulletR"), skin.getDrawable("bulletChosenR"));
         rBStyle.disabled = skin.getDrawable("bulletR");
-        rBStyle.pressedOffsetY = -8;
+        rBStyle.pressedOffsetY = 20;
         lBStyle = new Button.ButtonStyle(skin.getDrawable("bullet"), skin.getDrawable("bullet"), skin.getDrawable("bulletChosen"));
         lBStyle.disabled = skin.getDrawable("bullet");
-        lBStyle.pressedOffsetY = -8;
+        lBStyle.pressedOffsetY = 20;
 
     }
 
