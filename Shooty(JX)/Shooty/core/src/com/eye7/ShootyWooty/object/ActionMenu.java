@@ -40,18 +40,19 @@ public class ActionMenu extends Table {
     private boolean beingDragged;
     private float drawerSpeed = 10f;
 
-
     public ActionMenu(ActionResolver actionResolver) {
         this.actionResolver = actionResolver;
-
         //Setup Name
         this.setName("ActionMenu");
+
+
 
         //Setup buttons
         inputButtons = new InputButtons();
         handle_img = new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("buttons/handle.png"))));
         handle = new Button(handle_img, handle_img);
         beingDragged = false;
+
 
         handle.addListener( new DragListener() {
 
@@ -85,7 +86,10 @@ public class ActionMenu extends Table {
         //Add buttons to table
         this.add(handle).center();
         this.add(inputButtons);
-        this.setPosition(1050, 225); //Right edge of screen
+        this.setPosition(1050, 270); //Right edge of screen
+        this.defaults().height(536);
+        this.defaults().width(300);
+        this.setBackground(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("buttons/test.png")))));
     }
 
     public String[] getMoves() {

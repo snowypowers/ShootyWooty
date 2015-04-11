@@ -82,12 +82,7 @@ public class MainScreen implements Screen {
         input.addProcessor(stage);
         input.addProcessor(map);
         Gdx.input.setInputProcessor(input);
-/*
-        world.getInputButton0().show(); // buttons need to be display all the time
-        world.getInputButton1().show(); // they are in the stage and not GameRenderer
-        world.getInputButton2().show();
-        world.getInputButton3().show();
-*/
+
 
     }
 

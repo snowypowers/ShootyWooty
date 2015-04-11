@@ -51,6 +51,8 @@ public class Player {
 
     //HealthBar & WaterBar
     private Sprite healthBarFG;
+    private Sprite healthBarFG2;
+    private Sprite healthBarFG3;
     private Sprite healthBarBG;
     private Sprite waterBarFG;
     private Sprite waterBarBG;
@@ -113,6 +115,8 @@ public class Player {
 
         //initialize the healthbar & waterbar
         healthBarBG = new Sprite(new Texture("players/healthBG.png"));
+        healthBarFG3 = new Sprite(new Texture("players/healthFG3.png"));
+        healthBarFG2 = new Sprite(new Texture("players/healthFG2.png"));
         healthBarFG = new Sprite(new Texture("players/healthFG.png"));
         waterBarBG = new Sprite(new Texture("players/waterBarBG.png"));
         waterBarFG = new Sprite(new Texture("players/waterBarFG.png"));
@@ -217,14 +221,28 @@ public class Player {
         healthBarFG.setX(x-RADIUS-25);
         healthBarFG.setY(y+RADIUS+30);
 
+        healthBarFG2.setX(x-RADIUS-25);
+        healthBarFG2.setY(y+RADIUS+30);
+
+        healthBarFG3.setX(x-RADIUS-25);
+        healthBarFG3.setY(y+RADIUS+30);
 
         //healthBar image is too big, so scaling it down
-        healthBarBG.setScale(0.7f, 1f);
-        healthBarFG.setScale(0.7f, 1f);
+//        healthBarBG.setScale(0.7f, 1f);
+//        healthBarFG.setScale(0.7f, 1f);
 
         //connect the healthBar to the health of the player
-        healthBarFG.setScale(((float)0.7 *health)/(float)100, 1f);
+        if(health>=60) {
+            healthBarFG2.setScale((float)(health-50f)/50f, 1f);
+            healthBarFG3.setScale(1);
+            healthBarFG.setScale(0);
+        }
+        else{
+            healthBarFG.setScale((float)health/50f, 1f);
+            healthBarFG2.setScale(0);
+            healthBarFG3.setScale(0);
 
+        }
         //initialize the waterBars
         int waterBarFill = score*3+water;
 
@@ -243,6 +261,8 @@ public class Player {
         //draw the bars
         healthBarBG.draw(sb);
         healthBarFG.draw(sb);
+        healthBarFG2.draw(sb);
+        healthBarFG3.draw(sb);
 
         waterBarBG.draw(sb);
         waterBarFG.draw(sb);
@@ -276,7 +296,7 @@ public class Player {
             nOfMoves = new Sprite(new Texture("players/4Moves.png"));
         }
         nOfMoves.setX(getX()-RADIUS-22);
-        nOfMoves.setY(getY()+RADIUS+45);
+        nOfMoves.setY(getY()+RADIUS+32);
         return nOfMoves;
     }
 

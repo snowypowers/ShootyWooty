@@ -38,7 +38,7 @@ public class InputButtons extends Table {
         row4 = new ButtonRow();
 
         //Table properties
-        this.defaults().height(90);
+        this.defaults().height(120);
         //Add to table
         this.add(row1);
         this.row();
