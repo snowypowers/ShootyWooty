@@ -1,5 +1,8 @@
 package com.eye7.ShootyWooty.object;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup;
@@ -7,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.eye7.ShootyWooty.helper.MainLoader;
 
@@ -39,6 +43,7 @@ public class InputButtons extends Table {
 
         //Table properties
         this.defaults().height(120);
+        this.setBackground(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("buttons/test.png")))));
         //Add to table
         this.add(row1);
         this.row();

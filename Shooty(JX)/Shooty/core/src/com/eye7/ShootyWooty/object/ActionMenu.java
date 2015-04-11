@@ -47,6 +47,7 @@ public class ActionMenu extends Table {
 
 
 
+
         //Setup buttons
         inputButtons = new InputButtons();
         handle_img = new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("buttons/handle.png"))));
@@ -89,7 +90,7 @@ public class ActionMenu extends Table {
         this.setPosition(1050, 270); //Right edge of screen
         this.defaults().height(536);
         this.defaults().width(300);
-        this.setBackground(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("buttons/test.png")))));
+
     }
 
     public String[] getMoves() {

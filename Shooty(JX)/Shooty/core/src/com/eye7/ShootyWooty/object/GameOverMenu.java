@@ -38,6 +38,7 @@ public class GameOverMenu extends Table {
         for (String s: achievements.keySet()) {
             pointer.add(s);
         }
+
         //Setup Menu
         Label.LabelStyle style = new Label.LabelStyle(MainLoader.white, Color.WHITE);
         Label header = new Label("Game Over!", style);
@@ -45,10 +46,13 @@ public class GameOverMenu extends Table {
         Drawable buttonImage = new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("buttons/exitButton.png"))));
         Button.ButtonStyle bstyle = new Button.ButtonStyle(buttonImage, buttonImage, buttonImage);
         exitButton = new Button(bstyle);
+
+        //Setup Table
+        this.setBackground(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("buttons/test.png")))));
         this.add(header).center();
-        this.add(label).fillX().fillY().center();
+        this.add(label).center().height(300);
         this.row();
-        this.add(exitButton).fillX().center();
+        this.add(exitButton).center();
 
         label.addListener(new ClickListener() {
 
@@ -74,7 +78,7 @@ public class GameOverMenu extends Table {
 
     public void changeText() {
         String output = pointer.poll();
-        label.setText(output + "//n//n" + String.valueOf(achievements.get(output)));
+        label.setText(output + "/n/n" + String.valueOf(achievements.get(output)));
         pointer.add(output);
     }
 }
