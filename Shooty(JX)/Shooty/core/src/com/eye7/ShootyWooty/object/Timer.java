@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.TimeUtils;
+import com.eye7.ShootyWooty.model.GameConstants;
 
 /**
  * @author PT
@@ -93,7 +94,7 @@ class HourGlass extends Actor {
             hourglassTurn[i] = new TextureRegion (hourglassSkin.getRegion("hourglass.turn." + String.valueOf(i+1)));
         }
 
-        hourglassTimerAnimation = new Animation((float)30.0/27, hourglassTimer);
+        hourglassTimerAnimation = new Animation((float) GameConstants.TIME_LIMIT/27, hourglassTimer);
         hourglassTurnAnimation = new Animation(0.2f, hourglassTurn);
 
         attachActionMenu();

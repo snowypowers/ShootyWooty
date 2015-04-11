@@ -21,6 +21,7 @@ public class GameConstants {
     public static int NUM_PLAYERS = 2; // Determines the number of players in the game
     public static int PLAYER_TAG = 1; // This is the client's player tag
     public static int myID;
+    public static int TIME_LIMIT = 15;
 
     //Map properties
     public static float TILE_SIZE;
