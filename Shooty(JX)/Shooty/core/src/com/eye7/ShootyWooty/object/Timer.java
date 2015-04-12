@@ -89,17 +89,17 @@ class HourGlass extends Actor {
         //Import and build animation
         hourglassSkin = new Skin(new TextureAtlas(Gdx.files.internal("ShootyUI/hourglass1.pack")));
         hourglassSkin.addRegions(new TextureAtlas(Gdx.files.internal("ShootyUI/hourglass2.pack")));
-        TextureRegion[] hourglassTimer = new TextureRegion[27];
+        TextureRegion[] hourglassTimer = new TextureRegion[30];
         TextureRegion[] hourglassTurn = new TextureRegion[6];
 
-        for (int i = 0; i < 27; i++) {
+        for (int i = 0; i < 30; i++) {
             hourglassTimer[i] = new TextureRegion (hourglassSkin.getRegion("hourglass.timer." + String.valueOf(i+1)));
         }
         for (int i = 0; i < 6; i++) {
             hourglassTurn[i] = new TextureRegion (hourglassSkin.getRegion("hourglass.turn." + String.valueOf(i+1)));
         }
 
-        hourglassTimerAnimation = new Animation((float) GameConstants.TIME_LIMIT/27, hourglassTimer);
+        hourglassTimerAnimation = new Animation((float) GameConstants.TIME_LIMIT/30, hourglassTimer);
         hourglassTurnAnimation = new Animation(0.2f, hourglassTurn);
 
         attachActionMenu();
