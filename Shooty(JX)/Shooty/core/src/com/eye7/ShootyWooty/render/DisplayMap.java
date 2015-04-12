@@ -63,8 +63,10 @@ public class DisplayMap implements InputProcessor {
         gameMap = new GameMap(tiledMap);
         gameMap.setUpPlayers(GameConstants.NUM_PLAYERS);
 
-        shapeRenderer = new ShapeRenderer();
-        shapeRenderer.setProjectionMatrix(camera.combined);
+        if(GameConstants.DEBUG) {
+            shapeRenderer = new ShapeRenderer();
+            shapeRenderer.setProjectionMatrix(camera.combined);
+        }
     }
 
     public void render (float delta) {
@@ -76,12 +78,7 @@ public class DisplayMap implements InputProcessor {
         tiledMapRenderer.render();
         gameMap.render(mapBatch, delta);
 
-        /*
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-        shapeRenderer.setColor(Color.RED);
-        shapeRenderer.rect(screenXStart + 10,screenYStart + 10,Gdx.graphics.getWidth()/2 - 20,Gdx.graphics.getHeight()/2 - 20);
-        shapeRenderer.end();
-        */
+
 
     }
 
