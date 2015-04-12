@@ -24,12 +24,14 @@ public class InputButtons extends Table {
 
     private static ButtonGroup shooters;
 
+    private Table buttons_compact;
+
 
     public InputButtons() {
 
         //Load in all sprites
         ButtonRow.load();
-
+        buttons_compact = new Table();
         //Create ButtonGroup
         shooters = new ButtonGroup();
         shooters.setMinCheckCount(0);
@@ -42,18 +44,22 @@ public class InputButtons extends Table {
         row4 = new ButtonRow();
 
         //Table properties
-        this.defaults().height(120);
+//        this.defaults().height(100);
+        this.defaults().height(536);
+        this.defaults().width(300);
         this.setBackground(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("buttons/test.png")))));
         //Add to table
-        this.add(row1);
-        this.row();
-        this.add(row2);
-        this.row();
-        this.add(row3);
-        this.row();
-        this.add(row4);
+        buttons_compact.defaults().height(100);
+        buttons_compact.add(row1);
+        buttons_compact.row();
+        buttons_compact.add(row2);
+        buttons_compact.row();
+        buttons_compact.add(row3);
+        buttons_compact.row();
+        buttons_compact.add(row4);
+        buttons_compact.row();
 
-
+        this.add(buttons_compact).center();
     }
 
     public void setLock (boolean lock) {
