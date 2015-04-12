@@ -44,7 +44,9 @@ public class ActionMenu extends Table {
         this.actionResolver = actionResolver;
         //Setup Name
         this.setName("ActionMenu");
-
+        if (GameConstants.DEBUG) {
+            this.debug();
+        }
 
 
 

@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.eye7.ShootyWooty.helper.MainLoader;
+import com.eye7.ShootyWooty.model.GameConstants;
 
 public class InputButtons extends Table {
     private final String TAG = "InputButtons";
@@ -99,6 +100,9 @@ class ButtonRow extends Table {
     private boolean lock;
 
     ButtonRow() {
+        if (GameConstants.DEBUG) {
+            this.debug();
+        }
         lock = false;
         mBPointer = 0;
 
