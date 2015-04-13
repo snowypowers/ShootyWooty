@@ -70,6 +70,10 @@ public class TurnHandler extends Thread {
                 e.printStackTrace();
             }
         }
+
+        //TURN END
+        GameConstants.TurnEnd();
+
         Gdx.app.log(TAG, "Turn Ended!");
 
     }

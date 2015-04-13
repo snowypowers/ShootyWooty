@@ -98,13 +98,6 @@ public class ActionMenu extends Table {
         return inputButtons.getMoves();
     }
 
-    public void setLock(boolean lock) {
-        inputButtons.setLock(lock);
-    }
-
-    public void reset() {
-        inputButtons.reset();
-    }
 
     public void act(float delta) {
         if (!beingDragged) {

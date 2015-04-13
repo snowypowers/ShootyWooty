@@ -2,7 +2,6 @@ package com.eye7.ShootyWooty.object;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -10,67 +9,15 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.utils.TimeUtils;
 import com.eye7.ShootyWooty.model.GameConstants;
 
 /**
- * @author PT
- * thread that counts in 30 seconds interval
- * with 5 seconds execution time after every
- * 30 seconds round
+ * Created by Yak Jun Xiang on 13/4/2015.
  */
-public class Timer extends Thread {
-    private Object timerReset;
-    private int time;
-    private String timeStatus = "Time: ";
 
-    private HourGlass hg;
+public class HourGlass extends Actor implements Observer {
+    private final String TAG = "HourGlass";
 
-    public Timer(Stage stage, Object timerReset) {
-        time = 0;
-        this.timerReset = timerReset;
-        hg = new HourGlass(stage, this);
-    }
-
-    @Override
-    public void run() {
-        while (!isInterrupted()) {
-                if (time >= 0) {
-                    timeStatus = "Time: ";
-                } else {
-                    timeStatus = "Executing Moves...";
-                }
-                try {
-                    Thread.sleep(1000);
-                    time += 1;
-                    //Gdx.app.log("GameWorld", time + "");
-                } catch (InterruptedException e) {
-                    try {
-                        synchronized(timerReset) {
-                            timerReset.wait();
-                        }
-                    } catch (InterruptedException e1) {
-                        e1.printStackTrace();
-                    }
-                }
-            }
-
-    }
-    public String getTimeStatus() {
-        return timeStatus;
-    }
-    public int getTime() {
-        return time;
-    }
-    public void reset() {
-        timeStatus = "Executing Moves...";
-        time = -1;
-        hg.turn();
-        interrupt();
-    }
-}
-
-class HourGlass extends Actor {
     public Skin hourglassSkin;
     private Animation hourglassTimerAnimation;
     private Animation hourglassTurnAnimation;
@@ -78,12 +25,17 @@ class HourGlass extends Actor {
     private ActionMenu actionMenu;
     private Stage stage;
     private Timer timer;
+    private boolean turn;
 
     private float turnDelta = 0;
 
-    public HourGlass(Stage stage, Timer t) {
+    public HourGlass(Stage stage) {
+        //Listen to Turn End
+        GameConstants.subscribeTurnEnd(this);
+
         this.stage = stage;
-        this.timer = t;
+        this.timer = new Timer(this);
+        turn = false;
         stage.addActor(this);
 
         //Import and build animation
@@ -99,11 +51,20 @@ class HourGlass extends Actor {
             hourglassTurn[i] = new TextureRegion (hourglassSkin.getRegion("hourglass.turn." + String.valueOf(i+1)));
         }
 
-        hourglassTimerAnimation = new Animation((float) GameConstants.TIME_LIMIT/30, hourglassTimer);
+        hourglassTimerAnimation = new Animation(GameConstants.TIME_LIMIT/30f, hourglassTimer);
         hourglassTurnAnimation = new Animation(0.2f, hourglassTurn);
 
         attachActionMenu();
 
+    }
+
+    public void start() {
+        timer.start();
+    }
+
+    public void turnStart() {
+        turn();
+        GameConstants.TurnStart();
     }
 
     @Override
@@ -114,8 +75,8 @@ class HourGlass extends Actor {
         //Set the alpha to the alpha given by ActionMenu
         Color c = b.getColor();
         b.setColor(c.r, c.g, c.b, a);
-        if (timer.getTime() < 30 && timer.getTime() > 0) {
-            b.draw(hourglassTimerAnimation.getKeyFrame((float) timer.getTime(), true), 0,0,192,192);
+        if (!turn) {
+            b.draw(hourglassTimerAnimation.getKeyFrame(timer.getTime(), true), 0,0,192,192);
         } else {
             b.draw(hourglassTurnAnimation.getKeyFrame(turnDelta), 0, 0, 192, 192);
             turnDelta += Gdx.graphics.getDeltaTime();
@@ -134,10 +95,80 @@ class HourGlass extends Actor {
     }
 
     public void turn() {
+        Gdx.app.log(TAG, "TURN");
         turnDelta = 0;
+        if (turn) {
+            turn = false;
+        } else {
+            turn = true;
+        }
+    }
+
+    public float getTime() {
+        return timer.getTime();
+    }
+
+    public void observerUpdate(int i) {
+        synchronized (timer) {
+            timer.notify();
+            turn();
+        }
+    }
+
+    public int observerType() {
+        return 0;
     }
 
 }
+
+class Timer extends Thread {
+    private HourGlass hourGlass;
+    private float time;
+    private String timeStatus = "Time: ";
+
+    public Timer(HourGlass hg) {
+        time = 0f;
+        this.hourGlass = hg;
+    }
+
+    @Override
+    public void run() {
+        while (!isInterrupted()) {
+            if (time >= GameConstants.TIME_LIMIT) {
+                hourGlass.turnStart();
+                this.interrupt();
+            }
+            if (time >= 0) {
+                timeStatus = "Time: ";
+            } else {
+                timeStatus = "Executing Moves...";
+            }
+            try {
+                Thread.sleep(100);
+                time += 0.1f;
+            } catch (InterruptedException e) {
+                try {
+                    synchronized(this) {
+                        this.wait();
+                    }
+                    time = 0f;
+                } catch (InterruptedException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        }
+
+    }
+    public String getTimeStatus() {
+        return timeStatus;
+    }
+    public float getTime() {
+        return time;
+    }
+
+
+}
+
 
 
 

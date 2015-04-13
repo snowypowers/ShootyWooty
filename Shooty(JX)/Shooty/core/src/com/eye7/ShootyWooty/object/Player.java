@@ -16,7 +16,7 @@ import com.eye7.ShootyWooty.world.GameMap;
 
 import java.util.HashMap;
 
-public class Player {
+public class Player implements Observer{
     private final String TAG;
 
     //GameMap
@@ -31,17 +31,15 @@ public class Player {
     public int health;
     private int score;
     private int water;
-
+    private int bulletCount;
     public boolean dead = false;
 
     //PlayerStatus and Animations
-    private HashMap<String, Animation> animations = null;
+    private HashMap<String, Animation> animations;
     private PlayerState playerState;
     private PlayerState previousState;
     private float stateDelta;
-    public Object statusLock;
-
-	private Vector2 position;
+    public final Object statusLock = new Object();
 
     //Bullets
     private Bullet bulletl;
@@ -77,12 +75,15 @@ public class Player {
     //add sounds for collision
     private Sound cactiWalking = Gdx.audio.newSound(Gdx.files.internal("sounds/cactiWalking.mp3"));//add cacti footsteps
     private Sound sound_damaged = Gdx.audio.newSound(Gdx.files.internal("sounds/damaged.mp3"));
-    private int currentSound;
+    private long walkingSound;
 
-    // takes in x,y as origin
+    //CONSTRUCTOR
 	public Player(GameMap map, CircleMapObject collider, int d, int id) {
         TAG = "Player" + String.valueOf(id+1);
         playerID = id+1;
+
+        //Listen in to TurnEnd
+        GameConstants.subscribeTurnEnd(this);
 
         this.map = map; // Reference to the GameMap object in order to get the positions of other objects;
 
@@ -99,12 +100,11 @@ public class Player {
         }
 
         //Setup playerStates
-        this.statusLock = new Object();
         playerState = PlayerState.IDLE;
         previousState = PlayerState.IDLE;
 
-        cactiWalking.loop(0.7f);
-        cactiWalking.pause();
+        walkingSound = cactiWalking.loop(0.7f);
+        cactiWalking.pause(walkingSound);
 
         //Set up player position & stats
         //Coordinates of the middle of the circle
@@ -115,8 +115,7 @@ public class Player {
         health = 100;
         score = 0;
         water = 0;
-
-		position = new Vector2(x, y);
+        bulletCount = 4;
 
         //Create the bullets
         bulletl = new Bullet(270, this.x, this.y,this);
@@ -272,26 +271,26 @@ public class Player {
         waterBarFG.setScale(1f, waterBarFill/(float)9);
 
         sb.begin();
+        if (!isDead()) {//Only draw playerUI if not dead
+            //draw the bars
+            healthBarBG.draw(sb);
+            healthBarFG.draw(sb);
+            healthBarFG2.draw(sb);
+            healthBarFG3.draw(sb);
 
-        //draw the bars
-        healthBarBG.draw(sb);
-        healthBarFG.draw(sb);
-        healthBarFG2.draw(sb);
-        healthBarFG3.draw(sb);
+            waterBarBG.draw(sb);
+            waterBarFG.draw(sb);
 
-        waterBarBG.draw(sb);
-        waterBarFG.draw(sb);
+            //no of move bars
 
-        //no of move bars
+            int moves = 4;// I will get this anvita, should range from 0 to 4
 
-        int moves = 4;// I will get this anvita, should range from 0 to 4
-
-        if (moves!=0){
-            Sprite nOfMoves = getNoOfMoves(moves);
-            nOfMoves.draw(sb);
+            if (moves != 0) {
+                Sprite nOfMoves = getNoOfMoves(moves);
+                nOfMoves.draw(sb);
+            }
         }
-//        sb.end();
-//        sb.begin();
+
     }
 
 
@@ -317,25 +316,30 @@ public class Player {
     }
 
     public synchronized void decreaseHealth(int dmg){
-        health-=dmg;
-        water = 0;
-        if (health < 0) {
-            health = 0;
+        if (!isDead()) {
+            health -= dmg;
+            water = 0;
+            if (health < 0) {
+                health = 0;
+            }
+            changeAnimation(PlayerState.DAMAGED);
         }
-        changeAnimation(PlayerState.DAMAGED);
     }
 
     public synchronized void decreaseHealth(Bullet b){
-        health-= 20;
-        water = 0;
-        if (health < 0) {
-            health = 0;
-            if (playerState != PlayerState.DEAD) { //If not previously declared dead
-                b.killAwarded();
-            }
+        if (!isDead()) {
+            health -= 20;
+            water = 0;
+            if (health < 0) {
+                health = 0;
+                if (playerState != PlayerState.DEAD && dead == false) { //If not previously declared dead
+                    b.killAwarded();
+                    dead = true; // Set frag to true so no one else can get the kill
+                }
 
+            }
+            changeAnimation(PlayerState.DAMAGED);
         }
-        changeAnimation(PlayerState.DAMAGED);
     }
 
     public void hitAwarded() {
@@ -347,13 +351,15 @@ public class Player {
     }
 
     public synchronized void collectWater() {
-        water += 1;
-        lifeTimeWater += 1;
-         if (water == 3) {
-             score += 1;
-             water = 0;
-         }
-        changeAnimation(PlayerState.COLLECTING_WATER);
+        if (!isDead()) {
+            water += 1;
+            lifeTimeWater += 1;
+            if (water == 3) {
+                score += 1;
+                water = 0;
+            }
+            changeAnimation(PlayerState.COLLECTING_WATER);
+        }
     }
 
 
@@ -390,11 +396,13 @@ public class Player {
 
     public void startShootLeft() {
         shootLeft = true;
+        bulletCount -= 1;
         lifeTimeShotsFired += 1;
     }
 
     public void startShootRight() {
         shootRight = true;
+        bulletCount -= 1;
         lifeTimeShotsFired += 1;
     }
 
@@ -413,10 +421,6 @@ public class Player {
     }
 	
 	// getters
-	public Vector2 getPosition() {
-		return position;
-	}
-
     public int getPlayerID() { return playerID; }
 
 	public float getX() {
@@ -437,6 +441,10 @@ public class Player {
         return bulletr;
     }
 
+    public int getBulletCount() {
+        return bulletCount;
+    }
+
     public int getHealth(){
         return health;
     }
@@ -446,7 +454,7 @@ public class Player {
     }
 
     //Aligns player into the closest gridbox
-    //Calling this will also end player movement animation & checks for death
+    //Calling this will also end player movement animation
     public synchronized void snapInGrid() {
         //Snaps to 64 pixel grid
         float Xoff = x % 32;
@@ -467,14 +475,10 @@ public class Player {
         } else {
             rotate(90 - Roff);
         }
-        //Check if he is dead
-        if (health == 0) {
-            playerState = PlayerState.DEAD;
-        }
+
         if (playerState != PlayerState.DEAD) {
             changeAnimation(PlayerState.IDLE);
         }
-
     }
 
     public int getScore(){
@@ -516,18 +520,36 @@ public class Player {
                     stateDelta = 0f;
                     statusLock.notifyAll();
                     if (newState == PlayerState.MOVING) {
-                        cactiWalking.resume();
+                        cactiWalking.resume(walkingSound);
                     }
                     if (newState == PlayerState.DAMAGED) {
-                        cactiWalking.pause();
+                        cactiWalking.pause(walkingSound);
                         sound_damaged.play();
                     }
                     if (newState == PlayerState.IDLE) {
-                        cactiWalking.pause();
+                        cactiWalking.pause(walkingSound);
                     }
                 }
             }
         }
+    }
+
+    //Observer Methods for TurnEnd
+    public void observerUpdate(int i) {
+        //Check if just died
+        if (health <= 0 && !isDead()) { //Actions upon DEATH
+            changeAnimation(PlayerState.DEAD);
+        }
+        if (!isDead()) {
+            bulletCount += 3; // Add 3 more bullets
+            if (bulletCount > 12) { //Set max bullets that can be stored
+                bulletCount = 10;
+            }
+        }
+    }
+
+    public int observerType() {
+        return 1;
     }
 
 
@@ -538,6 +560,7 @@ public class Player {
 
 enum PlayerState {
     NONE,
+    EMOTE,
     IDLE,
     MOVING,
     DAMAGED,
@@ -547,6 +570,7 @@ enum PlayerState {
     static PlayerState getState(PlayerState e) {
         switch (e) {
             case IDLE: return IDLE;
+            case EMOTE: return EMOTE;
             case MOVING: return MOVING;
             case DAMAGED: return DAMAGED;
             case COLLECTING_WATER: return COLLECTING_WATER;
@@ -558,6 +582,7 @@ enum PlayerState {
     public String toString() {
         switch(this) {
             case IDLE: return "IDLE";
+            case EMOTE: return "EMOTE";
             case MOVING: return "MOVING";
             case DAMAGED: return "DAMAGED";
             case COLLECTING_WATER: return "COLLECTING_WATER";
@@ -565,4 +590,6 @@ enum PlayerState {
             default: return "null";
         }
     }
+
+
 }
