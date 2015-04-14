@@ -9,7 +9,7 @@ import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
-import com.eye7.ShootyWooty.helper.CactusLoader;
+import com.eye7.ShootyWooty.helper.ActionResolver;
 import com.eye7.ShootyWooty.model.GameConstants;
 import com.eye7.ShootyWooty.object.Player;
 
@@ -19,10 +19,11 @@ public class GameMap {
     private static Array<Rectangle> rocks=  new Array<Rectangle>();
     private static Array<Rectangle> water=  new Array<Rectangle>();
     private MapObjects spawns;
-
-    public GameMap(TiledMap tmap) {
+    private ActionResolver actionResolver;
+    public GameMap(TiledMap tmap, ActionResolver actionResolver) {
         GameConstants.PLAYERS.clear(); // Resets the PlayerList
         this.map = tmap;
+        this.actionResolver = actionResolver;
         //Get rocks
         MapObjects rockslist = map.getLayers().get("Rocks").getObjects();
         for (int i = 0; i < rockslist.getCount(); i++) {
@@ -66,7 +67,7 @@ public class GameMap {
         for (int i = 0; i < num; i++) {
             EllipseMapObject spawnpoint = (EllipseMapObject) spawns.get("Spawn" + String.valueOf(i+1));
             CircleMapObject spawn = new CircleMapObject(spawnpoint.getEllipse().x+32, spawnpoint.getEllipse().y+32, 20);
-            Player p = new Player(this, spawn, Integer.parseInt(spawnpoint.getProperties().get("direction").toString()),i);
+            Player p = new Player(this, spawn, Integer.parseInt(spawnpoint.getProperties().get("direction").toString()),i, actionResolver);
             GameConstants.PLAYERS.put(p.getPlayerID(), p);
             Gdx.app.log(TAG, "Created Player: " + String.valueOf(p.getPlayerID()));
         }

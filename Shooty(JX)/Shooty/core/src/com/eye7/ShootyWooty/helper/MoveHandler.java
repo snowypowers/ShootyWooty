@@ -8,6 +8,7 @@ import com.eye7.ShootyWooty.model.GameConstants;
 import com.eye7.ShootyWooty.object.Bullet;
 import com.eye7.ShootyWooty.object.Player;
 
+import java.util.ArrayList;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 
@@ -457,50 +458,76 @@ public class MoveHandler extends Thread{
         return false;
     }
     public void decideWin() throws InterruptedException {
-        for(int i=0; i<GameConstants.NUM_PLAYERS; i++){
-            if(GameConstants.PLAYERS.get(i+1).getHealth()==0 && !GameConstants.PLAYERS.get(i+1).isDead()){
+        ArrayList<Integer> recentDead = new ArrayList<Integer>();
+        ArrayList<Integer> playersLeft = actionResolver.getLeftPlayers();
+        if(playersLeft.size()!=0){
+            for(int i:playersLeft){
                 GameConstants.PLAYERS.get(i+1).dead = true;
+            }
+            actionResolver.clearLeftPlayers();
+
+        }
+        int numScoreFull = 0;
+        boolean meFull = false;
+        for(int i=0; i<GameConstants.NUM_PLAYERS; i++){
+            if(GameConstants.PLAYERS.get(i+1).getHealth()<=0 && !GameConstants.PLAYERS.get(i+1).isDead()){
+                GameConstants.PLAYERS.get(i+1).dead = true;
+                recentDead.add(i);
                 actionResolver.sendMessageAll("@",Integer.toString(i) );
-//                if(GameConstants.PLAYERS.get(GameConstants.myID+1).dead && ((GameConstants.NUM_PLAYERS - actionResolver.getDeadPlayers().size()) > 2))
-//                    actionResolver.leaveRoom();    // Call the button
+            }
+            if(GameConstants.PLAYERS.get(i+1).getScore()>=3){
+                if(i==GameConstants.myID){
+                    meFull = true;
+                }
+                numScoreFull++;
             }
         }
-        if(GameConstants.PLAYERS.get(GameConstants.myID+1).getScore()==3){
-            actionResolver.sendMessageAll("+",Integer.toString(GameConstants.myID));
-            actionResolver.gameDecided("won",GameConstants.PLAYERS.get(GameConstants.myID+1).getAchievments());
-        }
-        if(actionResolver.getDeadPlayers().size()==GameConstants.NUM_PLAYERS-1){
-            if(!GameConstants.PLAYERS.get(GameConstants.myID+1).dead){
-                actionResolver.gameDecided("won",GameConstants.PLAYERS.get(GameConstants.myID+1).getAchievments());
+        if(meFull){
+            if(numScoreFull==1){
+                actionResolver.gameDecided("win",GameConstants.PLAYERS.get(GameConstants.myID+1).getAchievments());
             }
             else{
-                actionResolver.gameDecided("lost", GameConstants.PLAYERS.get(GameConstants.myID+1).getAchievments());
+                actionResolver.gameDecided("draw",GameConstants.PLAYERS.get(GameConstants.myID+1).getAchievments());
+            }
+        }
+        else if(numScoreFull>0){
+            actionResolver.gameDecided("lose",GameConstants.PLAYERS.get(GameConstants.myID+1).getAchievments());
+        }
+
+        if(actionResolver.getDeadPlayers().size()==GameConstants.NUM_PLAYERS-1){
+            if(!GameConstants.PLAYERS.get(GameConstants.myID+1).dead){
+                actionResolver.gameDecided("win",GameConstants.PLAYERS.get(GameConstants.myID+1).getAchievments());
+            }
+            else{
+                actionResolver.gameDecided("lose",GameConstants.PLAYERS.get(GameConstants.myID+1).getAchievments());
             }
         }
         if(actionResolver.getDeadPlayers().size()==GameConstants.NUM_PLAYERS){
-            if(checkDraw()==GameConstants.myID){
-                actionResolver.gameDecided("won",GameConstants.PLAYERS.get(GameConstants.myID+1).getAchievments());
-            }
-            else if(checkDraw()==-1){
-                actionResolver.gameDecided("draw",GameConstants.PLAYERS.get(GameConstants.myID+1).getAchievments() );
-            }
-            else{
-                actionResolver.gameDecided("lost", GameConstants.PLAYERS.get(GameConstants.myID+1).getAchievments());
-            }
-        }
-        if(actionResolver.getWinner()!=-1){
-            actionResolver.gameDecided("lost", GameConstants.PLAYERS.get(GameConstants.myID+1).getAchievments());
+            String state = checkDraw(recentDead);
+            actionResolver.gameDecided(state, GameConstants.PLAYERS.get(GameConstants.myID + 1).getAchievments());
         }
     }
-    public int checkDraw(){
-        int play1 = GameConstants.PLAYERS.get(actionResolver.getDeadPlayers().get((GameConstants.NUM_PLAYERS-2)+1)).getScore();
-        int play2 = GameConstants.PLAYERS.get(actionResolver.getDeadPlayers().get((GameConstants.NUM_PLAYERS-1)+1)).getScore();
-        if(play1>play2){
-            return GameConstants.NUM_PLAYERS-2;
+    public String checkDraw(ArrayList<Integer> recentDead){
+        ArrayList<Integer> checkIn = recentDead;
+        int maxScore = 0;
+        for(int player:checkIn){
+            if(GameConstants.PLAYERS.get(player+1).getScore()>maxScore){
+                maxScore = GameConstants.PLAYERS.get(player+1).getScore();
+            }
         }
-        if(play2>play1){
-            return GameConstants.NUM_PLAYERS-1;
+        int numPlay = 0;
+        for(int player:checkIn){
+            if(GameConstants.PLAYERS.get(player+1).getScore() == maxScore){
+                numPlay++;
+            }
         }
-        return -1;
+        if(GameConstants.PLAYERS.get(GameConstants.myID+1).getScore()==maxScore){
+            if(numPlay==1)
+                return "win";
+            else
+                return "draw";
+        }
+        return "lose";
+
     }
 }

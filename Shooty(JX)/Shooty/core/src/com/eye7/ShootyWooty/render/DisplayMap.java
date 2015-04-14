@@ -1,17 +1,17 @@
 package com.eye7.ShootyWooty.render;
 
         import com.badlogic.gdx.Gdx;
-        import com.badlogic.gdx.InputProcessor;
-        import com.badlogic.gdx.graphics.Color;
-        import com.badlogic.gdx.graphics.OrthographicCamera;
-        import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-        import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-        import com.badlogic.gdx.maps.MapProperties;
-        import com.badlogic.gdx.maps.tiled.TiledMap;
-        import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-        import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.maps.MapProperties;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+        import com.eye7.ShootyWooty.helper.ActionResolver;
         import com.eye7.ShootyWooty.model.GameConstants;
-        import com.eye7.ShootyWooty.world.GameMap;
+import com.eye7.ShootyWooty.world.GameMap;
 
 /**
  * Created by JunXiang on 1/3/2015.
@@ -39,16 +39,16 @@ public class DisplayMap implements InputProcessor {
     private int screenYStart = (int) (20 * scaleHFactor);
     private int screenWidth = (int) (640 * scaleWFactor);
     private int screenHeight = (int) (360 * scaleHFactor);
-
+    private ActionResolver actionResolver;
     //Padding
     private float xPad = 100;
     private float yPad = 100;
 
     private MapProperties mp;
 
-    public DisplayMap () {
+    public DisplayMap (ActionResolver actionResolver) {
         mapBatch = new SpriteBatch();
-
+        this.actionResolver = actionResolver;
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 960 / zoom, 540 / zoom);
         camera.update();
@@ -60,7 +60,7 @@ public class DisplayMap implements InputProcessor {
         GameConstants.MAP_WIDTH = mp.get("tilewidth", Integer.class) * mp.get("width", Integer.class);
         GameConstants.MAP_HEIGHT = mp.get("tileheight", Integer.class) * mp.get("height", Integer.class);
 
-        gameMap = new GameMap(tiledMap);
+        gameMap = new GameMap(tiledMap, actionResolver);
         gameMap.setUpPlayers(GameConstants.NUM_PLAYERS);
 
         if(GameConstants.DEBUG) {

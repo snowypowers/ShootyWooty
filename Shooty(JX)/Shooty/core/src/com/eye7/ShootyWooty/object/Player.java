@@ -1,6 +1,6 @@
 package com.eye7.ShootyWooty.object;
-
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.objects.CircleMapObject;
-import com.badlogic.gdx.audio.Sound;
+import com.eye7.ShootyWooty.helper.ActionResolver;
 import com.eye7.ShootyWooty.helper.CactusLoader;
 import com.eye7.ShootyWooty.model.GameConstants;
 import com.eye7.ShootyWooty.world.GameMap;
@@ -23,8 +23,8 @@ public class Player implements Observer{
 
     //Collider and Player Stats
     private CircleMapObject collider;
-	private float x;
-	private float y;
+    private float x;
+    private float y;
     private int dir;
     private int playerID;
     public int health;
@@ -32,7 +32,7 @@ public class Player implements Observer{
     private int water;
     private int bulletCount;
     public boolean dead = false; // This boolean turns true when player just died. This prevents furthur movement in current Turn before finalising his death.
-
+    private ActionResolver actionResolver;
     //PlayerStatus and Animations
     private HashMap<String, Animation> animations;
     private PlayerState playerState;
@@ -77,10 +77,10 @@ public class Player implements Observer{
     private long walkingSound;
 
     //CONSTRUCTOR
-	public Player(GameMap map, CircleMapObject collider, int d, int id) {
+    public Player(GameMap map, CircleMapObject collider, int d, int id, ActionResolver actionResolver) {
         TAG = "Player" + String.valueOf(id+1);
         playerID = id+1;
-
+        this.actionResolver = actionResolver;
         //Listen in to TurnEnd
         GameConstants.subscribeTurnEnd(this);
 
@@ -113,8 +113,8 @@ public class Player implements Observer{
         //Set up player position & stats
         //Coordinates are the middle of the circle
         this.collider = collider;
-		this.x = collider.getCircle().x;
-		this.y = collider.getCircle().y;
+        this.x = collider.getCircle().x;
+        this.y = collider.getCircle().y;
         this.dir = d;
         health = 100;
         score = 0;
@@ -145,7 +145,7 @@ public class Player implements Observer{
         displayMoves2 = new Sprite(new Texture("players/2Moves.png"));
         displayMoves3 = new Sprite(new Texture("players/3Moves.png"));
         displayMoves4 = new Sprite(new Texture("players/4Moves.png"));
-        
+
         //ShapeRenderer for debug
         if (GameConstants.DEBUG) {
             sr = new ShapeRenderer();
@@ -157,7 +157,7 @@ public class Player implements Observer{
         lifeTimeWater = 0;
         lifeTimeShotsFired = 0;
 
-	}
+    }
 
     public void draw(SpriteBatch sb, float delta) {
         if (shootLeft) {
@@ -288,7 +288,7 @@ public class Player implements Observer{
 
             //no of move bars
 
-            int moves = 4;// I will get this anvita, should range from 0 to 4
+            int moves = actionResolver.getImMoves()[playerID-1];
 
             if (moves != 0) {
                 Sprite nOfMoves = getNoOfMoves(moves);
@@ -384,7 +384,6 @@ public class Player implements Observer{
         }
     }
 
-
 	//Move in x - direction
 	public synchronized void incrementX(float x) {
         if (!isDead()) {
@@ -392,7 +391,7 @@ public class Player implements Observer{
             collider.getCircle().setPosition(this.x, this.y);
             changeAnimation(PlayerState.MOVING);
         }
-	}
+    }
 
     //Move in y - direction
 	public synchronized void incrementY(float y) {
@@ -401,7 +400,7 @@ public class Player implements Observer{
             collider.getCircle().setPosition(this.x, this.y);
             changeAnimation(PlayerState.MOVING);
         }
-	}
+    }
 
     //Rotation
     public void rotate (int r) {
@@ -448,13 +447,13 @@ public class Player implements Observer{
             bulletr.getReturn();
         }
     }
-	
-	// getters
+
+    // getters
     public int getPlayerID() { return playerID; }
 
-	public float getX() {
-		return x;
-	}
+    public float getX() {
+        return x;
+    }
 
     public float getY() {
         return y;
@@ -627,3 +626,4 @@ enum PlayerState {
 
 
 }
+
