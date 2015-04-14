@@ -51,7 +51,7 @@ public class GameOverMenu extends Table {
         if (GameConstants.DEBUG) {
             this.debug();
         }
-        this.setBackground(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("buttons/test.png")))));
+        this.setBackground(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("buttons/menuBG.png")))));
         this.add(header).center();
         this.add(label).center().height(300);
         this.row();

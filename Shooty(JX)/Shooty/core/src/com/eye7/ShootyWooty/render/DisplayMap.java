@@ -77,9 +77,6 @@ public class DisplayMap implements InputProcessor {
         tiledMapRenderer.setView(camera);
         tiledMapRenderer.render();
         gameMap.render(mapBatch, delta);
-
-
-
     }
 
     public void resize(int width, int height) {

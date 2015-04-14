@@ -9,13 +9,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.eye7.ShootyWooty.helper.MainLoader;
 import com.eye7.ShootyWooty.model.GameConstants;
 
-public class InputButtons extends Table {
+public class InputButtons extends Table implements Observer{
     private final String TAG = "InputButtons";
 
     private ButtonRow row1;
@@ -23,12 +22,15 @@ public class InputButtons extends Table {
     private ButtonRow row3;
     private ButtonRow row4;
 
-    private static ButtonGroup shooters;
+    private ButtonGroup shooters;
 
     private Table buttons_compact;
 
 
     public InputButtons() {
+        //Listen in to TurnEnd & TurnStart
+        GameConstants.subscribeTurnStart(this);
+        GameConstants.subscribeTurnEnd(this);
 
         //Load in all sprites
         ButtonRow.load();
@@ -36,19 +38,19 @@ public class InputButtons extends Table {
         //Create ButtonGroup
         shooters = new ButtonGroup();
         shooters.setMinCheckCount(0);
-        shooters.setMaxCheckCount(8);
+        shooters.setMaxCheckCount(4);
 
         //Create buttons
-        row1 = new ButtonRow();
-        row2 = new ButtonRow();
-        row3 = new ButtonRow();
-        row4 = new ButtonRow();
+        row1 = new ButtonRow(this);
+        row2 = new ButtonRow(this);
+        row3 = new ButtonRow(this);
+        row4 = new ButtonRow(this);
 
         //Table properties
 //        this.defaults().height(100);
         this.defaults().height(536);
         this.defaults().width(300);
-        this.setBackground(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("buttons/test.png")))));
+        this.setBackground(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("buttons/menuBG.png")))));
         //Add to table
         buttons_compact.defaults().height(100);
         buttons_compact.add(row1);
@@ -63,32 +65,51 @@ public class InputButtons extends Table {
         this.add(buttons_compact).center();
     }
 
-    public void setLock (boolean lock) {
+    private void setLock (boolean lock) {
         row1.setLock(lock);
         row2.setLock(lock);
         row3.setLock(lock);
         row4.setLock(lock);
     }
 
-    public void reset() {
+    private void resetButtons() {
         row1.reset();
         row2.reset();
         row3.reset();
         row4.reset();
     }
 
+    //Observer Methods
+    public void observerUpdate(int i) {
+        //Turn Start
+        if (i == 0) {
+            setLock(true);
+        }
+        //Turn End
+        if (i == 1) {
+            shooters.setMaxCheckCount(GameConstants.PLAYERS.get(GameConstants.myID + 1).getBulletCount());
+            setLock(false);
+            resetButtons();
+        }
+    }
+
+    public int observerType() {
+        return 0;
+    }
+
+
     public String[] getMoves() { // Gets moves from all 4
         return new String[]{row1.getMoves(), row2.getMoves(), row3.getMoves(), row4.getMoves()};
     }
 
-    public static void addShooter(Button b) {
+    public void addShooter(Button b) {
         shooters.add(b);
     }
 
 }
 
 class ButtonRow extends Table {
-    private static Array<com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle> mBStyles;
+    private static Array<Button.ButtonStyle> mBStyles;
     private static Button.ButtonStyle lBStyle;
     private static Button.ButtonStyle rBStyle;
 
@@ -99,7 +120,7 @@ class ButtonRow extends Table {
     private int mBPointer;
     private boolean lock;
 
-    ButtonRow() {
+    ButtonRow(InputButtons i) {
         if (GameConstants.DEBUG) {
             this.debug();
         }
@@ -109,8 +130,8 @@ class ButtonRow extends Table {
         lB = new Button(lBStyle);
         rB = new Button(rBStyle);
 
-        InputButtons.addShooter(lB);
-        InputButtons.addShooter(rB);
+        i.addShooter(lB);
+        i.addShooter(rB);
 
         mB = new Button(mBStyles.get(0));
 
@@ -167,6 +188,7 @@ class ButtonRow extends Table {
         lBStyle.pressedOffsetY = 20;
 
     }
+
 
     public String getMoves() {
         return ((lB.isChecked())?"1":"0") + movements[mBPointer] + ((rB.isChecked())?"1":"0");
