@@ -285,13 +285,13 @@ public class Player implements Observer{
 
             waterBarBG.draw(sb);
             waterBarFG.draw(sb);
-
-            //no of move bars
             int moves;
+            //no of move bars
             if(actionResolver.getMultiplayer())
                 moves = actionResolver.getImMoves()[playerID-1];
             else
-            moves = 4;
+                    moves = 4;
+
 
             if (moves != 0) {
                 Sprite nOfMoves = getNoOfMoves(moves);

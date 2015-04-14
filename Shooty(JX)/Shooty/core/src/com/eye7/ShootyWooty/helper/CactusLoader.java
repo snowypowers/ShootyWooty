@@ -59,6 +59,7 @@ public class CactusLoader {
         cactus2_animations = new HashMap<String, Animation>();
 
 
+
         if(NUM_PLAYERS==2){
             loadC1();
             loadC2();
@@ -138,38 +139,38 @@ public class CactusLoader {
         loader("Cactus2.emote",10,0.4f,cactus2_animations);
     }
     public static void loadC3(){
-        loader("Cactus3.north.moving",4,0.4f,cactus3_animations);
-        loader("Cactus3.north.idle",4,0.4f,cactus3_animations);
+        loader("Cactus3.north.moving",4,0.15f,cactus3_animations);
+        loader("Cactus3.north.idle",4,0.3f,cactus3_animations);
 
-        loader("Cactus3.south.moving",4,0.4f,cactus3_animations);
-        loader("Cactus3.south.idle",4,0.4f,cactus3_animations);
+        loader("Cactus3.south.moving",4,0.15f,cactus3_animations);
+        loader("Cactus3.south.idle",4,0.3f,cactus3_animations);
 
-        loader("Cactus3.east.moving",4,0.4f,cactus3_animations);
-        loader("Cactus3.east.idle",4,0.4f,cactus3_animations);
+        loader("Cactus3.east.moving",4,0.15f,cactus3_animations);
+        loader("Cactus3.east.idle",4,0.3f,cactus3_animations);
 
-        loader("Cactus3.west.moving",4,0.4f,cactus3_animations);
-        loader("Cactus3.west.idle",4,0.4f,cactus3_animations);
+        loader("Cactus3.west.moving",4,0.15f,cactus3_animations);
+        loader("Cactus3.west.idle",4,0.3f,cactus3_animations);
 
-        loader("Cactus3.score",9,0.4f,cactus3_animations);
+        loader("Cactus3.score",9,0.3f,cactus3_animations);
         loader("Cactus3.shot",2,0.2f,cactus3_animations);
         loader("Cactus3.lose",4,0.2f,cactus3_animations);
         loader("Cactus3.emote",7,0.4f,cactus3_animations);
 
     }
     public static void loadC4(){
-        loader("Cactus4.north.moving",4,0.4f,cactus4_animations);
-        loader("Cactus4.north.idle",4,0.4f,cactus4_animations);
+        loader("Cactus4.north.moving",4,0.15f,cactus4_animations);
+        loader("Cactus4.north.idle",4,0.3f,cactus4_animations);
 
-        loader("Cactus4.south.moving",4,0.4f,cactus4_animations);
-        loader("Cactus4.south.idle",4,0.4f,cactus4_animations);
+        loader("Cactus4.south.moving",4,0.15f,cactus4_animations);
+        loader("Cactus4.south.idle",4,0.3f,cactus4_animations);
 
-        loader("Cactus4.east.moving",4,0.4f,cactus4_animations);
-        loader("Cactus4.east.idle",4,0.4f,cactus4_animations);
+        loader("Cactus4.east.moving",4,0.15f,cactus4_animations);
+        loader("Cactus4.east.idle",4,0.3f,cactus4_animations);
 
-        loader("Cactus4.west.moving",4,0.4f,cactus4_animations);
-        loader("Cactus4.west.idle",4,0.4f,cactus4_animations);
+        loader("Cactus4.west.moving",4,0.15f,cactus4_animations);
+        loader("Cactus4.west.idle",4,0.3f,cactus4_animations);
 
-        loader("Cactus4.score",7,0.4f,cactus4_animations);
+        loader("Cactus4.score",7,0.3f,cactus4_animations);
         loader("Cactus4.shot",2,0.2f,cactus4_animations);
         loader("Cactus4.lose",3,0.2f,cactus4_animations);
         loader("Cactus4.emote",5,0.4f,cactus4_animations);
