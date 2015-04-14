@@ -287,8 +287,11 @@ public class Player implements Observer{
             waterBarFG.draw(sb);
 
             //no of move bars
-
-            int moves = actionResolver.getImMoves()[playerID-1];
+            int moves;
+            if(actionResolver.getMultiplayer())
+                moves = actionResolver.getImMoves()[playerID-1];
+            else
+            moves = 4;
 
             if (moves != 0) {
                 Sprite nOfMoves = getNoOfMoves(moves);
