@@ -89,7 +89,7 @@ public class ActionMenu extends Table {
         //Add buttons to table
         this.add(handle).center();
         this.add(inputButtons);
-        this.setPosition(1050, 270); //Right edge of screen
+        this.setPosition(leftEdge, 270); //Right edge of screen
 
 
     }

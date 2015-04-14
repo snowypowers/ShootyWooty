@@ -1,11 +1,14 @@
 package com.eye7.ShootyWooty.object;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
@@ -16,6 +19,10 @@ import com.eye7.ShootyWooty.model.GameConstants;
 
 public class InputButtons extends Table implements Observer{
     private final String TAG = "InputButtons";
+
+    private Table display;
+    private Image img;
+    private Label number;
 
     private ButtonRow row1;
     private ButtonRow row2;
@@ -40,6 +47,11 @@ public class InputButtons extends Table implements Observer{
         shooters.setMinCheckCount(0);
         shooters.setMaxCheckCount(4);
 
+        //ButtonGroup Display
+        display = new Table();
+        img = new Image(MainLoader.skin.getDrawable("bulletChosen"));
+        number = new Label("4", new Label.LabelStyle(MainLoader.green, Color.GREEN));
+
         //Create buttons
         row1 = new ButtonRow(this);
         row2 = new ButtonRow(this);
@@ -48,8 +60,8 @@ public class InputButtons extends Table implements Observer{
 
         //Table properties
 //        this.defaults().height(100);
-        this.defaults().height(536);
-        this.defaults().width(300);
+        //this.defaults().height(536);
+        //this.defaults().width(300);
         this.setBackground(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("buttons/menuBG.png")))));
         //Add to table
         buttons_compact.defaults().height(100);
@@ -62,6 +74,10 @@ public class InputButtons extends Table implements Observer{
         buttons_compact.add(row4);
         buttons_compact.row();
 
+        display.add(img).padRight(20);
+        display.add(number);
+        this.add(display).center();
+        this.row();
         this.add(buttons_compact).center();
     }
 
@@ -87,7 +103,9 @@ public class InputButtons extends Table implements Observer{
         }
         //Turn End
         if (i == 1) {
-            shooters.setMaxCheckCount(GameConstants.PLAYERS.get(GameConstants.myID + 1).getBulletCount());
+            int newMax = GameConstants.PLAYERS.get(GameConstants.myID + 1).getBulletCount();
+            shooters.setMaxCheckCount(newMax);
+            number.setText(String.valueOf(newMax));
             setLock(false);
             resetButtons();
         }
