@@ -507,6 +507,13 @@ Cactus3.score8
   orig: 64, 64
   offset: 0, 0
   index: -1
+Cactus3.score9
+    rotate: false
+    xy: 512, 512
+    size: 64, 64
+    orig: 64, 64
+    offset: 0, 0
+    index: -1
 Cactus3.shot1
   rotate: false
   xy: 0, 576
@@ -535,6 +542,20 @@ Cactus3.lose2
   orig: 64, 64
   offset: 0, 0
   index: -1
+Cactus3.lose3
+    rotate: false
+    xy: 128, 640
+    size: 64, 64
+    orig: 64, 64
+    offset: 0, 0
+    index: -1
+Cactus3.lose4
+    rotate: false
+    xy: 160, 640
+    size: 64, 64
+    orig: 64, 64
+    offset: 0, 0
+    index: -1
 Cactus3.emote1
   rotate: false
   xy: 0, 704

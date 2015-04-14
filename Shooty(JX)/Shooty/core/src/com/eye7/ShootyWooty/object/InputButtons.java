@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
@@ -50,19 +51,22 @@ public class InputButtons extends Table implements Observer{
 //        this.defaults().height(100);
         this.defaults().height(536);
         this.defaults().width(300);
-        this.setBackground(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("buttons/menuBG.png")))));
-        //Add to table
         buttons_compact.defaults().height(100);
-        buttons_compact.add(row1);
-        buttons_compact.row();
-        buttons_compact.add(row2);
-        buttons_compact.row();
-        buttons_compact.add(row3);
-        buttons_compact.row();
-        buttons_compact.add(row4);
-        buttons_compact.row();
 
-        this.add(buttons_compact).center();
+        this.setBackground(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("buttons/menuBG.png")))));
+            //Add to table
+
+            buttons_compact.add(row1);
+            buttons_compact.row();
+            buttons_compact.add(row2);
+            buttons_compact.row();
+            buttons_compact.add(row3);
+            buttons_compact.row();
+            buttons_compact.add(row4);
+            buttons_compact.row();
+
+            this.add(buttons_compact).center();
+
     }
 
     private void setLock (boolean lock) {

@@ -535,6 +535,13 @@ Cactus4.lose2
   orig: 64, 64
   offset: 0, 0
   index: -1
+Cactus4.lose3
+   rotate: false
+   xy: 128, 640
+   size: 64, 64
+   orig: 64, 64
+   offset: 0, 0
+   index: -1
 Cactus4.emote1
   rotate: false
   xy: 0, 704
