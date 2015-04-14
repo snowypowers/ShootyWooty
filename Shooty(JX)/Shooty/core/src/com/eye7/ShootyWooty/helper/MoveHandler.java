@@ -400,7 +400,7 @@ public class MoveHandler extends Thread{
                 continue; // pass if checking if hit himself
             }
             if (Intersector.overlaps(b.getCollider().getCircle(), p.getCollider().getCircle())) {
-                p.decreaseHealth(20);
+                p.decreaseHealth(b);
                 player.hitAwarded();
                 return true;
             }

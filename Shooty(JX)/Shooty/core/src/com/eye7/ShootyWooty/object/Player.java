@@ -1,5 +1,4 @@
 package com.eye7.ShootyWooty.object;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
@@ -24,15 +23,15 @@ public class Player implements Observer{
 
     //Collider and Player Stats
     private CircleMapObject collider;
-	private float x;
-	private float y;
+    private float x;
+    private float y;
     private int dir;
     private int playerID;
     public int health;
     private int score;
     private int water;
     private int bulletCount;
-    public boolean dead = false;
+    public boolean dead = false; // This boolean turns true when player just died. This prevents furthur movement in current Turn before finalising his death.
     private ActionResolver actionResolver;
     //PlayerStatus and Animations
     private HashMap<String, Animation> animations;
@@ -78,7 +77,7 @@ public class Player implements Observer{
     private long walkingSound;
 
     //CONSTRUCTOR
-	public Player(GameMap map, CircleMapObject collider, int d, int id, ActionResolver actionResolver) {
+    public Player(GameMap map, CircleMapObject collider, int d, int id, ActionResolver actionResolver) {
         TAG = "Player" + String.valueOf(id+1);
         playerID = id+1;
         this.actionResolver = actionResolver;
@@ -109,8 +108,8 @@ public class Player implements Observer{
         //Set up player position & stats
         //Coordinates of the middle of the circle
         this.collider = collider;
-		this.x = collider.getCircle().x;
-		this.y = collider.getCircle().y;
+        this.x = collider.getCircle().x;
+        this.y = collider.getCircle().y;
         this.dir = d;
         health = 100;
         score = 0;
@@ -141,7 +140,7 @@ public class Player implements Observer{
         displayMoves2 = new Sprite(new Texture("players/2Moves.png"));
         displayMoves3 = new Sprite(new Texture("players/3Moves.png"));
         displayMoves4 = new Sprite(new Texture("players/4Moves.png"));
-        
+
         //ShapeRenderer for debug
         if (GameConstants.DEBUG) {
             sr = new ShapeRenderer();
@@ -153,7 +152,7 @@ public class Player implements Observer{
         lifeTimeWater = 0;
         lifeTimeShotsFired = 0;
 
-	}
+    }
 
     public void draw(SpriteBatch sb, float delta) {
         if (shootLeft) {
@@ -321,6 +320,7 @@ public class Player implements Observer{
             water = 0;
             if (health < 0) {
                 health = 0;
+                dead = true; // Just died
             }
             changeAnimation(PlayerState.DAMAGED);
         }
@@ -363,22 +363,22 @@ public class Player implements Observer{
     }
 
 
-	// setters
-	public synchronized void incrementX(float x) {
+    // setters
+    public synchronized void incrementX(float x) {
         if (!isDead()) {
             this.x += x;
             collider.getCircle().setPosition(this.x, this.y);
             changeAnimation(PlayerState.MOVING);
         }
-	}
+    }
 
-	public synchronized void incrementY(float y) {
+    public synchronized void incrementY(float y) {
         if (!isDead()) {
             this.y += y;
             collider.getCircle().setPosition(this.x, this.y);
             changeAnimation(PlayerState.MOVING);
         }
-	}
+    }
 
     public void rotate (int r) {
         this.dir += r;
@@ -419,13 +419,13 @@ public class Player implements Observer{
             bulletr.getReturn();
         }
     }
-	
-	// getters
+
+    // getters
     public int getPlayerID() { return playerID; }
 
-	public float getX() {
-		return x;
-	}
+    public float getX() {
+        return x;
+    }
 
     public float getY() {
         return y;
@@ -593,3 +593,4 @@ enum PlayerState {
 
 
 }
+

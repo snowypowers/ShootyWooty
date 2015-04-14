@@ -56,7 +56,7 @@ public class GameWorld implements Observer {
                             }
                         }
                         actionResolver.sendContMessage(Integer.toString(numMoves));
-                        Integer[] allPlayerMoves = actionResolver.getImMoves();//Continuously gets the player moves to render
+
                     }
 //                    Gdx.app.log("GameWorld Cont Moves", allPlayerMoves);
 
