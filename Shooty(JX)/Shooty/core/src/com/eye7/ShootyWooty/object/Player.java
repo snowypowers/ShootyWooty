@@ -32,7 +32,7 @@ public class Player implements Observer{
     private int score;
     private int water;
     private int bulletCount;
-    public boolean dead = false;
+    public boolean dead = false; // This boolean turns true when player just died. This prevents furthur movement in current Turn before finalising his death.
 
     //PlayerStatus and Animations
     private HashMap<String, Animation> animations;
@@ -321,6 +321,7 @@ public class Player implements Observer{
             water = 0;
             if (health < 0) {
                 health = 0;
+                dead = true; // Just died
             }
             changeAnimation(PlayerState.DAMAGED);
         }
