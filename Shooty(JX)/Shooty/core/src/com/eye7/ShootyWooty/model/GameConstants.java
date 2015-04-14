@@ -14,7 +14,7 @@ import java.util.HashMap;
 public class GameConstants {
     private static final String TAG = "GameConstants";
     public static boolean DEBUG = true;
-
+    public static String gameStateFlag = "U";
     //Screen Size
     public static float SCALE_X;
     public static float SCALE_Y;

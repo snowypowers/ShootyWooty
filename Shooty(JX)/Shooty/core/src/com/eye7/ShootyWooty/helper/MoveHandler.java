@@ -457,10 +457,11 @@ public class MoveHandler extends Thread{
         int numScoreFull = 0;
         boolean meFull = false;
         for(int i=0; i<GameConstants.NUM_PLAYERS; i++){
-            if(GameConstants.PLAYERS.get(i+1).getHealth()<=0 && !GameConstants.PLAYERS.get(i+1).isDead()){
-                GameConstants.PLAYERS.get(i+1).dead = true;
+            if((GameConstants.PLAYERS.get(i+1).dead == true) && !actionResolver.getDeadPlayers().contains(i)){
                 recentDead.add(i);
                 actionResolver.sendMessageAll("@",Integer.toString(i) );
+                if(i==GameConstants.myID)
+                    GameConstants.gameStateFlag = "dead";
             }
             if(GameConstants.PLAYERS.get(i+1).getScore()>=3){
                 if(i==GameConstants.myID){
@@ -471,30 +472,35 @@ public class MoveHandler extends Thread{
         }
         if(meFull){
             if(numScoreFull==1){
-                actionResolver.gameDecided("win",GameConstants.PLAYERS.get(GameConstants.myID+1).getAchievments());
+                //actionResolver.gameDecided("win",GameConstants.PLAYERS.get(GameConstants.myID+1).getAchievments());
+                GameConstants.gameStateFlag = "W";
             }
             else{
-                actionResolver.gameDecided("draw",GameConstants.PLAYERS.get(GameConstants.myID+1).getAchievments());
+                //actionResolver.gameDecided("draw",GameConstants.PLAYERS.get(GameConstants.myID+1).getAchievments());
+                GameConstants.gameStateFlag = "D";
             }
         }
         else if(numScoreFull>0){
-            actionResolver.gameDecided("lose",GameConstants.PLAYERS.get(GameConstants.myID+1).getAchievments());
+            //actionResolver.gameDecided("lose",GameConstants.PLAYERS.get(GameConstants.myID+1).getAchievments());
+            GameConstants.gameStateFlag = "L";
         }
 
         if(actionResolver.getDeadPlayers().size()==GameConstants.NUM_PLAYERS-1){
             if(!GameConstants.PLAYERS.get(GameConstants.myID+1).dead){
-                actionResolver.gameDecided("win",GameConstants.PLAYERS.get(GameConstants.myID+1).getAchievments());
+                GameConstants.gameStateFlag = "W";
+                //actionResolver.gameDecided("win",GameConstants.PLAYERS.get(GameConstants.myID+1).getAchievments());
             }
             else{
-                actionResolver.gameDecided("lose",GameConstants.PLAYERS.get(GameConstants.myID+1).getAchievments());
+                GameConstants.gameStateFlag = "L";
+                //actionResolver.gameDecided("lose",GameConstants.PLAYERS.get(GameConstants.myID+1).getAchievments());
             }
         }
         if(actionResolver.getDeadPlayers().size()==GameConstants.NUM_PLAYERS){
-            String state = checkDraw(recentDead);
-            actionResolver.gameDecided(state, GameConstants.PLAYERS.get(GameConstants.myID + 1).getAchievments());
+            checkDraw(recentDead);
+            //actionResolver.gameDecided(state, GameConstants.PLAYERS.get(GameConstants.myID + 1).getAchievments());
         }
     }
-    public String checkDraw(ArrayList<Integer> recentDead){
+    public void checkDraw(ArrayList<Integer> recentDead){
         ArrayList<Integer> checkIn = recentDead;
         int maxScore = 0;
         for(int player:checkIn){
@@ -510,11 +516,11 @@ public class MoveHandler extends Thread{
         }
         if(GameConstants.PLAYERS.get(GameConstants.myID+1).getScore()==maxScore){
             if(numPlay==1)
-                return "win";
+                GameConstants.gameStateFlag = "W";
             else
-                return "draw";
+                GameConstants.gameStateFlag = "D";
         }
-        return "lose";
+        GameConstants.gameStateFlag = "L";
 
     }
 }
