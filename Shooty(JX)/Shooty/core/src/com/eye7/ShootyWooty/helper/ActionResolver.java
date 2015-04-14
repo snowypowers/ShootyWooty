@@ -19,12 +19,15 @@ public interface ActionResolver {
     public int getMyID();
     public int getNumPlayers();
     public ArrayList<Integer> getDeadPlayers();
-    public int getWinner();
+
     public Integer[] getImMoves();
     public void sendContMessage(String s);
     public String getActive();
+    public void clearLeftPlayers();
+    public ArrayList<Integer> getLeftPlayers();
     public void gameDecided(String s, HashMap<String ,Integer> myAchievements) throws InterruptedException;
     public void leaveRoom();
+
     //public void lostGameDecide();
 
 

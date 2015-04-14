@@ -47,7 +47,7 @@ public class MainScreen implements Screen {
         world = new GameWorld(stage, actionResolver); // contains game objects
         renderer = new GameRenderer(world);    // animate game objects
 
-        map = new DisplayMap();
+        map = new DisplayMap(actionResolver);
     }
 
     @Override

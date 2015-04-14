@@ -148,32 +148,20 @@
             />
         </RelativeLayout>
     </LinearLayout>
-    <LinearLayout android:id="@+id/won" style="@style/LLScreen">
+    <LinearLayout android:id="@+id/GameDecided" style="@style/LLScreen">
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
         <!--<TextView style="@style/Blurb" android:text="@string/please_wait" />-->
 
-        <ImageView
+        <ImageView android:id="@+id/EndImage"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/homescreen"
             />
         </RelativeLayout>
     </LinearLayout>
 
-    <LinearLayout android:id="@+id/YouLost" style="@style/LLScreen">
-        <!--<TextView style="@style/Blurb" android:text="@string/please_wait" />-->
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:src="@drawable/homescreen"
-                />
-        </RelativeLayout>
-    </LinearLayout>
+
     <!-- GAMEPLAY SCREEN -->
     <LinearLayout android:id="@+id/screen_game" style="@style/LLScreen">
     </LinearLayout>

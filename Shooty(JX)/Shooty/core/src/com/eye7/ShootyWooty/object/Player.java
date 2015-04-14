@@ -1,6 +1,7 @@
 package com.eye7.ShootyWooty.object;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -8,8 +9,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.objects.CircleMapObject;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.audio.Sound;
+import com.eye7.ShootyWooty.helper.ActionResolver;
 import com.eye7.ShootyWooty.helper.CactusLoader;
 import com.eye7.ShootyWooty.model.GameConstants;
 import com.eye7.ShootyWooty.world.GameMap;
@@ -33,7 +33,7 @@ public class Player implements Observer{
     private int water;
     private int bulletCount;
     public boolean dead = false;
-
+    private ActionResolver actionResolver;
     //PlayerStatus and Animations
     private HashMap<String, Animation> animations;
     private PlayerState playerState;
@@ -78,10 +78,10 @@ public class Player implements Observer{
     private long walkingSound;
 
     //CONSTRUCTOR
-	public Player(GameMap map, CircleMapObject collider, int d, int id) {
+	public Player(GameMap map, CircleMapObject collider, int d, int id, ActionResolver actionResolver) {
         TAG = "Player" + String.valueOf(id+1);
         playerID = id+1;
-
+        this.actionResolver = actionResolver;
         //Listen in to TurnEnd
         GameConstants.subscribeTurnEnd(this);
 
@@ -283,7 +283,7 @@ public class Player implements Observer{
 
             //no of move bars
 
-            int moves = 4;// I will get this anvita, should range from 0 to 4
+            int moves = actionResolver.getImMoves()[playerID-1];
 
             if (moves != 0) {
                 Sprite nOfMoves = getNoOfMoves(moves);
