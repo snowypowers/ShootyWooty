@@ -2,16 +2,10 @@ package com.eye7.ShootyWooty.helper;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.utils.Array;
-import com.eye7.ShootyWooty.main;
 import com.eye7.ShootyWooty.model.GameConstants;
 
 /**
@@ -25,14 +19,10 @@ public class MainLoader {
     public static TextureAtlas atlas;
     public static Skin skin, skinCharacters;
 
-
-    public static Animation hourglass_timer;
-    public static Animation hourglass_turn;
-
     public static Animation animation_faucet;
 
     //add the sounds here
-    public static Music waterFountain;
+    public static Music bgMusic;
 
     public static void load() {
         white = new BitmapFont(Gdx.files.internal("fonts/white.fnt"),true); // white font
@@ -43,10 +33,10 @@ public class MainLoader {
         skin = new Skin(atlas); // skin containing drawables
 
         //add the background sound here
-        waterFountain = Gdx.audio.newMusic(Gdx.files.internal("sounds/waterFountain.mp3"));
-        waterFountain.setLooping(true);
-        waterFountain.setVolume(0.4f);
-        waterFountain.play();
+        bgMusic = Gdx.audio.newMusic(Gdx.files.internal("sounds/bgMusic.mp3"));
+        bgMusic.setLooping(true);
+        bgMusic.setVolume(0.4f);
+        bgMusic.play();
 
 
 //        TextureRegion[] faucets = new TextureRegion[11];
@@ -60,6 +50,10 @@ public class MainLoader {
 
     }
 
+    //Call when leaving game to unload all resources
+    public static void unload() {
+        bgMusic.stop();
+    }
 
 
 }

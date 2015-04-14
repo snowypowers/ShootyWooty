@@ -55,7 +55,7 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
     final static int REQUEST_ACHIEVEMENTS = 10003;
     // Request code used to invoke sign in user interactions.
     private static final int RC_SIGN_IN = 9001;
-
+    private boolean achieve = false;
     // Client used to interact with Google APIs.
     private GoogleApiClient mGoogleApiClient;
 
@@ -265,7 +265,8 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
                 }
                 break;
             case REQUEST_ACHIEVEMENTS:
-
+                achieve = true;
+                break;
 
                 //    if (responseCode = RESULT_RECONNECT_REQUIRED);
                 //Adding achievements here
@@ -363,7 +364,14 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
         }
         super.onStop();
     }
-
+    @Override
+    public void onResume(){
+        if(achieve) {
+            achieve = false;
+            switchToMainScreen();
+        }
+        super.onResume();
+    }
     // Activity just got to the foreground. We switch to the wait screen because we will now
     // go through the sign-in flow (remember that, yes, every time the Activity comes back to the
     // foreground we go through the sign-in flow -- but if the user is already authenticated,
@@ -640,10 +648,19 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
 
     @Override
     public void onP2PDisconnected(String participant) {
+        mParticipants.remove(participant);
+        sortParticipants();
+        if (mParticipants.size()<=1){
+            Log.d(TAG, "In check indicating everyone LEFT");
+            leaveRoom();
+
+        }
+
     }
 
     @Override
     public void onP2PConnected(String participant) {
+
     }
 
     @Override
@@ -689,8 +706,9 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
                 leftPlayers.add(idToNum.get(peer));
                 deadPlayers.add(idToNum.get(peer));
             }
+            mParticipants = room.getParticipants();
         }
-        mParticipants = room.getParticipants();
+
         sortParticipants();
 //            if(mParticipants.size()==1){
 //                Games.RealTimeMultiplayer.leave(mGoogleApiClient, this, mRoomId);
@@ -714,21 +732,21 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
             mParticipants = room.getParticipants();
             sortParticipants();
         }
-        int check = 0;
-        if (mParticipants != null) {
-            if (mRoomId != null) {
-                for (Participant p : mParticipants) {
-                    String pid = p.getParticipantId();
-                    if (pid.equals(mMyId))
-                        continue;
-                    if (p.getStatus() == Participant.STATUS_JOINED) {
-                        check++;
-                    }
-                }
-            }
-
-        }
-        if (check==0){
+//        int check = 0;
+//        if (mParticipants != null) {
+//            if (mRoomId != null) {
+//                for (Participant p : mParticipants) {
+//                    String pid = p.getParticipantId();
+//                    if (pid.equals(mMyId))
+//                        continue;
+//                    if (p.getStatus() == Participant.STATUS_JOINED) {
+//                        check++;
+//                    }
+//                }
+//            }
+//
+//        }
+        if (mParticipants.size()<=1||room==null){
             Log.d(TAG, "In check indicating everyone LEFT");
             leaveRoom();
 
@@ -926,8 +944,10 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
                 continue;
             if (p.getStatus()==Participant.STATUS_LEFT)
                 continue;
-            Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, bytes,
-                    mRoomId, p.getParticipantId());
+            if(mRoomId!=null) {
+                Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, bytes,
+                        mRoomId, p.getParticipantId());
+            }
             Log.d(TAG, "Message sent "+ p.getParticipantId());
         }
 

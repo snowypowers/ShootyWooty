@@ -104,7 +104,7 @@ public class MainScreen implements Screen {
     @Override
     public void dispose() {
         stage.dispose();
-        MainLoader.waterFountain.dispose();//disposes the background music
+        MainLoader.bgMusic.dispose();//disposes the background music
     }
 
 }

@@ -48,6 +48,8 @@ public class MoveHandler extends Thread{
 
     public MoveHandler(Player player, String[] moves, CyclicBarrier cb, ActionResolver actionResolver){
         TAG = "MoveHandler of Player "+String.valueOf(player.getPlayerID());
+
+        //Setup moveslist
         this.moves = moves;
         this.cb = cb;
         this.pointer = -1;
@@ -61,6 +63,7 @@ public class MoveHandler extends Thread{
         bullet_distance_L = BULLET_DISTANCE;
     }
 
+    //Moves the pointer to the next move
     public void nextMove() {
         pointer += 1;
         movement = AmountToMove(moves[pointer]);
@@ -77,18 +80,19 @@ public class MoveHandler extends Thread{
         } catch (BrokenBarrierException e) {
             e.printStackTrace();
         }
-        //Gdx.app.log("MoveHandler", "Execution!");
 
         for (int i = 0; i < 4;i++) {
             nextMove();//Initializes the moves
             /////////////////////////////////////////EXECUTE MOVEMENT///////////////////////////////////////
-            Gdx.app.log("Move Info Player" + String.valueOf(player.getPlayerID()), String.valueOf(movement[0]) +" "+ String.valueOf(movement[1]) +" "+ String.valueOf(movement[2]) +" "+ String.valueOf(movement[3]));
+            if (GameConstants.DEBUG) {
+                Gdx.app.log("Move Info Player" + String.valueOf(player.getPlayerID()), String.valueOf(movement[0]) + " " + String.valueOf(movement[1]) + " " + String.valueOf(movement[2]) + " " + String.valueOf(movement[3]));
+            }
             if (!player.isDead()) {
 
                 CircleMapObject collider = player.getCollider(); //Get collider
                 float[] oldMove = AmountToMove(moves[pointer]); //Record of original move
 
-                while (movement[0] > 0f || movement[1] > 0f || movement[3] != 0f) {
+                while (movement[0] > 0f || movement[1] > 0f || movement[3] != 0f) { //While there is movement to be done
                     //Gdx.app.log("Move Info Player" + String.valueOf(player.getPlayerID()), String.valueOf(movement[0]) +" "+ String.valueOf(movement[1]) +" "+ String.valueOf(movement[2]) +" "+ String.valueOf(movement[3]));
 
                     // move along x axis
@@ -138,7 +142,7 @@ public class MoveHandler extends Thread{
                     }
 
                     try {
-                        Thread.sleep(20);
+                        Thread.sleep(20); //Sleep so that the numan eye can see the animation
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -146,7 +150,7 @@ public class MoveHandler extends Thread{
 
                 player.snapInGrid(); // make sure the player is aligned to a grid
                 try {
-                    decideWin();
+                    decideWin(); //
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -238,7 +242,9 @@ public class MoveHandler extends Thread{
         } // End of For Loop
 
         /////////////////////////////////////////END OF TURN///////////////////////////////////////
-        Gdx.app.log("MoveHandler", "End!");
+        if (GameConstants.DEBUG) {
+            Gdx.app.log("MoveHandler", "End!");
+        }
     } // End of run()
 
 
@@ -389,7 +395,9 @@ public class MoveHandler extends Thread{
         //collision with rocks
         for (int i = 0; i < GameConstants.ROCKS.size;i++) {
             if (Intersector.overlaps(b.getCollider().getCircle(), GameConstants.ROCKS.get(i))) {
-                Gdx.app.log(TAG, "Collision with rock at " + GameConstants.ROCKS.get(i).getX() + " " + GameConstants.ROCKS.get(i).getY());
+                if (GameConstants.DEBUG) {
+                    Gdx.app.log(TAG, "Collision with rock at " + GameConstants.ROCKS.get(i).getX() + " " + GameConstants.ROCKS.get(i).getY());
+                }
                 return true;
             }
         }
@@ -410,12 +418,14 @@ public class MoveHandler extends Thread{
         return false;
     }
 
-    // Method to check for player hitting rock
+    // Method to check for player hitting stuff
     public boolean checkPlayerHit(){
         //Collision with rocks
         for (int i = 0; i < GameConstants.ROCKS.size;i++) {
             if (Intersector.overlaps(player.getCollider().getCircle(), GameConstants.ROCKS.get(i))) {
-                Gdx.app.log(TAG, "Collision with rock at " + GameConstants.ROCKS.get(i).getX() + " " + GameConstants.ROCKS.get(i).getY());
+                if (GameConstants.DEBUG) {
+                    Gdx.app.log(TAG, "Collision with rock at " + GameConstants.ROCKS.get(i).getX() + " " + GameConstants.ROCKS.get(i).getY());
+                }
                 player.decreaseHealth(10);
                 return true;
             }
@@ -426,16 +436,19 @@ public class MoveHandler extends Thread{
                 continue; // pass if checking if hit himself
             }
             if (Intersector.overlaps(player.getCollider().getCircle(), p.getCollider().getCircle())) {
-                Gdx.app.log(TAG, "Collision with player at " + String.valueOf(p.getCollider().getCircle().x) + " " + String.valueOf(p.getCollider().getCircle().y));
-                player.decreaseHealth(10);
-                p.decreaseHealth(10);
+                if (GameConstants.DEBUG) {
+                    Gdx.app.log(TAG, "Collision with player at " + String.valueOf(p.getCollider().getCircle().x) + " " + String.valueOf(p.getCollider().getCircle().y));
+                }
+                player.decreaseHealth(p);
+                p.decreaseHealth(player);
                 return true;
             }
         }
-
+        // No Collisions
         return false;
     }
 
+    //Check if player is standing in water
     public boolean checkInWater() {
         for (int i = 0; i < GameConstants.WATER.size;i++) {
             if (Intersector.overlaps(player.getCollider().getCircle(), GameConstants.WATER.get(i))) {
@@ -457,10 +470,11 @@ public class MoveHandler extends Thread{
         int numScoreFull = 0;
         boolean meFull = false;
         for(int i=0; i<GameConstants.NUM_PLAYERS; i++){
-            if(GameConstants.PLAYERS.get(i+1).getHealth()<=0 && !GameConstants.PLAYERS.get(i+1).isDead()){
-                GameConstants.PLAYERS.get(i+1).dead = true;
+            if((GameConstants.PLAYERS.get(i+1).dead == true) && !actionResolver.getDeadPlayers().contains(i)){
                 recentDead.add(i);
                 actionResolver.sendMessageAll("@",Integer.toString(i) );
+                if(i==GameConstants.myID)
+                    GameConstants.gameStateFlag = "dead";
             }
             if(GameConstants.PLAYERS.get(i+1).getScore()>=3){
                 if(i==GameConstants.myID){
@@ -471,30 +485,35 @@ public class MoveHandler extends Thread{
         }
         if(meFull){
             if(numScoreFull==1){
-                actionResolver.gameDecided("win",GameConstants.PLAYERS.get(GameConstants.myID+1).getAchievments());
+                //actionResolver.gameDecided("win",GameConstants.PLAYERS.get(GameConstants.myID+1).getAchievments());
+                GameConstants.gameStateFlag = "W";
             }
             else{
-                actionResolver.gameDecided("draw",GameConstants.PLAYERS.get(GameConstants.myID+1).getAchievments());
+                //actionResolver.gameDecided("draw",GameConstants.PLAYERS.get(GameConstants.myID+1).getAchievments());
+                GameConstants.gameStateFlag = "D";
             }
         }
         else if(numScoreFull>0){
-            actionResolver.gameDecided("lose",GameConstants.PLAYERS.get(GameConstants.myID+1).getAchievments());
+            //actionResolver.gameDecided("lose",GameConstants.PLAYERS.get(GameConstants.myID+1).getAchievments());
+            GameConstants.gameStateFlag = "L";
         }
 
         if(actionResolver.getDeadPlayers().size()==GameConstants.NUM_PLAYERS-1){
             if(!GameConstants.PLAYERS.get(GameConstants.myID+1).dead){
-                actionResolver.gameDecided("win",GameConstants.PLAYERS.get(GameConstants.myID+1).getAchievments());
+                GameConstants.gameStateFlag = "W";
+                //actionResolver.gameDecided("win",GameConstants.PLAYERS.get(GameConstants.myID+1).getAchievments());
             }
             else{
-                actionResolver.gameDecided("lose",GameConstants.PLAYERS.get(GameConstants.myID+1).getAchievments());
+                GameConstants.gameStateFlag = "L";
+                //actionResolver.gameDecided("lose",GameConstants.PLAYERS.get(GameConstants.myID+1).getAchievments());
             }
         }
         if(actionResolver.getDeadPlayers().size()==GameConstants.NUM_PLAYERS){
-            String state = checkDraw(recentDead);
-            actionResolver.gameDecided(state, GameConstants.PLAYERS.get(GameConstants.myID + 1).getAchievments());
+            checkDraw(recentDead);
+            //actionResolver.gameDecided(state, GameConstants.PLAYERS.get(GameConstants.myID + 1).getAchievments());
         }
     }
-    public String checkDraw(ArrayList<Integer> recentDead){
+    public void checkDraw(ArrayList<Integer> recentDead){
         ArrayList<Integer> checkIn = recentDead;
         int maxScore = 0;
         for(int player:checkIn){
@@ -510,11 +529,11 @@ public class MoveHandler extends Thread{
         }
         if(GameConstants.PLAYERS.get(GameConstants.myID+1).getScore()==maxScore){
             if(numPlay==1)
-                return "win";
+                GameConstants.gameStateFlag = "W";
             else
-                return "draw";
+                GameConstants.gameStateFlag = "D";
         }
-        return "lose";
+        GameConstants.gameStateFlag = "L";
 
     }
 }
