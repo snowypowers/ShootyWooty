@@ -1,6 +1,7 @@
 package com.eye7.ShootyWooty.helper;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -40,9 +41,16 @@ public class CactusLoader {
     public static HashMap<String, Animation> cactus3_animations;
     public static HashMap<String, Animation> cactus4_animations;
 
+    public static Sound sound_walking;
+    public static Sound sound_damaged;
+
 
 
     public static void load(int NUM_PLAYERS){
+
+        //Sound effects
+        sound_walking = Gdx.audio.newSound(Gdx.files.internal("sounds/cactiWalking.mp3"));
+        sound_damaged = Gdx.audio.newSound(Gdx.files.internal("sounds/damaged.mp3"));
 
         cactus1Skin = new Skin(new TextureAtlas(Gdx.files.internal("players/Cactus1.pack")));
         cactus2Skin = new Skin(new TextureAtlas(Gdx.files.internal("players/Cactus2.pack")));

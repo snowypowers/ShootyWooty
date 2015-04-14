@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.objects.CircleMapObject;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.audio.Sound;
 import com.eye7.ShootyWooty.helper.CactusLoader;
 import com.eye7.ShootyWooty.model.GameConstants;
@@ -73,8 +72,8 @@ public class Player implements Observer{
     private int lifeTimeShotsFired = 0;
 
     //add sounds for collision
-    private Sound cactiWalking = Gdx.audio.newSound(Gdx.files.internal("sounds/cactiWalking.mp3"));//add cacti footsteps
-    private Sound sound_damaged = Gdx.audio.newSound(Gdx.files.internal("sounds/damaged.mp3"));
+    private Sound cactiWalking;
+    private Sound soundDamaged;
     private long walkingSound;
 
     //CONSTRUCTOR
@@ -103,11 +102,16 @@ public class Player implements Observer{
         playerState = PlayerState.IDLE;
         previousState = PlayerState.IDLE;
 
+        //Setup Sounds
+        cactiWalking = CactusLoader.sound_walking;
+        soundDamaged = CactusLoader.sound_damaged;
+
+        //Starts walkingSound and pauses it. Resume when needed instead of calling a new instance each time.
         walkingSound = cactiWalking.loop(0.7f);
         cactiWalking.pause(walkingSound);
 
         //Set up player position & stats
-        //Coordinates of the middle of the circle
+        //Coordinates are the middle of the circle
         this.collider = collider;
 		this.x = collider.getCircle().x;
 		this.y = collider.getCircle().y;
@@ -191,10 +195,11 @@ public class Player implements Observer{
                         s = new Sprite(animations.get("shot").getKeyFrame(stateDelta));
                         stateDelta += delta;
                     } else {
-                        playerState = PlayerState.NONE; // Restore previous state
-                        sound_damaged.stop();
-                        changeAnimation(previousState);
-                        Gdx.app.log(TAG,playerState.toString());
+                        playerState = PlayerState.NONE;             // Clears damaged state so we can change animation
+                        soundDamaged.stop();                        // Stop damagedSound
+                        changeAnimation(previousState);             // Change to the previous state whatever that was.
+                        previousState = PlayerState.DAMAGED;        // Set the previousState to DAMAGED.
+                        Gdx.app.log(TAG,playerState.toString());    //
                         statusLock.notifyAll();
                     }
 
@@ -315,6 +320,7 @@ public class Player implements Observer{
         return nOfMoves;
     }
 
+    //Damaged by collision with rock or other neutral obstacles
     public synchronized void decreaseHealth(int dmg){
         if (!isDead()) {
             health -= dmg;
@@ -327,6 +333,21 @@ public class Player implements Observer{
         }
     }
 
+    //Damaged by collision with other player
+    public synchronized void decreaseHealth(Player p){
+        if (!isDead()) {
+            health -= 10;
+            water = 0;
+            if (health < 0) {
+                health = 0;
+                p.killAwarded();
+                dead = true; // Just died
+            }
+            changeAnimation(PlayerState.DAMAGED);
+        }
+    }
+
+    //Damaged by bullet
     public synchronized void decreaseHealth(Bullet b){
         if (!isDead()) {
             health -= 20;
@@ -352,7 +373,7 @@ public class Player implements Observer{
     }
 
     public synchronized void collectWater() {
-        if (!isDead()) {
+        if (!isDead() && previousState != PlayerState.DAMAGED) { //Must not be dead or damaged this turn
             water += 1;
             lifeTimeWater += 1;
             if (water == 3) {
@@ -364,7 +385,7 @@ public class Player implements Observer{
     }
 
 
-	// setters
+	//Move in x - direction
 	public synchronized void incrementX(float x) {
         if (!isDead()) {
             this.x += x;
@@ -373,6 +394,7 @@ public class Player implements Observer{
         }
 	}
 
+    //Move in y - direction
 	public synchronized void incrementY(float y) {
         if (!isDead()) {
             this.y += y;
@@ -381,6 +403,7 @@ public class Player implements Observer{
         }
 	}
 
+    //Rotation
     public void rotate (int r) {
         this.dir += r;
         if (dir >= 360) {
@@ -391,22 +414,26 @@ public class Player implements Observer{
         }
     }
 
+    //Whether if player is shooting
     public boolean isShooting() {
         return (shootLeft || shootRight);
     }
 
+    //Starts player shooting left
     public void startShootLeft() {
         shootLeft = true;
         bulletCount -= 1;
         lifeTimeShotsFired += 1;
     }
 
+    //Starts player shooting right
     public void startShootRight() {
         shootRight = true;
         bulletCount -= 1;
         lifeTimeShotsFired += 1;
     }
 
+    //Ends player shooting left
     public void endShootLeft() {
         if (shootLeft) {
             shootLeft = false;
@@ -414,6 +441,7 @@ public class Player implements Observer{
         }
     }
 
+    //Ends player shooting right
     public void endShootRight() {
         if (shootRight) {
             shootRight = false;
@@ -454,6 +482,22 @@ public class Player implements Observer{
         return collider;
     }
 
+    public int getScore(){
+        return score;
+    }
+
+    private String getdirection() {
+        if (dir == 0) {
+            return "north";
+        } else if (dir == 90) {
+            return "west";
+        } else if (dir == 180) {
+            return "south";
+        } else  {
+            return "east";
+        }
+    }
+
     //Aligns player into the closest gridbox
     //Calling this will also end player movement animation
     public synchronized void snapInGrid() {
@@ -482,21 +526,6 @@ public class Player implements Observer{
         }
     }
 
-    public int getScore(){
-        return score;
-    }
-
-    private String getdirection() {
-        if (dir == 0) {
-            return "north";
-        } else if (dir == 90) {
-            return "west";
-        } else if (dir == 180) {
-            return "south";
-        } else  {
-            return "east";
-        }
-    }
 
     //Call this to get achievments at the end of the game.
     public HashMap<String, Integer> getAchievments() {
@@ -510,6 +539,9 @@ public class Player implements Observer{
 
     }
 
+    //Changes Animation and PlayerState to the next State provided.
+    //If player is damaged, next state is placed under previousState as a hold to allow damaged animation to run.
+    //Damaged animation will handle the transition back to what it should be in when damaged animation runs to the end.
     private void changeAnimation(PlayerState newState) {
         synchronized (statusLock) {
             if (playerState != PlayerState.DEAD) {
@@ -525,7 +557,7 @@ public class Player implements Observer{
                     }
                     if (newState == PlayerState.DAMAGED) {
                         cactiWalking.pause(walkingSound);
-                        sound_damaged.play();
+                        soundDamaged.play();
                     }
                     if (newState == PlayerState.IDLE) {
                         cactiWalking.pause(walkingSound);
@@ -553,7 +585,8 @@ public class Player implements Observer{
         return 1;
     }
 
-
+    //Returns whether player is dead
+    //This state is only set at the end of the turn. For players that just died, refer to boolean dead
     public boolean isDead() {
         return playerState == PlayerState.DEAD;
     }
