@@ -42,7 +42,20 @@ public class GameOverMenu extends Table {
         //Setup Menu
         Label.LabelStyle style = new Label.LabelStyle(MainLoader.white, Color.WHITE);
         Label header = new Label("Game Over!", style);
-        label = new Label("", style);
+        label = new Label(null, style);
+
+        if (GameConstants.gameStateFlag.contains("W")) {
+            label.setText("You Win!");
+        }
+        if (GameConstants.gameStateFlag.contains("L")) {
+            label.setText("You Lose!");
+        }
+        if (GameConstants.gameStateFlag.contains("D")) {
+            label.setText("Draw!!!");
+        }
+        if (GameConstants.gameStateFlag.contains("dead")) {
+            label.setText("You died!");
+        }
         Drawable buttonImage = new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("buttons/exitButton.png"))));
         Button.ButtonStyle bstyle = new Button.ButtonStyle(buttonImage, buttonImage, buttonImage);
         exitButton = new Button(bstyle);
@@ -53,7 +66,8 @@ public class GameOverMenu extends Table {
         }
         this.setBackground(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("buttons/menuBG.png")))));
         this.add(header).center();
-        this.add(label).center().height(300);
+        this.row();
+        this.add(label).center().expand();
         this.row();
         this.add(exitButton).center();
 

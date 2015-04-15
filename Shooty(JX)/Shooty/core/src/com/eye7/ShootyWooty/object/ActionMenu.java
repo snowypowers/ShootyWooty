@@ -21,7 +21,7 @@ import com.eye7.ShootyWooty.model.GameConstants;
 /**
  * Created by Yak Jun Xiang on 8/4/2015.
  */
-public class ActionMenu extends Table {
+public class ActionMenu extends Table implements Observer{
     private final String TAG = "ActionMenu";
 
     private ActionResolver actionResolver;
@@ -34,13 +34,15 @@ public class ActionMenu extends Table {
     private InputButtons inputButtons;
     private GameOverMenu gameOverMenu;
 
-    private boolean deathFlag = false;
+    private boolean transitionFlag = false;
 
 
     private boolean beingDragged;
     private float drawerSpeed = 10f;
 
     public ActionMenu(ActionResolver actionResolver) {
+        GameConstants.subscribeTurnEnd(this);
+        GameConstants.subscribeGameEnd(this);
         this.actionResolver = actionResolver;
         //Setup Name
         this.setName("ActionMenu");
@@ -108,12 +110,6 @@ public class ActionMenu extends Table {
                 setX(getX() + drawerSpeed);
             }
         }
-        if (deathFlag == false) {
-            if (GameConstants.PLAYERS.get(GameConstants.myID + 1).isDead()) {
-                gameOver();
-                deathFlag = true;
-            }
-        }
     }
 
     //Helper method for HourGlass to get the alpha value
@@ -128,10 +124,20 @@ public class ActionMenu extends Table {
         }
     }
 
-    public void gameOver() {
-        this.removeActor(inputButtons);
-        this.add(gameOverMenu = new GameOverMenu(actionResolver));
+    public void observerUpdate(int i) {
+        if (!transitionFlag) { // If menu has not been swapped yet
+            if (!GameConstants.gameStateFlag.contains("U")) {
+                this.removeActor(inputButtons);
+                this.add(gameOverMenu = new GameOverMenu(actionResolver));
+                transitionFlag = true;
+            }
+        }
     }
+
+    public int observerType() {
+        return 0;
+    }
+
 
 
 }

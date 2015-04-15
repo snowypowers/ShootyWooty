@@ -71,4 +71,21 @@ public class GameConstants {
             }
         }
     }
+
+    public static Array<Observer> observersGameEnd = new Array<Observer>();
+    public static void subscribeGameEnd (Observer o) {
+        observersGameEnd.add(o);
+    }
+
+    //ONLY TURN HANDLER IS ALLOWED TO CALL THIS METHOD
+    public static void GameEnd () {
+        Gdx.app.log(TAG, "GAME END");
+        for (int i = 1; i > -1; i--) {
+            for (Observer o : observersGameEnd) {
+                if (o.observerType() == i) {
+                    o.observerUpdate(2);
+                }
+            }
+        }
+    }
 }

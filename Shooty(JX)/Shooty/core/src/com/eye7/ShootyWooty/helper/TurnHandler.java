@@ -35,7 +35,7 @@ public class TurnHandler extends Thread {
     }
 
     public void run() {
-        if(actionResolver.getMultiplayer()) {
+        if (actionResolver.getMultiplayer()) {
             while (!actionResolver.getValid()) {
 //                try {
 //                    actionResolver.wait();
@@ -45,13 +45,13 @@ public class TurnHandler extends Thread {
                 continue;
             }
             String moves = actionResolver.getMoves();
-            Gdx.app.log(TAG,moves );
+            Gdx.app.log(TAG, moves);
             String[] moveArray = moves.split("!");
 
             //!move!move
             //!0F0 0B0 0B0 1F1!1F1 0B1 1B1 0F1
-            for (int i = 1; i < moveArray.length;i++) {
-                Gdx.app.log(TAG,"THIS"+ moveArray[i] );
+            for (int i = 1; i < moveArray.length; i++) {
+                Gdx.app.log(TAG, "THIS" + moveArray[i]);
                 addTurn(i, moveArray[i].split(" "));
             }
             actionResolver.setValid(false);
@@ -59,11 +59,11 @@ public class TurnHandler extends Thread {
         }
         executing = true;
         Gdx.app.log(TAG, "Starting MoveHandlers");
-        for (MoveHandler mh: moveHandlers) {
+        for (MoveHandler mh : moveHandlers) {
             mh.start();
         }
         Gdx.app.log(TAG, "Waiting...");
-        for (MoveHandler mh: moveHandlers) {
+        for (MoveHandler mh : moveHandlers) {
             try {
                 mh.join();
             } catch (InterruptedException e) {
@@ -72,7 +72,11 @@ public class TurnHandler extends Thread {
         }
 
         //TURN END
-        GameConstants.TurnEnd();
+        if (GameConstants.gameStateFlag.contains("U") || GameConstants.gameStateFlag.contains("dead")) {
+            GameConstants.TurnEnd();
+        } else {
+            GameConstants.GameEnd();
+        }
 
         Gdx.app.log(TAG, "Turn Ended!");
 

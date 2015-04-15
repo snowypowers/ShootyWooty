@@ -25,18 +25,16 @@ public class MainLoader {
     public static Music bgMusic;
 
     public static void load() {
-        white = new BitmapFont(Gdx.files.internal("fonts/white.fnt"),true); // white font
+        white = new BitmapFont(Gdx.files.internal("fonts/white.fnt"),false); // white font
         green = new BitmapFont(Gdx.files.internal("fonts/green.fnt"),false); // green font
-        white.setScale(GameConstants.SCALE_X, GameConstants.SCALE_Y); // scale it to size
+        //white.setScale(GameConstants.SCALE_X, GameConstants.SCALE_Y); // scale it to size
         //green.setScale(GameConstants.SCALE_X, GameConstants.SCALE_Y);
         atlas = new TextureAtlas(Gdx.files.internal("buttons/Gbuttons.pack")); // atlas for skin
         skin = new Skin(atlas); // skin containing drawables
 
         //add the background sound here
         bgMusic = Gdx.audio.newMusic(Gdx.files.internal("sounds/bgMusic.mp3"));
-        bgMusic.setLooping(true);
-        bgMusic.setVolume(0.4f);
-        bgMusic.play();
+
 
 
 //        TextureRegion[] faucets = new TextureRegion[11];
