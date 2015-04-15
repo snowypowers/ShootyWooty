@@ -101,7 +101,8 @@ public class GameWorld implements Observer {
         if (i == 1) { // Turn End
             gameState = GameState.DECIDING;
         }
-        if (i == 2) {
+        if (i == 2) { // Game End
+            actionResolver.setEndGame();
             MainLoader.bgMusic.stop();
         }
     }
