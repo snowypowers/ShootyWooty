@@ -27,7 +27,7 @@ public interface ActionResolver {
     public ArrayList<Integer> getLeftPlayers();
     public void gameDecided(String s, HashMap<String ,Integer> myAchievements) throws InterruptedException;
     public void leaveRoom();
-
+    public void setEndGame();
     //public void lostGameDecide();
 
 

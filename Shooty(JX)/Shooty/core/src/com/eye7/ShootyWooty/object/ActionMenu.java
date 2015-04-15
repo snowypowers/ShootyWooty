@@ -1,17 +1,11 @@
 package com.eye7.ShootyWooty.object;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
@@ -34,7 +28,7 @@ public class ActionMenu extends Table {
     private InputButtons inputButtons;
     private GameOverMenu gameOverMenu;
 
-    private boolean deathFlag = false;
+    private boolean myFlag = false;
 
 
     private boolean beingDragged;
@@ -108,11 +102,13 @@ public class ActionMenu extends Table {
                 setX(getX() + drawerSpeed);
             }
         }
-        if (deathFlag == false) {
-            if (GameConstants.PLAYERS.get(GameConstants.myID + 1).isDead()) {
-                gameOver();
-                deathFlag = true;
-            }
+        if ((!GameConstants.gameStateFlag.equals("U"))&&!myFlag) {
+            Gdx.app.log(TAG, "Game state flag" + GameConstants.gameStateFlag);
+            gameOver();
+            myFlag = true;
+//            if (GameConstants.PLAYERS.get(GameConstants.myID + 1).isDead()) {
+//
+//            }
         }
     }
 
@@ -131,6 +127,7 @@ public class ActionMenu extends Table {
     public void gameOver() {
         this.removeActor(inputButtons);
         this.add(gameOverMenu = new GameOverMenu(actionResolver));
+        actionResolver.setEndGame();
     }
 
 
