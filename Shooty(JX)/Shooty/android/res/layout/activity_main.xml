@@ -165,5 +165,6 @@
     <!-- GAMEPLAY SCREEN -->
     <LinearLayout android:id="@+id/screen_game" style="@style/LLScreen">
     </LinearLayout>
+
 </FrameLayout>
 

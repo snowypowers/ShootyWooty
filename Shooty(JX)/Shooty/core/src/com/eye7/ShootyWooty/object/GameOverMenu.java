@@ -19,9 +19,7 @@ import com.eye7.ShootyWooty.model.GameConstants;
 import java.util.HashMap;
 import java.util.LinkedList;
 
-/**
- * Created by Yak Jun Xiang on 11/4/2015.
- */
+
 public class GameOverMenu extends Table {
     private final ActionResolver actionResolver;
     private Player player;
@@ -41,6 +39,10 @@ public class GameOverMenu extends Table {
         for (String s: achievements.keySet()) {
             pointer.add(s);
         }
+        for (String s: achievements.keySet()) {
+            pointer.add(s);
+        }
+        a.displayAchievements(achievements);
 
         //Setup Menu
         Label.LabelStyle style = new Label.LabelStyle(MainLoader.green, Color.GREEN);
@@ -76,14 +78,12 @@ public class GameOverMenu extends Table {
             public void clicked(InputEvent event, float x,float y) {
                 try {
                     if(GameConstants.gameStateFlag.equals("W")){
-                        actionResolver.gameDecided("win", achievements);
+                        actionResolver.gameDecided("win");
                     }
-                    else if(GameConstants.gameStateFlag.equals("D")) {
-                        actionResolver.gameDecided("draw", achievements);
-                    } else {
-                        actionResolver.gameDecided("lose", achievements);
-                    }
-
+                    else if(GameConstants.gameStateFlag.equals("D"))
+                        actionResolver.gameDecided("draw");
+                    else
+                        actionResolver.gameDecided("lose");
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

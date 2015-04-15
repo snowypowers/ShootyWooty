@@ -470,7 +470,7 @@ public class MoveHandler extends Thread{
         int numScoreFull = 0;
         boolean meFull = false;
         for(int i=0; i<GameConstants.NUM_PLAYERS; i++){
-            if((GameConstants.PLAYERS.get(i+1).dead == true) && !actionResolver.getDeadPlayers().contains(i)){
+            if((GameConstants.PLAYERS.get(i+1).dead == true)){
                 recentDead.add(i);
                 actionResolver.sendMessageAll("@", Integer.toString(i));
                 Gdx.app.log(TAG, "Sent dead message" + i);
@@ -502,7 +502,8 @@ public class MoveHandler extends Thread{
             Gdx.app.log(TAG, "L");
         }
 
-        if(actionResolver.getDeadPlayers().size()==GameConstants.NUM_PLAYERS-1){
+        if(actionResolver.getNumDeadPlayers()==GameConstants.NUM_PLAYERS-1){
+            Gdx.app.log(TAG, "sent in check win lose");
             if(!GameConstants.PLAYERS.get(GameConstants.myID+1).dead){
                 GameConstants.gameStateFlag = "W";
                 Gdx.app.log(TAG, "W");
@@ -514,7 +515,8 @@ public class MoveHandler extends Thread{
                 //actionResolver.gameDecided("lose",GameConstants.PLAYERS.get(GameConstants.myID+1).getAchievments());
             }
         }
-        if(actionResolver.getDeadPlayers().size()==GameConstants.NUM_PLAYERS){
+        if(actionResolver.getNumDeadPlayers()==GameConstants.NUM_PLAYERS){
+            Gdx.app.log(TAG, "In check draw");
             checkDraw(recentDead);
             //actionResolver.gameDecided(state, GameConstants.PLAYERS.get(GameConstants.myID + 1).getAchievments());
         }
@@ -533,6 +535,7 @@ public class MoveHandler extends Thread{
                 numPlay++;
             }
         }
+        Gdx.app.log(TAG, "Number of players with same score" + numPlay);
         if(GameConstants.PLAYERS.get(GameConstants.myID+1).getScore()==maxScore){
             if(numPlay==1) {
                 GameConstants.gameStateFlag = "W";
@@ -542,8 +545,9 @@ public class MoveHandler extends Thread{
                 Gdx.app.log(TAG, "D");
             }
         }
-        GameConstants.gameStateFlag = "L";
-        Gdx.app.log(TAG, "L");
-
+        else {
+            GameConstants.gameStateFlag = "L";
+            Gdx.app.log(TAG, "L");
+        }
     }
 }

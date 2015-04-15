@@ -18,14 +18,15 @@ public interface ActionResolver {
     public boolean getMultiplayer();
     public int getMyID();
     public int getNumPlayers();
-    public ArrayList<Integer> getDeadPlayers();
+    public int getNumDeadPlayers();
 
     public Integer[] getImMoves();
     public void sendContMessage(String s);
     public String getActive();
     public void clearLeftPlayers();
     public ArrayList<Integer> getLeftPlayers();
-    public void gameDecided(String s, HashMap<String ,Integer> myAchievements) throws InterruptedException;
+    public void gameDecided(String s) throws InterruptedException;
+    public void displayAchievements(final HashMap<String, Integer> myAchievements);
     public void leaveRoom();
     public void setEndGame();
     //public void lostGameDecide();
