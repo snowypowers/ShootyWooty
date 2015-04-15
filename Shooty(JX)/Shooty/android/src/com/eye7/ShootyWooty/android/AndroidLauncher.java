@@ -70,6 +70,7 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
     private boolean mAutoStartSignInFlow = true;
     // Room ID where the currently active game is taking place; null if we're
     // not playing.
+    private HashMap<Integer,Boolean> checkDead = new HashMap<>();
     String mRoomId = null;
     private boolean endGame = false;
     private main oldShootyWooty = null;
@@ -98,8 +99,8 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
     private ArrayList<Integer> leftPlayers = new ArrayList<Integer>();
     private Map<String, Integer> idToNum = new HashMap<>();
     private AndroidApplicationConfiguration config;
-    private ArrayList<Integer> deadPlayers = new ArrayList<Integer>();
     private main shootyWooty;
+    private View achievements;
     private Map<String,Integer> imMoves = new HashMap<>();
     LinearLayout linearLayout = null;
     @Override
@@ -113,6 +114,7 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
                 .addOnConnectionFailedListener(this)
                 .addApi(Plus.API).addScope(Plus.SCOPE_PLUS_LOGIN)
                 .addApi(Games.API).addScope(Games.SCOPE_GAMES)
+                .setViewForPopups(achievements)
                 .build();
 
         // set up a click listener for everything we care about
@@ -268,7 +270,9 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
                 }
                 break;
             case REQUEST_ACHIEVEMENTS:
-                achieve = true;
+                Log.w(TAG, "Response from achievements");
+                linearLayout.removeView(achievements);
+               // achieve = true;
                 break;
 
                 //    if (responseCode = RESULT_RECONNECT_REQUIRED);
@@ -430,7 +434,14 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
 //           // switchToScreen(R.id.screen_wait);
 //        } else {
         }
-        switchToMainScreen();
+
+//        if(endGame){
+////                switchToScreen(R.id.GameDecided);
+//            //switchToDecision();
+//        }
+
+
+            switchToMainScreen();
 //        reset = true;
 
     }
@@ -549,10 +560,10 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
         // we have left the room; return to main screen.
         Log.d(TAG, "onLeftRoom, code " + statusCode);
         if (mRoomId !=null) {
-            if(endGame){
-                switchToScreen(R.id.GameDecided);
-            }
-            else
+//            if(endGame) {
+//
+//                startActivityForResult(Games.Achievements.getAchievementsIntent(mGoogleApiClient), REQUEST_ACHIEVEMENTS);
+//            }
              switchToMainScreen();
 
 //            BaseGameUtil.makeSimpleDialog(this, "Game Notification", "You have quit the game.").show();
@@ -571,6 +582,7 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
 //    }
     // Reset game variables in preparation for a new game.
     void resetGameVars() {
+        checkDead = new HashMap<>();
         interruptEndGame = false;
         mMultiplayer = false;
         host = null;
@@ -581,10 +593,11 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
         mParticipants = null;
         mMyId = null;
         imMoves = new HashMap<>();
-        deadPlayers = new ArrayList<Integer>();
+
         leftPlayers = new ArrayList<Integer>();
         idToNum = new HashMap<>();
         linearLayout.removeViewAt(0);
+        linearLayout = (LinearLayout) findViewById(R.id.screen_game);
         oldShootyWooty = shootyWooty;
         shootyWooty = new main(this);
         gameView = initializeForView(shootyWooty,config);
@@ -727,7 +740,8 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
         if(room!=null) {
             for(String peer:peers){
                 leftPlayers.add(idToNum.get(peer));
-                deadPlayers.add(idToNum.get(peer));
+                checkDead.put(idToNum.get(peer),true);
+
             }
             mParticipants = room.getParticipants();
         }
@@ -788,8 +802,13 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
     public int getNumPlayers(){
         return numPlayers;
     }
-    public ArrayList<Integer> getDeadPlayers(){
-        return deadPlayers;
+    public int getNumDeadPlayers(){
+        int d = 0;
+        for(int i=0; i<4; i++){
+            if(checkDead.get(i))
+                d++;
+        }
+        return d;
     }
     /*
      * GAME LOGIC SECTION. Methods that implement the game's rules.
@@ -830,6 +849,9 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
 //        if(!shootyWootyCreated) {
 //            shootyWooty.create();
 //        }
+        for(int i=0; i<4; i++){
+            checkDead.put(i,false);
+        }
         if(mMultiplayer) {
             sortParticipants();
             if (mParticipants.get(0).getParticipantId().equals(mMyId)) {
@@ -881,13 +903,14 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
         host = getHost(s);
         sendMessageAll("$", s);
         Log.d(TAG, "Host chosen message sent "+s + mMyId);
+
     }
 
     public void readyToSend(){
         String movestoSend = "";
         int i=0;
         for(Participant p:mParticipants){
-            if(!deadPlayers.contains(i))
+            if(!checkDead.get(idToNum.get(p.getParticipantId())))
                 movestoSend += moves.get(p.getParticipantId());
         }
 //        sendMessageHost("@");
@@ -967,8 +990,12 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
 //            statusMessage.put(mMyId,0);
         }
         if (x.equals("@")){
-            if(!deadPlayers.contains(Integer.getInteger(s.substring(1))))
-                deadPlayers.add(Integer.getInteger(s.substring(1)));
+            Log.d(TAG, "Player marked dead " + s);
+            checkDead.put(Integer.parseInt(s),true);
+//            if(!deadPlayers.contains(Integer.getInteger(s))) {
+//                Log.d(TAG, "Player added TO DEAD LIST" + s);
+//                deadPlayers.add(Integer.getInteger(s));
+//            }
             return;
         }
         byte[] bytes = (x+s).getBytes();
@@ -1045,7 +1072,17 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
 
 
     }
-    public void gameDecided(String s, final HashMap<String, Integer> myAchievements) throws InterruptedException {
+    public void displayAchievements(final HashMap<String, Integer> myAchievements){
+        try {
+            addAchievements(myAchievements);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        startActivityForResult(Games.Achievements.getAchievementsIntent(mGoogleApiClient), REQUEST_ACHIEVEMENTS);
+
+
+    }
+    public void gameDecided(String s ) throws InterruptedException {
         final String check = s;
 
         Thread thread = new Thread(){
@@ -1071,7 +1108,9 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
                             Drawable res = getResources().getDrawable(imageResource);
                             imageView.setImageDrawable(res);
                             Log.d(TAG, "SET IMAGE");
-
+                            switchToScreen(R.id.GameDecided);
+//                            achievements = initializeForView(getApplicationListener());
+//                            linearLayout.addView(achievements,new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT));
 
                             keepScreenOn();
 
@@ -1088,12 +1127,8 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
         thread.join();
 
 
-        try {
-            addAchievements(myAchievements);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        leaveRoom();
+
+        //leaveRoom();
 
 
         //  gameView.setOnTouchListener(new OnTouchListener() {
@@ -1136,11 +1171,14 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
         }
         findViewById(R.id.invitation_popup).setVisibility(showInvPopup ? View.VISIBLE : View.GONE);
     }
-    void switchToDecision(){
-        //switchToScreen(R.id.GameDecided);
-       // startActivityForResult(Games.Achievements.getAchievementsIntent(mGoogleApiClient), REQUEST_ACHIEVEMENTS);
-
-    }
+//    void switchToDecision(){
+////        linearLayout.removeViewAt(0);
+////        findViewById(R.id.GameDecided).setVisibility(View.VISIBLE);
+////        linearLayout = (LinearLayout) findViewById(R.id.GameDecided);
+//        switchToScreen(R.id.GameDecided);
+//        //startActivityForResult(Games.Achievements.getAchievementsIntent(mGoogleApiClient), REQUEST_ACHIEVEMENTS);
+//
+//    }
 
     void switchToMainScreen() {
         if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {

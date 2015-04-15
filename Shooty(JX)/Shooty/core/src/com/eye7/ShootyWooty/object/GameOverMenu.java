@@ -38,7 +38,7 @@ public class GameOverMenu extends Table {
         for (String s: achievements.keySet()) {
             pointer.add(s);
         }
-
+        a.displayAchievements(achievements);
         //Setup Menu
         Label.LabelStyle style = new Label.LabelStyle(MainLoader.white, Color.WHITE);
         Label header = new Label("Game Over!", style);
@@ -70,12 +70,12 @@ public class GameOverMenu extends Table {
                 try {
 //                    String gameState = GameConstants.gameStateFlag;
                     if(GameConstants.gameStateFlag.equals("W")){
-                        actionResolver.gameDecided("win", achievements);
+                        actionResolver.gameDecided("win");
                     }
                     else if(GameConstants.gameStateFlag.equals("D"))
-                        actionResolver.gameDecided("draw", achievements);
+                        actionResolver.gameDecided("draw");
                     else
-                        actionResolver.gameDecided("lose", achievements);
+                        actionResolver.gameDecided("lose");
 
 
 
