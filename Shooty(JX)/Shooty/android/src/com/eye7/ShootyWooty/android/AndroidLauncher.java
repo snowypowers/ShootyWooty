@@ -213,9 +213,7 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
 //            shootyWootyCreated=true;
 //            Log.d(TAG, "Created again");
 //        }
-        if(oldShootyWooty!=null){
-            oldShootyWooty.dispose();
-        }
+
         RoomConfig.Builder rtmConfigBuilder = RoomConfig.builder(this);
         rtmConfigBuilder.setMessageReceivedListener(this);
         rtmConfigBuilder.setRoomStatusUpdateListener(this);
@@ -570,6 +568,9 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
         }
 
         resetGameVars();
+        if(oldShootyWooty!=null){
+            oldShootyWooty.dispose();
+        }
 
     }
 //    void resetLibGdxnVars(){

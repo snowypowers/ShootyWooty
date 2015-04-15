@@ -16,7 +16,7 @@ import com.eye7.ShootyWooty.screen.MainScreen;
 public class main extends Game {
     SpriteBatch batch;
     Texture img;
-
+    Screen myScreen;
     private ActionResolver actionResolver;
     public main(ActionResolver actionResolver){
 
@@ -31,20 +31,25 @@ public class main extends Game {
         GameConstants.SCALE_Y = Gdx.graphics.getHeight() / 540.0f;
         MainLoader.load();
         CactusLoader.load(GameConstants.NUM_PLAYERS);
-        setScreen(new MainScreen(this, actionResolver));
+        myScreen = new MainScreen(this, actionResolver);
+        setScreen(myScreen);
         GameConstants.gameStateFlag = "U";
         Gdx.app.log("Screen Reso:", "Width: " + String.valueOf(Gdx.graphics.getWidth()));
         Gdx.app.log("Screen Reso:", "Height: " + String.valueOf(Gdx.graphics.getHeight()));
         Gdx.app.log("ScaleX", String.valueOf(GameConstants.SCALE_X));
         Gdx.app.log("ScaleY", String.valueOf(GameConstants.SCALE_Y));
     }
-
-    public void reCreate(){
-        setScreen(new MainScreen(this, actionResolver));
+    @Override
+    public void dispose(){
+        Gdx.app.log("disposing","In main dispose");
+        myScreen.dispose();
+        MainLoader.dispose();
     }
+
     @Override
     public void setScreen(Screen screen) {
         super.setScreen(screen);
+
         //this.getScreen().resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
     }

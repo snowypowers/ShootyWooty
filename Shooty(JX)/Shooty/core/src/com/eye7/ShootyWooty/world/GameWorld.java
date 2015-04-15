@@ -115,6 +115,10 @@ public class GameWorld implements Observer {
     public Stage getStage() {
         return stage;
     }
+    public void dispose(){
+        hourGlass.dispose();
+
+    }
 
 }
 

@@ -57,6 +57,7 @@ public class HourGlass extends Actor implements Observer {
 
         attachActionMenu();
 
+
     }
 
     public void start() {
@@ -126,6 +127,10 @@ public class HourGlass extends Actor implements Observer {
 
     public int observerType() {
         return 0;
+    }
+    public void dispose(){
+        hourglassSkin.dispose();
+
     }
 
 }

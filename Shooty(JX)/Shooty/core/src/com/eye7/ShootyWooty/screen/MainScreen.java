@@ -103,8 +103,12 @@ public class MainScreen implements Screen {
 
     @Override
     public void dispose() {
-        stage.dispose();
+
         MainLoader.bgMusic.dispose();//disposes the background music
+        map.dispose();
+        renderer.dispose();
+        world.dispose();
+        stage.dispose();
     }
 
 }

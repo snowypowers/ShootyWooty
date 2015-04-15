@@ -1,9 +1,6 @@
 package com.eye7.ShootyWooty.object;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -11,7 +8,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.eye7.ShootyWooty.helper.ActionResolver;
 import com.eye7.ShootyWooty.helper.MainLoader;
 import com.eye7.ShootyWooty.model.GameConstants;
@@ -33,6 +29,7 @@ public class GameOverMenu extends Table {
     public GameOverMenu(ActionResolver a) {
         actionResolver = a;
         //Setup Player
+        a.setEndGame();
         player = GameConstants.PLAYERS.get(GameConstants.myID+1);
         achievements = player.getAchievments();
         pointer = new LinkedList<String>();
@@ -87,6 +84,7 @@ public class GameOverMenu extends Table {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+
 
             }
         });

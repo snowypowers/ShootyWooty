@@ -1,25 +1,9 @@
 package com.eye7.ShootyWooty.render;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-import com.badlogic.gdx.maps.MapLayer;
-import com.badlogic.gdx.maps.MapObjects;
-import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.eye7.ShootyWooty.helper.MainLoader;
-import com.eye7.ShootyWooty.main;
-import com.eye7.ShootyWooty.model.GameConstants;
-import com.eye7.ShootyWooty.object.Player;
 import com.eye7.ShootyWooty.world.GameWorld;
 
 /**
@@ -128,6 +112,11 @@ public class GameRenderer {
 
 
 
+    }
+    public void dispose(){
+        shapeRenderer.dispose();
+        batcher.dispose();
+        shapeRenderer.dispose();
     }
 
 }
