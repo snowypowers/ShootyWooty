@@ -977,6 +977,10 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
         }
 
     }
+    public void markDead(int i){
+        Log.d(TAG, "Player marked dead " + Integer.toString(i));
+        checkDead.put(i,true);
+    }
     public void sendMessageAll(String x, String s){
         if(!mMultiplayer)
             return;
@@ -988,15 +992,6 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
             }
 
 //            statusMessage.put(mMyId,0);
-        }
-        if (x.equals("@")){
-            Log.d(TAG, "Player marked dead " + s);
-            checkDead.put(Integer.parseInt(s),true);
-//            if(!deadPlayers.contains(Integer.getInteger(s))) {
-//                Log.d(TAG, "Player added TO DEAD LIST" + s);
-//                deadPlayers.add(Integer.getInteger(s));
-//            }
-            return;
         }
         byte[] bytes = (x+s).getBytes();
         for (Participant p : mParticipants){
@@ -1033,7 +1028,7 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
             R.id.button_single_player_2
     };
     public void addAchievements(HashMap<String, Integer> myAchievements) throws InterruptedException {
-        if(myAchievements.get("Kills")==1){
+        if(myAchievements.get("Kills")>=1){
             Games.Achievements.unlock(mGoogleApiClient, "CgkI_oGooPsFEAIQAw");//level 3
         }
         if(myAchievements.get("Hits")>=15){

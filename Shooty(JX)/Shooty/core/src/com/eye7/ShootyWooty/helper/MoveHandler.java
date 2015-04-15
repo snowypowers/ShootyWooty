@@ -472,7 +472,7 @@ public class MoveHandler extends Thread{
         for(int i=0; i<GameConstants.NUM_PLAYERS; i++){
             if((GameConstants.PLAYERS.get(i+1).dead == true)){
                 recentDead.add(i);
-                actionResolver.sendMessageAll("@", Integer.toString(i));
+                actionResolver.markDead(i);
                 Gdx.app.log(TAG, "Sent dead message" + i);
                 if(i==GameConstants.myID)
                     GameConstants.gameStateFlag = "dead";

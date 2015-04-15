@@ -29,6 +29,7 @@ public interface ActionResolver {
     public void displayAchievements(final HashMap<String, Integer> myAchievements);
     public void leaveRoom();
     public void setEndGame();
+    public void markDead(int i);
     //public void lostGameDecide();
 
 

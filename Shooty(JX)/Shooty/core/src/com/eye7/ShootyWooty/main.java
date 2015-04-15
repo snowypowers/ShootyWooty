@@ -32,7 +32,7 @@ public class main extends Game {
         MainLoader.load();
         CactusLoader.load(GameConstants.NUM_PLAYERS);
         setScreen(new MainScreen(this, actionResolver));
-
+        GameConstants.gameStateFlag = "U";
         Gdx.app.log("Screen Reso:", "Width: " + String.valueOf(Gdx.graphics.getWidth()));
         Gdx.app.log("Screen Reso:", "Height: " + String.valueOf(Gdx.graphics.getHeight()));
         Gdx.app.log("ScaleX", String.valueOf(GameConstants.SCALE_X));
