@@ -1,17 +1,11 @@
 package com.eye7.ShootyWooty.object;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
@@ -35,6 +29,7 @@ public class ActionMenu extends Table implements Observer{
     private GameOverMenu gameOverMenu;
 
     private boolean transitionFlag = false;
+
 
 
     private boolean beingDragged;
@@ -124,7 +119,7 @@ public class ActionMenu extends Table implements Observer{
         }
     }
 
-    public void observerUpdate(int i) {
+    public void observerUpdate(int i) { // Turn End or Game End
         if (!transitionFlag) { // If menu has not been swapped yet
             if (!GameConstants.gameStateFlag.contains("U")) {
                 this.removeActor(inputButtons);
@@ -132,6 +127,8 @@ public class ActionMenu extends Table implements Observer{
                 transitionFlag = true;
             }
         }
+
+
     }
 
     public int observerType() {

@@ -58,10 +58,10 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
     private boolean achieve = false;
     // Client used to interact with Google APIs.
     private GoogleApiClient mGoogleApiClient;
-
+    private boolean checkNewLib = true;
     // Are we currently resolving a connection failure?
     private boolean mResolvingConnectionFailure = false;
-
+    private HashMap<String, Integer> myCurAchievements = null;
     // Has the user clicked the sign-in button?
     private boolean mSignInClicked = false;
     private boolean interruptEndGame = false;
@@ -71,6 +71,7 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
     // Room ID where the currently active game is taking place; null if we're
     // not playing.
     String mRoomId = null;
+    private boolean endGame = false;
     private main oldShootyWooty = null;
     // Are we playing in multiplayer mode?
     boolean mMultiplayer = false;
@@ -192,6 +193,7 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
     void startQuickGame(int player) {
         // quick-start a game with 1 randomly selected opponent
         Log.d(TAG, "Start quick game");
+        checkNewLib = false;
         final int MIN_OPPONENTS = player - 1, MAX_OPPONENTS = player-1;
         Bundle autoMatchCriteria = RoomConfig.createAutoMatchCriteria(MIN_OPPONENTS,
                 MAX_OPPONENTS, 0);
@@ -219,6 +221,7 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
         switchToScreen(R.id.screen_wait);
         keepScreenOn();
         // resetGameVars();
+
         Games.RealTimeMultiplayer.create(mGoogleApiClient, rtmConfigBuilder.build());
     }
 
@@ -410,10 +413,12 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
     public void leaveRoom() {
         Log.d(TAG, "Leaving room.");
         mSecondsLeft = 0;
+
         stopKeepingScreenOn();
         if(!getMultiplayer()){
-
+           // resetLibGdxnVars();
             resetGameVars();
+
         }
 
         if (mRoomId != null) {
@@ -544,12 +549,26 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
         // we have left the room; return to main screen.
         Log.d(TAG, "onLeftRoom, code " + statusCode);
         if (mRoomId !=null) {
-            switchToMainScreen();
+            if(endGame){
+                switchToScreen(R.id.GameDecided);
+            }
+            else
+             switchToMainScreen();
+
 //            BaseGameUtil.makeSimpleDialog(this, "Game Notification", "You have quit the game.").show();
         }
+
         resetGameVars();
 
     }
+//    void resetLibGdxnVars(){
+//        linearLayout.removeViewAt(0);
+//        oldShootyWooty = shootyWooty;
+//        shootyWooty = new main(this);
+//        gameView = initializeForView(shootyWooty,config);
+//        linearLayout.addView(gameView, 0, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
+//        checkNewLib = true;
+//    }
     // Reset game variables in preparation for a new game.
     void resetGameVars() {
         interruptEndGame = false;
@@ -575,9 +594,13 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
     // Called when we get disconnected from the room. We return to the main screen.
     @Override
     public void onDisconnectedFromRoom(Room room) {
-        Games.RealTimeMultiplayer.leave(mGoogleApiClient, this, mRoomId);
-        mRoomId = null;
-        showGameError();
+        Log.w(TAG, "Left from disconnected");
+        if(!endGame) {
+            Games.RealTimeMultiplayer.leave(mGoogleApiClient, this, mRoomId);
+            mRoomId = null;
+            showGameError();
+        }
+
     }
 
     // Show error message about game being cancelled and return to main screen.
@@ -650,7 +673,7 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
     public void onP2PDisconnected(String participant) {
         mParticipants.remove(participant);
         sortParticipants();
-        if (mParticipants.size()<=1){
+        if ((mParticipants.size()<=1)&&!endGame){
             Log.d(TAG, "In check indicating everyone LEFT");
             leaveRoom();
 
@@ -708,6 +731,11 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
             }
             mParticipants = room.getParticipants();
         }
+        if ((mParticipants.size()<=1||room==null)&&!endGame){
+            Log.d(TAG, "In check indicating everyone LEFT");
+            leaveRoom();
+
+        }
 
         sortParticipants();
 //            if(mParticipants.size()==1){
@@ -717,9 +745,13 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
 //                switchToMainScreen();
 //                return;
 //            }
+
         if (mParticipants.get(0).getParticipantId().equals(mMyId))
             updateHost(peers);
 
+    }
+    public void setEndGame(){
+        endGame = true;
     }
     public ArrayList<Integer> getLeftPlayers(){
         return leftPlayers;
@@ -746,7 +778,7 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
 //            }
 //
 //        }
-        if (mParticipants.size()<=1||room==null){
+        if ((mParticipants.size()<=1||room==null)&&!endGame){
             Log.d(TAG, "In check indicating everyone LEFT");
             leaveRoom();
 
@@ -915,7 +947,7 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
                 imMoves.put(mMyId, Integer.valueOf(s));
             if (p.getStatus() == Participant.STATUS_LEFT)
                 continue;
-            if(mRoomId!=null)
+            if(mRoomId!=null && !endGame)
                 Games.RealTimeMultiplayer.sendUnreliableMessage(mGoogleApiClient, bytes,
                         mRoomId, p.getParticipantId());
 //            Log.d(TAG, "Unrealiable Message sent "+ p.getParticipantId());
@@ -935,7 +967,8 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
 //            statusMessage.put(mMyId,0);
         }
         if (x.equals("@")){
-            deadPlayers.add(Integer.getInteger(s.substring(1)));
+            if(!deadPlayers.contains(Integer.getInteger(s.substring(1))))
+                deadPlayers.add(Integer.getInteger(s.substring(1)));
             return;
         }
         byte[] bytes = (x+s).getBytes();
@@ -988,22 +1021,25 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
         if(myAchievements.get("Kills")==3){
             Games.Achievements.unlock(mGoogleApiClient, "CgkI_oGooPsFEAIQBQ");// level 5
         }
-        Thread thread = new Thread(){
-            @Override
-            public void run() {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
 
-                        startActivityForResult(Games.Achievements.getAchievementsIntent(mGoogleApiClient), REQUEST_ACHIEVEMENTS);
 
-                    }
-                });
-            };
-        };
-        thread.start();
-        thread.join();
 
+
+//        Thread thread = new Thread(){
+//            @Override
+//            public void run() {
+//                runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//
+//                        startActivityForResult(Games.Achievements.getAchievementsIntent(mGoogleApiClient), REQUEST_ACHIEVEMENTS);
+//
+//                    }
+//                });
+//            };
+//        };
+//        thread.start();
+//        thread.join();
 
 
 
@@ -1011,6 +1047,7 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
     }
     public void gameDecided(String s, final HashMap<String, Integer> myAchievements) throws InterruptedException {
         final String check = s;
+
         Thread thread = new Thread(){
             @Override
             public void run() {
@@ -1019,6 +1056,9 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
                     public void run() {
                         Log.d(TAG, "BEGINNING SCREEN CHANGE");
                         try {
+                            //resetLibGdxnVars();
+
+
                             String uri;
                             if(check!="draw")
                                 uri = "@drawable/"+check+Integer.toString(myIDNum+1);
@@ -1031,8 +1071,10 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
                             Drawable res = getResources().getDrawable(imageResource);
                             imageView.setImageDrawable(res);
                             Log.d(TAG, "SET IMAGE");
-                            switchToScreen(R.id.GameDecided);
+
+
                             keepScreenOn();
+
                         }
                         catch(Exception e){
                             Log.d(TAG, "Error in game decided");
@@ -1044,7 +1086,16 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
         };
         thread.start();
         thread.join();
-        addAchievements(myAchievements);
+
+
+        try {
+            addAchievements(myAchievements);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        leaveRoom();
+
+
         //  gameView.setOnTouchListener(new OnTouchListener() {
         //      @Override
         //      public boolean onTouch(View v, MotionEvent event) {
@@ -1084,6 +1135,11 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
             showInvPopup = (mCurScreen == R.id.screen_main || mCurScreen == R.id.screen_game);
         }
         findViewById(R.id.invitation_popup).setVisibility(showInvPopup ? View.VISIBLE : View.GONE);
+    }
+    void switchToDecision(){
+        //switchToScreen(R.id.GameDecided);
+       // startActivityForResult(Games.Achievements.getAchievementsIntent(mGoogleApiClient), REQUEST_ACHIEVEMENTS);
+
     }
 
     void switchToMainScreen() {

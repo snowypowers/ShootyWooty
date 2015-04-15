@@ -82,7 +82,17 @@ public class GameOverMenu extends Table {
 
             public void clicked(InputEvent event, float x,float y) {
                 try {
-                    actionResolver.gameDecided("lost", achievements);
+//                    String gameState = GameConstants.gameStateFlag;
+                    if(GameConstants.gameStateFlag.equals("W")){
+                        actionResolver.gameDecided("win", achievements);
+                    }
+                    else if(GameConstants.gameStateFlag.equals("D"))
+                        actionResolver.gameDecided("draw", achievements);
+                    else
+                        actionResolver.gameDecided("lose", achievements);
+
+
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
