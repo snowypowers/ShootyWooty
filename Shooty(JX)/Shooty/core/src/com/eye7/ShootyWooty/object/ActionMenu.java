@@ -83,8 +83,8 @@ public class ActionMenu extends Table implements Observer{
         });
 
         //Table Properties
-        this.setHeight(536);
-        this.setWidth(382);
+        this.setHeight(540);
+        this.setWidth(385);
 
         //Add buttons to table
         this.add(handle).center();
@@ -125,13 +125,14 @@ public class ActionMenu extends Table implements Observer{
     public void observerUpdate(int i) { // Turn End or Game End
         if (!transitionFlag) { // If menu has not been swapped yet
             if (!GameConstants.gameStateFlag.contains("U")) {
-                this.clearChildren();
-                this.add(handle).center();
+                //this.clearChildren();
+                //this.add(handle).center();
                 gameOverMenu = new GameOverMenu(actionResolver);
-                this.add(gameOverMenu).expand();
-                //Cell c = this.getCell(inputButtons);                            //Get the cell containing inputButtons
-                //c.clearActor();                                                 //Remove inputButtons
-               // c.setActor(gameOverMenu = new GameOverMenu(actionResolver)).expand();    //Replace it with GameOverMenu
+                //this.add(gameOverMenu);
+                this.invalidate();
+                Cell c = this.getCell(inputButtons);                            //Get the cell containing inputButtons
+                c.clearActor();                                                 //Remove inputButtons
+                c.setActor(gameOverMenu);    //Replace it with GameOverMenu
                 transitionFlag = true;
             }
         }
