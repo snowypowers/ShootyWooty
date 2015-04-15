@@ -87,7 +87,7 @@ public class MoveHandler extends Thread{
             if (GameConstants.DEBUG) {
                 Gdx.app.log("Move Info Player" + String.valueOf(player.getPlayerID()), String.valueOf(movement[0]) + " " + String.valueOf(movement[1]) + " " + String.valueOf(movement[2]) + " " + String.valueOf(movement[3]));
             }
-            if (!player.isDead()) {
+            if (player.dead == false) {
 
                 CircleMapObject collider = player.getCollider(); //Get collider
                 float[] oldMove = AmountToMove(moves[pointer]); //Record of original move
@@ -165,7 +165,7 @@ public class MoveHandler extends Thread{
                 e.printStackTrace();
             }
 
-            if(!player.isDead()) {
+            if(player.dead == false) {
                 /////////////////////////////////////////EXECUTE SHOOTING///////////////////////////////////////
                 bulletl.setReturn(player.getX(), player.getY());
                 bulletr.setReturn(player.getX(), player.getY());
@@ -472,7 +472,7 @@ public class MoveHandler extends Thread{
         for(int i=0; i<GameConstants.NUM_PLAYERS; i++){
             if((GameConstants.PLAYERS.get(i+1).dead == true) && !actionResolver.getDeadPlayers().contains(i)){
                 recentDead.add(i);
-                actionResolver.sendMessageAll("@",Integer.toString(i) );
+                actionResolver.sendMessageAll("@", Integer.toString(i));
                 Gdx.app.log(TAG, "Sent dead message" + i);
                 if(i==GameConstants.myID)
                     GameConstants.gameStateFlag = "dead";
@@ -488,24 +488,29 @@ public class MoveHandler extends Thread{
             if(numScoreFull==1){
                 //actionResolver.gameDecided("win",GameConstants.PLAYERS.get(GameConstants.myID+1).getAchievments());
                 GameConstants.gameStateFlag = "W";
+                Gdx.app.log(TAG, "W");
             }
             else{
                 //actionResolver.gameDecided("draw",GameConstants.PLAYERS.get(GameConstants.myID+1).getAchievments());
                 GameConstants.gameStateFlag = "D";
+                Gdx.app.log(TAG, "D");
             }
         }
         else if(numScoreFull>0){
             //actionResolver.gameDecided("lose",GameConstants.PLAYERS.get(GameConstants.myID+1).getAchievments());
             GameConstants.gameStateFlag = "L";
+            Gdx.app.log(TAG, "L");
         }
 
         if(actionResolver.getDeadPlayers().size()==GameConstants.NUM_PLAYERS-1){
             if(!GameConstants.PLAYERS.get(GameConstants.myID+1).dead){
                 GameConstants.gameStateFlag = "W";
+                Gdx.app.log(TAG, "W");
                 //actionResolver.gameDecided("win",GameConstants.PLAYERS.get(GameConstants.myID+1).getAchievments());
             }
             else{
                 GameConstants.gameStateFlag = "L";
+                Gdx.app.log(TAG, "L");
                 //actionResolver.gameDecided("lose",GameConstants.PLAYERS.get(GameConstants.myID+1).getAchievments());
             }
         }
@@ -529,12 +534,16 @@ public class MoveHandler extends Thread{
             }
         }
         if(GameConstants.PLAYERS.get(GameConstants.myID+1).getScore()==maxScore){
-            if(numPlay==1)
+            if(numPlay==1) {
                 GameConstants.gameStateFlag = "W";
-            else
+                Gdx.app.log(TAG, "W");
+            } else {
                 GameConstants.gameStateFlag = "D";
+                Gdx.app.log(TAG, "D");
+            }
         }
         GameConstants.gameStateFlag = "L";
+        Gdx.app.log(TAG, "L");
 
     }
 }

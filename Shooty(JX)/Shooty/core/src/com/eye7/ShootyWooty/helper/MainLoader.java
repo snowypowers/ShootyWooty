@@ -2,10 +2,14 @@ package com.eye7.ShootyWooty.helper;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.eye7.ShootyWooty.model.GameConstants;
 
 /**
@@ -18,6 +22,10 @@ public class MainLoader {
     public static BitmapFont white, green;
     public static TextureAtlas atlas;
     public static Skin skin, skinCharacters;
+
+    public static Drawable menuBG;
+    public static Drawable homeButtonImg;
+
 
     public static Animation animation_faucet;
 
@@ -32,6 +40,8 @@ public class MainLoader {
         atlas = new TextureAtlas(Gdx.files.internal("buttons/Gbuttons.pack")); // atlas for skin
         skin = new Skin(atlas); // skin containing drawables
 
+       menuBG = new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("buttons/menuBG.png"))));
+       homeButtonImg = new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("buttons/exitButton2.png"))));
         //add the background sound here
         bgMusic = Gdx.audio.newMusic(Gdx.files.internal("sounds/bgMusic.mp3"));
 

@@ -70,6 +70,7 @@ public class Player implements Observer{
     private int lifeTimeHits = 0;
     private int lifeTimeWater = 0;
     private int lifeTimeShotsFired = 0;
+    private int lifeTimeDmgTaken = 0;
 
     //add sounds for collision
     private Sound cactiWalking;
@@ -157,6 +158,7 @@ public class Player implements Observer{
         lifeTimeKills = 0;
         lifeTimeWater = 0;
         lifeTimeShotsFired = 0;
+        lifeTimeDmgTaken = 0;
 
     }
 
@@ -334,8 +336,9 @@ public class Player implements Observer{
     public synchronized void decreaseHealth(int dmg){
         if (!isDead()) {
             health -= dmg;
+            lifeTimeDmgTaken += dmg;
             water = 0;
-            if (health < 0) {
+            if (health <= 0) {
                 health = 0;
                 dead = true; // Just died
             }
@@ -347,8 +350,9 @@ public class Player implements Observer{
     public synchronized void decreaseHealth(Player p){
         if (!isDead()) {
             health -= 10;
+            lifeTimeDmgTaken += 10;
             water = 0;
-            if (health < 0) {
+            if (health <= 0) {
                 health = 0;
                 p.killAwarded();
                 dead = true; // Just died
@@ -361,8 +365,9 @@ public class Player implements Observer{
     public synchronized void decreaseHealth(Bullet b){
         if (!isDead()) {
             health -= 20;
+            lifeTimeDmgTaken += 20;
             water = 0;
-            if (health < 0) {
+            if (health <= 0) {
                 health = 0;
                 if (playerState != PlayerState.DEAD && dead == false) { //If not previously declared dead
                     b.killAwarded();
@@ -547,6 +552,7 @@ public class Player implements Observer{
         a.put ("Hits", lifeTimeHits);
         a.put ("Shots Fired", lifeTimeShotsFired);
         a.put ("Water", lifeTimeWater);
+        a.put ("Dmg Taken", lifeTimeDmgTaken);
 
         return a;
 

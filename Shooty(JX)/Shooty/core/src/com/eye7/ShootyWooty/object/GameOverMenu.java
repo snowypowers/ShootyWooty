@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
@@ -26,6 +27,8 @@ public class GameOverMenu extends Table {
     private Player player;
     private HashMap<String, Integer> achievements;
     private LinkedList<String> pointer;
+
+    private Label header;
     private Label label;
     private Button exitButton;
 
@@ -40,9 +43,10 @@ public class GameOverMenu extends Table {
         }
 
         //Setup Menu
-        Label.LabelStyle style = new Label.LabelStyle(MainLoader.white, Color.WHITE);
-        Label header = new Label("Game Over!", style);
+        Label.LabelStyle style = new Label.LabelStyle(MainLoader.green, Color.GREEN);
+        header = new Label("Game Over!", style);
         label = new Label(null, style);
+        label.setAlignment(Align.center, Align.center);
 
         if (GameConstants.gameStateFlag.contains("W")) {
             label.setText("You Win!");
@@ -56,20 +60,9 @@ public class GameOverMenu extends Table {
         if (GameConstants.gameStateFlag.contains("dead")) {
             label.setText("You died!");
         }
-        Drawable buttonImage = new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("buttons/exitButton.png"))));
-        Button.ButtonStyle bstyle = new Button.ButtonStyle(buttonImage, buttonImage, buttonImage);
-        exitButton = new Button(bstyle);
+        Drawable buttonImage = MainLoader.homeButtonImg;
+        exitButton = new Button(buttonImage);
 
-        //Setup Table
-        if (GameConstants.DEBUG) {
-            this.debug();
-        }
-        this.setBackground(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("buttons/menuBG.png")))));
-        this.add(header).center();
-        this.row();
-        this.add(label).center().expand();
-        this.row();
-        this.add(exitButton).center();
 
         label.addListener(new ClickListener() {
 
@@ -82,16 +75,14 @@ public class GameOverMenu extends Table {
 
             public void clicked(InputEvent event, float x,float y) {
                 try {
-//                    String gameState = GameConstants.gameStateFlag;
                     if(GameConstants.gameStateFlag.equals("W")){
                         actionResolver.gameDecided("win", achievements);
                     }
-                    else if(GameConstants.gameStateFlag.equals("D"))
+                    else if(GameConstants.gameStateFlag.equals("D")) {
                         actionResolver.gameDecided("draw", achievements);
-                    else
+                    } else {
                         actionResolver.gameDecided("lose", achievements);
-
-
+                    }
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -100,12 +91,25 @@ public class GameOverMenu extends Table {
             }
         });
 
-        changeText();
+        //Debug
+        if (GameConstants.DEBUG) {
+            this.debug();
+        }
+        //Setup Table
+        this.setHeight(536);
+        this.setWidth(300);
+        this.setBackground(MainLoader.menuBG);
+
+        this.add(header).center().padTop(50);
+        this.row();
+        this.add(label).center().expand();
+        this.row();
+        this.add(exitButton).center().padBottom(50);
     }
 
     public void changeText() {
         String output = pointer.poll();
-        label.setText(output + "/n/n" + String.valueOf(achievements.get(output)));
+        label.setText(output + "\n\n" + String.valueOf(achievements.get(output)));
         pointer.add(output);
     }
 }

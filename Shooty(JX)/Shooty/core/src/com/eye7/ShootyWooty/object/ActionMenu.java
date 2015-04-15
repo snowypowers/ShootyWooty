@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
@@ -20,8 +21,8 @@ public class ActionMenu extends Table implements Observer{
 
     private ActionResolver actionResolver;
 
-    private static float leftEdge = 800;
-    private static float rightEdge = 1050;
+    private static float leftEdge = 580;
+    private static float rightEdge = 880;
 
     private Button handle;
     private Drawable handle_img;
@@ -81,12 +82,14 @@ public class ActionMenu extends Table implements Observer{
             }
         });
 
-
+        //Table Properties
+        this.setHeight(536);
+        this.setWidth(382);
 
         //Add buttons to table
         this.add(handle).center();
-        this.add(inputButtons);
-        this.setPosition(leftEdge, 270); //Right edge of screen
+        this.add(inputButtons).expand();
+        this.setPosition(leftEdge, 0); //Right edge of screen
 
 
     }
@@ -122,8 +125,13 @@ public class ActionMenu extends Table implements Observer{
     public void observerUpdate(int i) { // Turn End or Game End
         if (!transitionFlag) { // If menu has not been swapped yet
             if (!GameConstants.gameStateFlag.contains("U")) {
-                this.removeActor(inputButtons);
-                this.add(gameOverMenu = new GameOverMenu(actionResolver));
+                this.clearChildren();
+                this.add(handle).center();
+                gameOverMenu = new GameOverMenu(actionResolver);
+                this.add(gameOverMenu).expand();
+                //Cell c = this.getCell(inputButtons);                            //Get the cell containing inputButtons
+                //c.clearActor();                                                 //Remove inputButtons
+               // c.setActor(gameOverMenu = new GameOverMenu(actionResolver)).expand();    //Replace it with GameOverMenu
                 transitionFlag = true;
             }
         }

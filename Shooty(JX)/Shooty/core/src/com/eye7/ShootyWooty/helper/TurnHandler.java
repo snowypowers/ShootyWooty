@@ -74,11 +74,13 @@ public class TurnHandler extends Thread {
         //TURN END
         if (GameConstants.gameStateFlag.contains("U") || GameConstants.gameStateFlag.contains("dead")) {
             GameConstants.TurnEnd();
+            Gdx.app.log(TAG, GameConstants.gameStateFlag + "| Turn Ended!");
         } else {
             GameConstants.GameEnd();
+            Gdx.app.log(TAG, "Game Ended!");
         }
 
-        Gdx.app.log(TAG, "Turn Ended!");
+
 
     }
 

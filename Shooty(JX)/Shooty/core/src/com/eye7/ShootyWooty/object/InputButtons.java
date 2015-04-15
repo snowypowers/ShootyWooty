@@ -62,7 +62,9 @@ public class InputButtons extends Table implements Observer{
 //        this.defaults().height(100);
         //this.defaults().height(536);
         //this.defaults().width(300);
-        this.setBackground(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("buttons/menuBG.png")))));
+        this.setBackground(MainLoader.menuBG);
+        this.setHeight(536);
+        //this.setWidth(300);
         //Add to table
         buttons_compact.defaults().height(100);
         buttons_compact.add(row1);

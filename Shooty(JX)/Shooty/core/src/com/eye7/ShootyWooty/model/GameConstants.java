@@ -78,7 +78,7 @@ public class GameConstants {
     }
 
     //ONLY TURN HANDLER IS ALLOWED TO CALL THIS METHOD
-    public static void GameEnd () {
+    public static void GameEnd() {
         Gdx.app.log(TAG, "GAME END");
         for (int i = 1; i > -1; i--) {
             for (Observer o : observersGameEnd) {
