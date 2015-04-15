@@ -32,6 +32,7 @@ public class HourGlass extends Actor implements Observer {
     public HourGlass(Stage stage) {
         //Listen to Turn End
         GameConstants.subscribeTurnEnd(this);
+        GameConstants.subscribeGameEnd(this);
 
         this.stage = stage;
         this.timer = new Timer(this);
@@ -109,9 +110,17 @@ public class HourGlass extends Actor implements Observer {
     }
 
     public void observerUpdate(int i) {
-        synchronized (timer) {
-            timer.notify();
-            turn();
+        if (i == 1) { // Turn End
+            synchronized (timer) {
+                timer.notify();
+                turn();
+            }
+        }
+        if (i == 2) { // Game End
+            synchronized (timer) {
+                timer.gameEnd();
+                timer.notify();
+            }
         }
     }
 
@@ -125,15 +134,17 @@ class Timer extends Thread {
     private HourGlass hourGlass;
     private float time;
     private String timeStatus = "Time: ";
+    private boolean running;
 
     public Timer(HourGlass hg) {
+        running = true;
         time = 0f;
         this.hourGlass = hg;
     }
 
     @Override
     public void run() {
-        while (!isInterrupted()) {
+        while (running) {
             if (time >= GameConstants.TIME_LIMIT) {
                 hourGlass.turnStart();
                 this.interrupt();
@@ -159,11 +170,15 @@ class Timer extends Thread {
         }
 
     }
+
     public String getTimeStatus() {
         return timeStatus;
     }
     public float getTime() {
         return time;
+    }
+    public void gameEnd() {
+        running = false;
     }
 
 

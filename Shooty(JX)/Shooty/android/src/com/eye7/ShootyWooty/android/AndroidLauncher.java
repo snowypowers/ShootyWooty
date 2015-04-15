@@ -1033,7 +1033,7 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
             R.id.button_single_player_2
     };
     public void addAchievements(HashMap<String, Integer> myAchievements) throws InterruptedException {
-        if(myAchievements.get("Kills")==2){
+        if(myAchievements.get("Kills")==1){
             Games.Achievements.unlock(mGoogleApiClient, "CgkI_oGooPsFEAIQAw");//level 3
         }
         if(myAchievements.get("Hits")>=15){

@@ -117,6 +117,7 @@ public class DisplayMap implements InputProcessor {
             camera.position.x = GameConstants.PLAYERS.get(GameConstants.myID+1).getX();
             camera.position.y = GameConstants.PLAYERS.get(GameConstants.myID+1).getY();
             camera.update();
+            GameConstants.PLAYERS.get(GameConstants.myID+1).emote();
         }
         posX = screenX;
         posY = screenY;

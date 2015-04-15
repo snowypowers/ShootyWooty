@@ -3,6 +3,7 @@ package com.eye7.ShootyWooty.world;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.eye7.ShootyWooty.helper.ActionResolver;
+import com.eye7.ShootyWooty.helper.MainLoader;
 import com.eye7.ShootyWooty.helper.TurnHandler;
 import com.eye7.ShootyWooty.model.GameConstants;
 import com.eye7.ShootyWooty.object.ActionMenu;
@@ -37,6 +38,10 @@ public class GameWorld implements Observer {
         gameState = gameState.DECIDING;
         hourGlass = new HourGlass(stage);
         hourGlass.start(); // start timer
+
+        MainLoader.bgMusic.setLooping(true);
+        MainLoader.bgMusic.setVolume(0.4f);
+        MainLoader.bgMusic.play();
     }
 
     // constantly call this method
@@ -95,6 +100,10 @@ public class GameWorld implements Observer {
         }
         if (i == 1) { // Turn End
             gameState = GameState.DECIDING;
+        }
+        if (i == 2) { // Game End
+            actionResolver.setEndGame();
+            MainLoader.bgMusic.stop();
         }
     }
 

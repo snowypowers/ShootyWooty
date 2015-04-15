@@ -18,9 +18,7 @@ import com.eye7.ShootyWooty.model.GameConstants;
 import java.util.HashMap;
 import java.util.LinkedList;
 
-/**
- * Created by Yak Jun Xiang on 11/4/2015.
- */
+
 public class GameOverMenu extends Table {
     private final ActionResolver actionResolver;
     private Player player;
@@ -38,11 +36,28 @@ public class GameOverMenu extends Table {
         for (String s: achievements.keySet()) {
             pointer.add(s);
         }
+        for (String s: achievements.keySet()) {
+            pointer.add(s);
+        }
         a.displayAchievements(achievements);
+
         //Setup Menu
         Label.LabelStyle style = new Label.LabelStyle(MainLoader.white, Color.WHITE);
         Label header = new Label("Game Over!", style);
-        label = new Label("", style);
+        label = new Label(null, style);
+
+        if (GameConstants.gameStateFlag.contains("W")) {
+            label.setText("You Win!");
+        }
+        if (GameConstants.gameStateFlag.contains("L")) {
+            label.setText("You Lose!");
+        }
+        if (GameConstants.gameStateFlag.contains("D")) {
+            label.setText("Draw!!!");
+        }
+        if (GameConstants.gameStateFlag.contains("dead")) {
+            label.setText("You died!");
+        }
         Drawable buttonImage = new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("buttons/exitButton.png"))));
         Button.ButtonStyle bstyle = new Button.ButtonStyle(buttonImage, buttonImage, buttonImage);
         exitButton = new Button(bstyle);
@@ -53,7 +68,8 @@ public class GameOverMenu extends Table {
         }
         this.setBackground(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("buttons/menuBG.png")))));
         this.add(header).center();
-        this.add(label).center().height(300);
+        this.row();
+        this.add(label).center().expand();
         this.row();
         this.add(exitButton).center();
 

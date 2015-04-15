@@ -83,6 +83,7 @@ public class Player implements Observer{
         this.actionResolver = actionResolver;
         //Listen in to TurnEnd
         GameConstants.subscribeTurnEnd(this);
+        GameConstants.subscribeGameEnd(this);
 
         this.map = map; // Reference to the GameMap object in order to get the positions of other objects;
 
@@ -185,8 +186,7 @@ public class Player implements Observer{
 
                 } else if (playerState == PlayerState.MOVING) {
                     stateDelta += delta;
-                    s = new Sprite(animations.get(getdirection()+ ".moving").getKeyFrame(stateDelta));
-
+                    s = new Sprite(animations.get(getdirection() + ".moving").getKeyFrame(stateDelta));
 
 
                 } else if (playerState == PlayerState.DAMAGED) {
@@ -199,7 +199,7 @@ public class Player implements Observer{
                         soundDamaged.stop();                        // Stop damagedSound
                         changeAnimation(previousState);             // Change to the previous state whatever that was.
                         previousState = PlayerState.DAMAGED;        // Set the previousState to DAMAGED.
-                        Gdx.app.log(TAG,playerState.toString());    //
+                        Gdx.app.log(TAG, playerState.toString());    //
                         statusLock.notifyAll();
                     }
 
@@ -216,6 +216,13 @@ public class Player implements Observer{
                     } else {
                         changeAnimation(PlayerState.IDLE);
                         s = new Sprite(animations.get(getdirection() + ".idle").getKeyFrame(stateDelta));
+                    }
+                } else if (playerState == PlayerState.EMOTE) {
+                    if (stateDelta > animations.get("emote").getAnimationDuration()) {
+                        changeAnimation(previousState);
+                    } else {
+                        s = new Sprite(animations.get("emote").getKeyFrame(stateDelta));
+                        stateDelta += delta;
                     }
                 }
             }
@@ -385,6 +392,10 @@ public class Player implements Observer{
             }
             changeAnimation(PlayerState.COLLECTING_WATER);
         }
+    }
+
+    public void emote() {
+
     }
 
 	//Move in x - direction
@@ -571,14 +582,24 @@ public class Player implements Observer{
 
     //Observer Methods for TurnEnd
     public void observerUpdate(int i) {
-        //Check if just died
-        if (health <= 0 && !isDead()) { //Actions upon DEATH
-            changeAnimation(PlayerState.DEAD);
+        if (i == 1) {
+            //Check if just died
+            if (health <= 0 && !isDead()) { //Actions upon DEATH
+                changeAnimation(PlayerState.DEAD);
+            }
+            if (!isDead()) { // HouseKeeping Actions
+                bulletCount += 3; // Add 3 more bullets
+                if (bulletCount > 12) { //Set max bullets that can be stored
+                    bulletCount = 10;
+                }
+            }
         }
-        if (!isDead()) {
-            bulletCount += 3; // Add 3 more bullets
-            if (bulletCount > 12) { //Set max bullets that can be stored
-                bulletCount = 10;
+        if (i == 2) { // Game End
+            if (GameConstants.gameStateFlag.contains("L")) { //Lose
+                changeAnimation(PlayerState.DEAD);
+            }
+            if (GameConstants.gameStateFlag.contains("W")) { // Win
+                changeAnimation(PlayerState.COLLECTING_WATER);
             }
         }
     }
