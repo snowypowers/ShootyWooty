@@ -12,6 +12,14 @@ import com.eye7.ShootyWooty.helper.MainLoader;
 import com.eye7.ShootyWooty.model.GameConstants;
 import com.eye7.ShootyWooty.screen.MainScreen;
 
+/**
+ * Main. Creates the game.
+ *
+ * Hierarchy
+ * actionResolver -> main -> MainScreen myScreen
+ *                        -> MainLoader
+ *                        -> CactusLoader
+ */
 
 public class main extends Game {
     SpriteBatch batch;

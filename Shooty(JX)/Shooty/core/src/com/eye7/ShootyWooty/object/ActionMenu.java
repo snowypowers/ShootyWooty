@@ -19,6 +19,10 @@ import com.eye7.ShootyWooty.model.GameConstants;
  * ActionMenu is the sliding menu that contains buttons for players to input their moves. This class controls the main frame which holds the buttons.
  * Buttons are found in InputButtons and GameOverMenu.
  * HourGlass refers to the state of ActionMenu for alpha adjustment.
+ *
+ * Hierarchy
+ * GameWorld -> ActionMenu -> InputButtons
+ *                         -> GameOverMenu
  */
 public class ActionMenu extends Table implements Observer{
     private final String TAG = "ActionMenu";

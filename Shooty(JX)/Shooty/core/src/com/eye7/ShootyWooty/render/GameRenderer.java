@@ -9,6 +9,8 @@ import com.eye7.ShootyWooty.world.GameWorld;
 /**
  * GameRenderer. Renders the UI.
  *
+ * Hierarchy
+ * MainScreen -> GameRenderer
  */
 public class GameRenderer {
 

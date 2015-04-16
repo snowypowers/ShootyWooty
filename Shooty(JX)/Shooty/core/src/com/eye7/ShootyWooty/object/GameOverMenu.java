@@ -15,6 +15,12 @@ import com.eye7.ShootyWooty.model.GameConstants;
 import java.util.HashMap;
 import java.util.LinkedList;
 
+/**
+ * GameOverMenu displayed when the game ends, replacing InputButtons
+ *
+ * Hierarchy
+ * ActionMenu -> GameOverMenu
+ */
 
 public class GameOverMenu extends Table {
     private final ActionResolver actionResolver;

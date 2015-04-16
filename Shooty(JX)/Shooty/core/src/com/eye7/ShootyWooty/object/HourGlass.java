@@ -15,6 +15,9 @@ import com.eye7.ShootyWooty.model.GameConstants;
  * HourGlass. Timer thread which calls TurnStart(), triggering the moving of players on the map.
  * HourGlass class contains the code for the graphical representation on the screen.
  * Timer class is a thread that runs and keep time.
+ *
+ * Hierarchy
+ * GameWorld -> HourGlass -> Timer (inner class)
  */
 
 public class HourGlass extends Actor implements Observer {

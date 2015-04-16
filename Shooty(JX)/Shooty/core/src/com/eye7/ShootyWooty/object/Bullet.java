@@ -9,6 +9,9 @@ import com.badlogic.gdx.math.Vector2;
 
 /**
  * Bullet of player. Contains information and manipulation methods.
+ *
+ * Hierarchy
+ * Player -> Bullet
  */
 public class Bullet {
     private final String TAG;

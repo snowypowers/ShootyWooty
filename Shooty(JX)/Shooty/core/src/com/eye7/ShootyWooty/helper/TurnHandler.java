@@ -9,6 +9,9 @@ import java.util.concurrent.CyclicBarrier;
  * Turn handler that manages and moves the pieces on board.
  * Game must ensure that all moves have arrived before running this thread.
  * This thread will call TurnEnd() or GameEnd() to signal the end of turn or end of game respectively.
+ *
+ * Hierarchy
+ * GameWorld -> TurnHandler -> MoveHandler
  */
 public class TurnHandler extends Thread {
     private final String TAG = "TurnHandler";

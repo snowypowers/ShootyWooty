@@ -11,8 +11,12 @@ import com.eye7.ShootyWooty.object.HourGlass;
 import com.eye7.ShootyWooty.object.Observer;
 
 /**
- * @author PT
- * Handles interaction with ActionResolver
+ * GameWorld. Handles interaction with ActionResolver. Contains all UI elements. Part of the flow as the creator of TurnHandler.
+ *
+ * Hierarchy
+ * MainScreen -> GameWorld -> ActionMenu
+ *                         -> HourGlass
+ *                         -> TurnHandler
  */
 public class GameWorld implements Observer {
     private final String TAG = "GameWorld";

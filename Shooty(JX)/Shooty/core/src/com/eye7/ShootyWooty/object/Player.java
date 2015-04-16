@@ -17,6 +17,9 @@ import java.util.HashMap;
 
 /**
  * Player class. This class takes a CircleMapObject and renders a player sprite on top of it. Contains information and manipulation method for the player.
+ *
+ * Hierarchy
+ * GameMap -> Player -> Bullet
  */
 public class Player implements Observer{
     private final String TAG;

@@ -16,6 +16,9 @@ import com.eye7.ShootyWooty.model.GameConstants;
 /**
  * InputButtons is the table of 12 buttons that players use to input moves. This class is initialised and placed in ActionMenu.
  * Each row of buttons is a ButtonRow.
+ *
+ * Hierarchy
+ * ActionMenu -> InputButtons -> ButtonRow
  */
 public class InputButtons extends Table implements Observer{
     private final String TAG = "InputButtons";

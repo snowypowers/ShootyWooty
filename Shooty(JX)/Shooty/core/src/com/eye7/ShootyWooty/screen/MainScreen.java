@@ -15,7 +15,13 @@ import com.eye7.ShootyWooty.render.GameRenderer;
 import com.eye7.ShootyWooty.world.GameWorld;
 
 /**
- * MainScreen.
+ * MainScreen. Setups the stage and renderers
+ *
+ * Hierarchy
+ * Main -> MainScreen -> GameWorld world
+ *                    -> GameRenderer renderer
+ *                    -> DisplayMap map
+ *
  */
 
 public class MainScreen implements Screen {

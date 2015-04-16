@@ -14,7 +14,11 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.eye7.ShootyWooty.world.GameMap;
 
 /**
- * DisplayMap. This class contains the map and processes Input onto the Map.
+ * DisplayMap. This class is the container for GameMap and MapRenderer. This processes the input for the map.
+ *
+ * Hierarchy
+ * MainScreen -> DisplayMap -> MapRenderer tiledMapRenderer
+ *                          -> GameMap gameMap
  */
 public class DisplayMap implements InputProcessor {
     private static final String TAG = "DisplayMap";

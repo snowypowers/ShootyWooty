@@ -17,6 +17,9 @@ import java.util.concurrent.CyclicBarrier;
  * Each moveHandler is attached to a player and executes the moves according to the Cyclic Barrier found in TurnHandler.
  * Contains methods to check for collisions with players, rocks and water.
  * If player is dead, execution is skipped over and thread immediately waits at Barrier.
+ *
+ * Hierarchy
+ * TurnHandler -> MoveHandler
  */
 public class MoveHandler extends Thread{
     private final String TAG;

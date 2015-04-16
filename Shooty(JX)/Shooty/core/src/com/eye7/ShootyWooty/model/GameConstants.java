@@ -11,10 +11,20 @@ import java.util.HashMap;
 /**
  * GameConstants that are accessed globally in the game. Contains global variables and methods that affects the game as a whole.
  *
+ * Game Loop
+ * *Game Starts
+ * *HourGlass calls TurnStart() and pauses
+ * *GameWorld creates TurnHandler and run it
+ * *TurnHandler creates MoveHandlers and run them.
+ * *Once MoveHandlers end, TurnHandler calls TurnEnd()
+ * *TurnEnd() resumes HourGlass
+ *
+ * *If there is a conclusion, GameEnd() is called.
+ *
  */
 public class GameConstants {
     private static final String TAG = "GameConstants";
-    public static boolean DEBUG = true;
+    public static boolean DEBUG = false;
 
     //Screen Size
     public static float SCALE_X;

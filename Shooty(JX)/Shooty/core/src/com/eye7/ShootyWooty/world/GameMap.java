@@ -13,6 +13,12 @@ import com.eye7.ShootyWooty.helper.ActionResolver;
 import com.eye7.ShootyWooty.model.GameConstants;
 import com.eye7.ShootyWooty.object.Player;
 
+/**
+ * GameMap. Extracts all information needed from the loaded map and creates the players. Places all objects in game into lists in GameConstants. Renders the players.
+ *
+ * Hierarchy
+ * DisplayMap -> GameMap -> Player
+ */
 public class GameMap {
     private final String TAG = "GameMap";
     private TiledMap map;

@@ -2,6 +2,9 @@ package com.eye7.ShootyWooty.render;
 
 /**
  * MapRenderer. Renders the Map.
+ *
+ * Hierarchy
+ * DisplayMap -> MapRenderer
  */
 
 import com.badlogic.gdx.graphics.Color;
