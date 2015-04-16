@@ -262,19 +262,17 @@ public class Player implements Observer{
         healthBarFG3.setY(y+RADIUS+30);
 
         //healthBar image is too big, so scaling it down
-//        healthBarBG.setScale(0.7f, 1f);
-//        healthBarFG.setScale(0.7f, 1f);
 
         //connect the healthBar to the health of the player
         if(health>=60) {
-            healthBarFG2.setScale((float)(health-50f)/50f, 1f);
-            healthBarFG3.setScale(1);
-            healthBarFG.setScale(0);
+            healthBarFG2.setScale((float)(health-50)/50f, 1f);
+            healthBarFG3.setScale(1,1);
+            healthBarFG.setScale(0,0);
         }
         else{
             healthBarFG.setScale((float)health/50f, 1f);
-            healthBarFG2.setScale(0);
-            healthBarFG3.setScale(0);
+            healthBarFG2.setScale(0,0);
+            healthBarFG3.setScale(0,0);
 
         }
         //initialize the waterBars

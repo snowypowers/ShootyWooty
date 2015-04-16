@@ -42,8 +42,8 @@ public class GameOverMenu extends Table {
         a.displayAchievements(achievements);
 
         //Setup Menu
-        Label.LabelStyle style = new Label.LabelStyle(MainLoader.green, Color.GREEN);
-        header = new Label("Game Over!", style);
+        Label.LabelStyle style = new Label.LabelStyle(MainLoader.green, Color.valueOf("452f04"));
+//        header = new Label("Game Over!", style);
         label = new Label(null, style);
         label.setAlignment(Align.center, Align.center);
 
@@ -96,13 +96,13 @@ public class GameOverMenu extends Table {
         //Setup Table
         this.setHeight(536);
         this.setWidth(300);
-        this.setBackground(MainLoader.menuBG);
+        this.setBackground(MainLoader.exitmenuBG);
 
-        this.add(header).center().padTop(50);
+//        this.add(header).center().padBottom(50).padTop(25);
         this.row();
-        this.add(label).center().expand();
+        this.add(label).center().padBottom(175);
         this.row();
-        this.add(exitButton).center().padBottom(50);
+        this.add(exitButton).center().padBottom(25);
     }
 
     public void changeText() {

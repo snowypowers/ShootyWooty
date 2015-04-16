@@ -6,11 +6,13 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Cell;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.eye7.ShootyWooty.helper.ActionResolver;
+import com.eye7.ShootyWooty.helper.MainLoader;
 import com.eye7.ShootyWooty.model.GameConstants;
 
 /**
@@ -30,6 +32,7 @@ public class ActionMenu extends Table implements Observer{
     private Drawable handle_img;
     private InputButtons inputButtons;
     private GameOverMenu gameOverMenu;
+
 
     private boolean transitionFlag = false;
 
@@ -90,7 +93,7 @@ public class ActionMenu extends Table implements Observer{
 
         //Add buttons to table
         this.add(handle).center();
-        this.add(inputButtons).expand();
+        this.add(inputButtons);
         this.setPosition(leftEdge, 0); //Right edge of screen
 
 
@@ -129,11 +132,14 @@ public class ActionMenu extends Table implements Observer{
             if (!GameConstants.gameStateFlag.contains("U")) {
                 //this.clearChildren();
                 //this.add(handle).center();
+
                 gameOverMenu = new GameOverMenu(actionResolver);
                 //this.add(gameOverMenu);
                 this.invalidate();
                 Cell c = this.getCell(inputButtons);                            //Get the cell containing inputButtons
                 c.clearActor();                                                 //Remove inputButtons
+
+
                 c.setActor(gameOverMenu);    //Replace it with GameOverMenu
                 transitionFlag = true;
             }
