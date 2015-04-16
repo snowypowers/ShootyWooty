@@ -6,8 +6,9 @@ import com.eye7.ShootyWooty.model.GameConstants;
 import java.util.concurrent.CyclicBarrier;
 
 /**
- * Created by JunXiang on 25/3/2015. Turn handler that manages and moves the pieces on board.
- * Game must ensure that all moves have arrived before running this thread
+ * Turn handler that manages and moves the pieces on board.
+ * Game must ensure that all moves have arrived before running this thread.
+ * This thread will call TurnEnd() or GameEnd() to signal the end of turn or end of game respectively.
  */
 public class TurnHandler extends Thread {
     private final String TAG = "TurnHandler";

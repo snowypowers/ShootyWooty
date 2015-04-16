@@ -15,6 +15,9 @@ import com.eye7.ShootyWooty.world.GameMap;
 
 import java.util.HashMap;
 
+/**
+ * Player class. This class takes a CircleMapObject and renders a player sprite on top of it. Contains information and manipulation method for the player.
+ */
 public class Player implements Observer{
     private final String TAG;
 
@@ -33,6 +36,8 @@ public class Player implements Observer{
     private int bulletCount;
     public boolean dead = false; // This boolean turns true when player just died. This prevents furthur movement in current Turn before finalising his death.
     private ActionResolver actionResolver;
+    private boolean turn = false;
+
     //PlayerStatus and Animations
     private HashMap<String, Animation> animations;
     private PlayerState playerState;
@@ -65,7 +70,7 @@ public class Player implements Observer{
     //Debug Renderer
     private ShapeRenderer sr;
 
-    //Achievemnts
+    //Achievements
     private int lifeTimeKills = 0;
     private int lifeTimeHits = 0;
     private int lifeTimeWater = 0;
@@ -82,7 +87,8 @@ public class Player implements Observer{
         TAG = "Player" + String.valueOf(id+1);
         playerID = id+1;
         this.actionResolver = actionResolver;
-        //Listen in to TurnEnd
+        //Listen in to EVERYTHING
+        GameConstants.subscribeTurnStart(this);
         GameConstants.subscribeTurnEnd(this);
         GameConstants.subscribeGameEnd(this);
 
@@ -221,7 +227,7 @@ public class Player implements Observer{
                     }
                 } else if (playerState == PlayerState.EMOTE) {
                     if (stateDelta > animations.get("emote").getAnimationDuration()) {
-                        changeAnimation(previousState);
+                        changeAnimation(PlayerState.IDLE);
                     } else {
                         s = new Sprite(animations.get("emote").getKeyFrame(stateDelta));
                         stateDelta += delta;
@@ -374,6 +380,7 @@ public class Player implements Observer{
                     dead = true; // Set frag to true so no one else can get the kill
                 }
 
+
             }
             changeAnimation(PlayerState.DAMAGED);
         }
@@ -397,10 +404,6 @@ public class Player implements Observer{
             }
             changeAnimation(PlayerState.COLLECTING_WATER);
         }
-    }
-
-    public void emote() {
-
     }
 
 	//Move in x - direction
@@ -586,9 +589,20 @@ public class Player implements Observer{
         }
     }
 
-    //Observer Methods for TurnEnd
+    public void emote() {
+        if (turn == false && playerState != PlayerState.EMOTE) {
+            changeAnimation(PlayerState.EMOTE);
+        }
+    }
+
+    //Observer Methods
     public void observerUpdate(int i) {
-        if (i == 1) {
+        if (i == 0) { //Turn Start
+            turn = true;
+            changeAnimation(PlayerState.IDLE);
+        }
+        if (i == 1) { // Turn End
+            turn  = false;
             //Check if just died
             if (health <= 0 && !isDead()) { //Actions upon DEATH
                 changeAnimation(PlayerState.DEAD);
@@ -601,6 +615,9 @@ public class Player implements Observer{
             }
         }
         if (i == 2) { // Game End
+            if (health <= 0 && !isDead()) { //Actions upon DEATH
+                changeAnimation(PlayerState.DEAD);
+            }
             if (GameConstants.gameStateFlag.contains("L")) { //Lose
                 changeAnimation(PlayerState.DEAD);
             }
@@ -621,6 +638,9 @@ public class Player implements Observer{
     }
 }
 
+/**
+ * PlayerState that is used for animation.
+ */
 enum PlayerState {
     NONE,
     EMOTE,

@@ -14,6 +14,9 @@ import com.eye7.ShootyWooty.render.DisplayMap;
 import com.eye7.ShootyWooty.render.GameRenderer;
 import com.eye7.ShootyWooty.world.GameWorld;
 
+/**
+ * MainScreen.
+ */
 
 public class MainScreen implements Screen {
     private GameWorld world;
