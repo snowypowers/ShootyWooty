@@ -11,7 +11,8 @@ import com.badlogic.gdx.utils.Array;
 import java.util.HashMap;
 
 /**
- * Created by PT on 3/4/2015.
+ * Loader for player sprites and sounds. Will only load 2 or 4 player sprites depending on context.
+ *
  * Animation Strings:
  * character.north.moving (4 frames)
  * character.north.idle (4 frames)

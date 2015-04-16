@@ -1,9 +1,6 @@
 package com.eye7.ShootyWooty.object;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup;
@@ -12,11 +9,14 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.eye7.ShootyWooty.helper.MainLoader;
 import com.eye7.ShootyWooty.model.GameConstants;
 
+/**
+ * InputButtons is the table of 12 buttons that players use to input moves. This class is initialised and placed in ActionMenu.
+ * Each row of buttons is a ButtonRow.
+ */
 public class InputButtons extends Table implements Observer{
     private final String TAG = "InputButtons";
 

@@ -12,7 +12,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.eye7.ShootyWooty.model.GameConstants;
 
 /**
- * Created by Yak Jun Xiang on 13/4/2015.
+ * HourGlass. Timer thread which calls TurnStart(), triggering the moving of players on the map.
+ * HourGlass class contains the code for the graphical representation on the screen.
+ * Timer class is a thread that runs and keep time.
  */
 
 public class HourGlass extends Actor implements Observer {
@@ -130,6 +132,7 @@ public class HourGlass extends Actor implements Observer {
     }
     public void dispose(){
         hourglassSkin.dispose();
+        timer.gameEnd();
 
     }
 
@@ -185,7 +188,6 @@ class Timer extends Thread {
     public void gameEnd() {
         running = false;
     }
-
 
 }
 

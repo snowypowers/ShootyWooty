@@ -14,7 +14,7 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.eye7.ShootyWooty.world.GameMap;
 
 /**
- * Created by JunXiang on 1/3/2015.
+ * DisplayMap. This class contains the map and processes Input onto the Map.
  */
 public class DisplayMap implements InputProcessor {
     private static final String TAG = "DisplayMap";

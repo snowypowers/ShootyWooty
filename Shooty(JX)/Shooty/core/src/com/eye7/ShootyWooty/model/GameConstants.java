@@ -9,12 +9,13 @@ import com.eye7.ShootyWooty.object.Player;
 import java.util.HashMap;
 
 /**
- * Created by JunXiang on 14/3/2015.
+ * GameConstants that are accessed globally in the game. Contains global variables and methods that affects the game as a whole.
+ *
  */
 public class GameConstants {
     private static final String TAG = "GameConstants";
     public static boolean DEBUG = true;
-    public static String gameStateFlag;
+
     //Screen Size
     public static float SCALE_X;
     public static float SCALE_Y;
@@ -23,6 +24,7 @@ public class GameConstants {
     public static int NUM_PLAYERS; // Determines the number of players in the game
     public static int myID; // This client's player number
     public static float TIME_LIMIT = 15f;
+    public static String gameStateFlag;
 
     //Map properties
     public static float TILE_SIZE;
@@ -37,6 +39,7 @@ public class GameConstants {
     //Global Turn Observer System.
     // TurnStart() is called by the Timer to start the processing of moves.
     // TurnEnd() is called by the TurnHandler before shutting down. This announces the end of the turn and allows content to update.
+    // GameEnd90 is called by the TurnHandler when the game has reached a conclusion. This prepares the game for shutdown by stopping HourGlass.
 
     public static Array<Observer> observersTurnStart = new Array<Observer>();
     public static void subscribeTurnStart (Observer o) {
@@ -87,5 +90,11 @@ public class GameConstants {
                 }
             }
         }
+    }
+
+    public static void dispose() {
+    observersTurnStart.clear();
+    observersTurnEnd.clear();
+    observersGameEnd.clear();
     }
 }

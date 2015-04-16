@@ -1,7 +1,7 @@
 package com.eye7.ShootyWooty.render;
 
 /**
- * Created by JunXiang on 5/3/2015.
+ * MapRenderer. Renders the Map.
  */
 
 import com.badlogic.gdx.graphics.Color;

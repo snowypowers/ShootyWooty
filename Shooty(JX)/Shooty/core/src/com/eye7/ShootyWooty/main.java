@@ -44,6 +44,7 @@ public class main extends Game {
         Gdx.app.log("disposing","In main dispose");
         myScreen.dispose();
         MainLoader.dispose();
+        GameConstants.dispose();
     }
 
     @Override

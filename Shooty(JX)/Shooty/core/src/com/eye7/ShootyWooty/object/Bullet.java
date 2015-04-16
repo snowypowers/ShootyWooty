@@ -7,6 +7,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.objects.CircleMapObject;
 import com.badlogic.gdx.math.Vector2;
 
+/**
+ * Bullet of player. Contains information and manipulation methods.
+ */
 public class Bullet {
     private final String TAG;
 

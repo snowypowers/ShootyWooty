@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 
-/*
+/**
  * MoveHandler. Created by TurnHandler to handle moves for each player.
  * Each moveHandler is attached to a player and executes the moves according to the Cyclic Barrier found in TurnHandler.
  * Contains methods to check for collisions with players, rocks and water.
@@ -20,6 +20,7 @@ import java.util.concurrent.CyclicBarrier;
  */
 public class MoveHandler extends Thread{
     private final String TAG;
+
     //Phaser
     private CyclicBarrier cb = null;
 
