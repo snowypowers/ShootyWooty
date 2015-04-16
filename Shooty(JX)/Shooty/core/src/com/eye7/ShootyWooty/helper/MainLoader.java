@@ -23,6 +23,7 @@ public class MainLoader {
     public static Skin skin, skinCharacters;
 
     public static Drawable menuBG;
+    public static Drawable exitmenuBG;
     public static Drawable homeButtonImg;
 
 
@@ -40,6 +41,7 @@ public class MainLoader {
         skin = new Skin(atlas); // skin containing drawables
 
        menuBG = new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("buttons/menuBG.png"))));
+       exitmenuBG = new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("buttons/exitmenuBG.png"))));
        homeButtonImg = new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("buttons/exitButton2.png"))));
         //add the background sound here
         bgMusic = Gdx.audio.newMusic(Gdx.files.internal("sounds/bgMusic.mp3"));

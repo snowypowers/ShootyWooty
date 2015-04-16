@@ -50,6 +50,7 @@ public class InputButtons extends Table implements Observer{
         //ButtonGroup Display
         display = new Table();
         img = new Image(MainLoader.skin.getDrawable("bulletChosen"));
+        img.setScale(0.7f,0.7f);
         number = new Label("4", new Label.LabelStyle(MainLoader.green, Color.GREEN));
 
         //Create buttons
@@ -59,12 +60,9 @@ public class InputButtons extends Table implements Observer{
         row4 = new ButtonRow(this);
 
         //Table properties
-//        this.defaults().height(100);
-        //this.defaults().height(536);
-        //this.defaults().width(300);
         this.setBackground(MainLoader.menuBG);
         this.setHeight(536);
-        //this.setWidth(300);
+
         //Add to table
         buttons_compact.defaults().height(100);
         buttons_compact.add(row1);
@@ -76,9 +74,9 @@ public class InputButtons extends Table implements Observer{
         buttons_compact.add(row4);
         buttons_compact.row();
 
-        display.add(img).padRight(20);
+        display.add(img).padBottom(20).right();
         display.add(number);
-        this.add(display).center();
+        this.add(display).center().padRight(20);
         this.row();
         this.add(buttons_compact).center();
     }
