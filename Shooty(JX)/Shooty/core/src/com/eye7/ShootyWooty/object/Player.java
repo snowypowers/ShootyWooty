@@ -606,6 +606,11 @@ public class Player implements Observer{
             //Check if just died
             if (health <= 0 && !isDead()) { //Actions upon DEATH
                 changeAnimation(PlayerState.DEAD);
+                collider.getCircle().setPosition(-100,100); // Move colliders out so other players cannot collide with it anymore
+                bulletl.setReturn(-100,-100);
+                bulletr.setReturn(-100,-100);
+                bulletl.getReturn();
+                bulletr.getReturn();
             }
             if (!isDead()) { // HouseKeeping Actions
                 bulletCount += 3; // Add 3 more bullets
@@ -617,6 +622,11 @@ public class Player implements Observer{
         if (i == 2) { // Game End
             if (health <= 0 && !isDead()) { //Actions upon DEATH
                 changeAnimation(PlayerState.DEAD);
+                collider.getCircle().setPosition(-100,100); // Move colliders out so other players cannot collide with it anymore
+                bulletl.setReturn(-100,-100);
+                bulletr.setReturn(-100,-100);
+                bulletl.getReturn();
+                bulletr.getReturn();
             }
             if (GameConstants.gameStateFlag.contains("L")) { //Lose
                 changeAnimation(PlayerState.DEAD);
