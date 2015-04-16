@@ -116,7 +116,6 @@ public class GameRenderer {
     public void dispose(){
         shapeRenderer.dispose();
         batcher.dispose();
-        shapeRenderer.dispose();
     }
 
 }

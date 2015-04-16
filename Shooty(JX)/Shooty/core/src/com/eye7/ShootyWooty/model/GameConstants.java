@@ -14,7 +14,7 @@ import java.util.HashMap;
 public class GameConstants {
     private static final String TAG = "GameConstants";
     public static boolean DEBUG = true;
-    public static String gameStateFlag;
+
     //Screen Size
     public static float SCALE_X;
     public static float SCALE_Y;
@@ -23,6 +23,7 @@ public class GameConstants {
     public static int NUM_PLAYERS; // Determines the number of players in the game
     public static int myID; // This client's player number
     public static float TIME_LIMIT = 15f;
+    public static String gameStateFlag;
 
     //Map properties
     public static float TILE_SIZE;
@@ -87,5 +88,11 @@ public class GameConstants {
                 }
             }
         }
+    }
+
+    public static void dispose() {
+    observersTurnStart.clear();
+    observersTurnEnd.clear();
+    observersGameEnd.clear();
     }
 }

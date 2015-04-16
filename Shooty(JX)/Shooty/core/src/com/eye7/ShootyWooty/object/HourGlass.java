@@ -130,6 +130,7 @@ public class HourGlass extends Actor implements Observer {
     }
     public void dispose(){
         hourglassSkin.dispose();
+        timer.gameEnd();
 
     }
 
@@ -185,7 +186,6 @@ class Timer extends Thread {
     public void gameEnd() {
         running = false;
     }
-
 
 }
 

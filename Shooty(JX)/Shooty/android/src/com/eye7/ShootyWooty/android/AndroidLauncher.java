@@ -568,9 +568,11 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
         }
 
         resetGameVars();
+        /*
         if(oldShootyWooty!=null){
             oldShootyWooty.dispose();
         }
+        */
 
     }
 //    void resetLibGdxnVars(){
@@ -599,7 +601,8 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
         idToNum = new HashMap<>();
         linearLayout.removeViewAt(0);
         linearLayout = (LinearLayout) findViewById(R.id.screen_game);
-        oldShootyWooty = shootyWooty;
+        shootyWooty.dispose();
+        //oldShootyWooty = shootyWooty;
         shootyWooty = new main(this);
         gameView = initializeForView(shootyWooty,config);
         linearLayout.addView(gameView, 0, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
