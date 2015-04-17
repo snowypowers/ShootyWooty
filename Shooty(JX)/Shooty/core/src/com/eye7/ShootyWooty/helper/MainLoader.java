@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
@@ -37,22 +38,24 @@ public class MainLoader {
         atlas = new TextureAtlas(Gdx.files.internal("buttons/Gbuttons.pack")); // atlas for skin
         skin = new Skin(atlas); // skin containing drawables
 
-       menuBG = new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("buttons/menuBG.png"))));
-       exitmenuBG = new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("buttons/exitmenuBG.png"))));
-       homeButtonImg = new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("buttons/exitButton2.png"))));
+        //UI Sprites
+        menuBG = new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("buttons/menuBG.png"))));
+        exitmenuBG = new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("buttons/exitmenuBG.png"))));
+        homeButtonImg = new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("buttons/exitButton2.png"))));
+
+
 
         //Background music
         bgMusic = Gdx.audio.newMusic(Gdx.files.internal("sounds/bgMusic.mp3"));
 
 
-
-//        TextureRegion[] faucets = new TextureRegion[11];
-//        int faucet_count=0;
-//        for (int i = 1; i < 12 ; i++) {
-//            faucets[i-1] = new TextureRegion(skinCharacters.getRegion("Sprite.faucet"+String.valueOf(i)));
-//            faucets[i-1].flip(false,true);
-//        }
-//        animation_faucet = new Animation(0.2f,faucets);
+        //Faucet Sprites
+        TextureRegion[] faucets = new TextureRegion[11];
+        Skin faucetSkin = new Skin(new TextureAtlas(Gdx.files.internal("maps/faucet_animation.pack")));
+        for (int i = 1; i < 12 ; i++) {
+            faucets[i-1] = new TextureRegion(faucetSkin.getRegion("faucet"+String.valueOf(i)));
+        }
+        animation_faucet = new Animation(0.2f,faucets);
 
 
     }

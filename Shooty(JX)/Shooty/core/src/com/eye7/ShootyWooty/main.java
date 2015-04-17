@@ -26,6 +26,8 @@ public class main extends Game {
     Texture img;
     Screen myScreen;
     private ActionResolver actionResolver;
+
+
     public main(ActionResolver actionResolver){
 
         this.actionResolver = actionResolver;

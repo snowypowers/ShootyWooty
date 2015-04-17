@@ -7,6 +7,7 @@ package com.eye7.ShootyWooty.render;
  * DisplayMap -> MapRenderer
  */
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -16,6 +17,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
+import com.eye7.ShootyWooty.helper.MainLoader;
 import com.eye7.ShootyWooty.model.GameConstants;
 
 import java.util.ArrayList;
@@ -24,22 +26,18 @@ import java.util.List;
 public class MapRenderer extends OrthogonalTiledMapRenderer {
     private final String TAG = "MapRenderer";
 
-    private Sprite sprite;
     private SpriteBatch spriteBatch;
     private List<Sprite> sprites;
     private int drawSpritesAfterLayer = 2;
     private ShapeRenderer colliderRender;
+    private float mapDelta;
 
     public MapRenderer (TiledMap map, SpriteBatch sb) {
         super(map, sb);
         spriteBatch = sb;
         sprites = new ArrayList<Sprite>();
         colliderRender = new ShapeRenderer();
-
-    }
-
-    public void addSprite(Sprite sprite){
-        sprites.add(sprite);
+        mapDelta = 0;
     }
 
     @Override
@@ -70,6 +68,15 @@ public class MapRenderer extends OrthogonalTiledMapRenderer {
                         beginRender();
                     }
                 } else if (layer.getName().contains("Water")) { // Renders all water squares
+
+                    for (Rectangle r: GameConstants.WATER) { //Draws the water
+                        spriteBatch.draw(MainLoader.animation_faucet.getKeyFrame(mapDelta), r.x, r.y);
+                    }
+                    mapDelta += Gdx.graphics.getDeltaTime();
+                    if (mapDelta > 8) {
+                        mapDelta= 0;
+                    }
+
                     if (GameConstants.DEBUG) {
                         endRender();
                         colliderRender.setColor(Color.BLUE);
