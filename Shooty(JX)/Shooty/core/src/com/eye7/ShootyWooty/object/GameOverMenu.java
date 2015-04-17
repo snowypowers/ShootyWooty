@@ -1,5 +1,6 @@
 package com.eye7.ShootyWooty.object;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
@@ -31,9 +32,10 @@ public class GameOverMenu extends Table {
     private Label header;
     private Label label;
     private Button exitButton;
-
-    public GameOverMenu(ActionResolver a) {
+    private Game game;
+    public GameOverMenu(ActionResolver a, final Game game) {
         actionResolver = a;
+        this.game = game;
         //Setup Player
         a.setEndGame();
         player = GameConstants.PLAYERS.get(GameConstants.myID+1);
@@ -80,6 +82,16 @@ public class GameOverMenu extends Table {
 
             public void clicked(InputEvent event, float x,float y) {
                 try {
+                    Thread exitGame = new Thread(){
+                        public void run(){
+                            try {
+                                Thread.sleep(1000);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                            game.dispose();
+                        }
+                    };
                     if(GameConstants.gameStateFlag.equals("W")){
                         actionResolver.gameDecided("win");
                     }
@@ -87,6 +99,8 @@ public class GameOverMenu extends Table {
                         actionResolver.gameDecided("draw");
                     else
                         actionResolver.gameDecided("lose");
+                    exitGame.start();
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

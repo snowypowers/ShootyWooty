@@ -1,18 +1,17 @@
 package com.eye7.ShootyWooty.object;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Cell;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.eye7.ShootyWooty.helper.ActionResolver;
-import com.eye7.ShootyWooty.helper.MainLoader;
 import com.eye7.ShootyWooty.model.GameConstants;
 
 /**
@@ -37,7 +36,7 @@ public class ActionMenu extends Table implements Observer{
     private InputButtons inputButtons;
     private GameOverMenu gameOverMenu;
 
-
+    private Game game;
     private boolean transitionFlag = false;
 
 
@@ -45,10 +44,11 @@ public class ActionMenu extends Table implements Observer{
     private boolean beingDragged;
     private float drawerSpeed = 10f;
 
-    public ActionMenu(ActionResolver actionResolver) {
+    public ActionMenu(ActionResolver actionResolver, Game game) {
         GameConstants.subscribeTurnEnd(this);
         GameConstants.subscribeGameEnd(this);
         this.actionResolver = actionResolver;
+        this.game = game;
         //Setup Name
         this.setName("ActionMenu");
         if (GameConstants.DEBUG) {
@@ -137,7 +137,7 @@ public class ActionMenu extends Table implements Observer{
                 //this.clearChildren();
                 //this.add(handle).center();
 
-                gameOverMenu = new GameOverMenu(actionResolver);
+                gameOverMenu = new GameOverMenu(actionResolver,game);
                 //this.add(gameOverMenu);
                 this.invalidate();
                 Cell c = this.getCell(inputButtons);                            //Get the cell containing inputButtons

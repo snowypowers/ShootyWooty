@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.eye7.ShootyWooty.helper.ActionResolver;
-import com.eye7.ShootyWooty.helper.MainLoader;
 import com.eye7.ShootyWooty.model.GameConstants;
 import com.eye7.ShootyWooty.render.DisplayMap;
 import com.eye7.ShootyWooty.render.GameRenderer;
@@ -53,7 +52,7 @@ public class MainScreen implements Screen {
             GameConstants.myID = 0;
         }
         stage = new Stage(new StretchViewport(960, 540)); // contain buttons and display
-        world = new GameWorld(stage, actionResolver); // contains game objects
+        world = new GameWorld(stage, actionResolver,game); // contains game objects
         renderer = new GameRenderer(world);    // animate game objects
 
         map = new DisplayMap(actionResolver);
@@ -112,13 +111,13 @@ public class MainScreen implements Screen {
 
     @Override
     public void dispose() {
-
-        MainLoader.bgMusic.dispose();//disposes the background music
-        map.dispose();
+        Gdx.app.log("disposing","In mainScreen dispose");
         renderer.dispose();
         world.dispose();
+        map.dispose();
         stage.dispose();
     }
+
 
 }
 

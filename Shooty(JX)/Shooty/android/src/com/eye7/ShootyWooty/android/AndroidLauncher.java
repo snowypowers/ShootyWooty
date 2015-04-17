@@ -2,14 +2,18 @@ package com.eye7.ShootyWooty.android;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.ImageButton;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
@@ -32,6 +36,8 @@ import com.google.android.gms.games.multiplayer.realtime.RoomStatusUpdateListene
 import com.google.android.gms.games.multiplayer.realtime.RoomUpdateListener;
 import com.google.android.gms.plus.Plus;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -56,6 +62,7 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
     // Request code used to invoke sign in user interactions.
     private static final int RC_SIGN_IN = 9001;
     private boolean achieve = false;
+
     // Client used to interact with Google APIs.
     private GoogleApiClient mGoogleApiClient;
     private boolean checkNewLib = true;
@@ -65,6 +72,8 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
     // Has the user clicked the sign-in button?
     private boolean mSignInClicked = false;
     private boolean interruptEndGame = false;
+    Bitmap bitmap;
+    private boolean exitGame = false;
     // Set to true to automatically start the sign in flow when the Activity starts.
     // Set to false to require the user to click the button in order to sign in.
     private boolean mAutoStartSignInFlow = true;
@@ -73,10 +82,16 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
     private HashMap<Integer,Boolean> checkDead = new HashMap<>();
     String mRoomId = null;
     private boolean endGame = false;
-    private main oldShootyWooty = null;
+
     // Are we playing in multiplayer mode?
     boolean mMultiplayer = false;
-
+    Bitmap homeMap;
+    Bitmap tutorial;
+    Bitmap doublePlayer;
+    Bitmap fourPlayer;
+    Bitmap tutorialpress;
+    Bitmap doublePlayerpress;
+    Bitmap fourPlayerpress;
     // The participants in the currently active game
     ArrayList<Participant> mParticipants = null;
 
@@ -121,12 +136,74 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
         for (int id : CLICKABLES) {
             findViewById(id).setOnClickListener(this);
         }
+        setUpScreen();
         shootyWooty = new main(this);
         config = new AndroidApplicationConfiguration();
         gameView = initializeForView(shootyWooty,config);
         linearLayout = (LinearLayout) findViewById(R.id.screen_game);
         linearLayout.addView(gameView,new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT));
 
+    }
+    public void setUpScreen(){
+        InputStream is = null;
+        try {
+            is = getAssets().open("HomeScreen/tutorial.png");
+            tutorial = BitmapFactory.decodeStream(is);
+            is = getAssets().open("HomeScreen/tutorialpress.png");
+            tutorialpress = BitmapFactory.decodeStream(is);
+            is = getAssets().open("HomeScreen/players2.png");
+            doublePlayer = BitmapFactory.decodeStream(is);
+            is = getAssets().open("HomeScreen/players2press.png");
+            doublePlayerpress = BitmapFactory.decodeStream(is);
+            is = getAssets().open("HomeScreen/players4.png");
+            fourPlayer = BitmapFactory.decodeStream(is);
+            is = getAssets().open("HomeScreen/players4press.png");
+            fourPlayerpress = BitmapFactory.decodeStream(is);
+            is = getAssets().open("HomeScreen/homescreen.png");
+            homeMap = BitmapFactory.decodeStream(is);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        ImageView imageView = (ImageView)findViewById(R.id.signin);
+        imageView.setImageBitmap(homeMap);
+        imageView = (ImageView)(findViewById(R.id.mainhome));
+        imageView.setImageBitmap(homeMap);
+        imageView = (ImageView)(findViewById(R.id.wait));
+        imageView.setImageBitmap(homeMap);
+        ImageButton imageButton = (ImageButton) findViewById(R.id.button_single_player_2);
+        imageButton.setImageBitmap(tutorial);
+        ImageView tutImage = (ImageView) findViewById(R.id.button_single_player_2);
+        buttonEffect(tutImage,R.id.button_single_player_2, tutorialpress, tutorial);
+        ImageView doubImage = (ImageView) findViewById(R.id.button_quick_game);
+        buttonEffect(doubImage,R.id.button_quick_game,doublePlayerpress,doublePlayer);
+        ImageView fourImage = (ImageView) findViewById(R.id.button_quick_game1);
+        buttonEffect(fourImage,R.id.button_quick_game1,fourPlayerpress,fourPlayer);
+        imageButton = (ImageButton) findViewById(R.id.button_quick_game);
+        imageButton.setImageBitmap(doublePlayer);
+        imageButton = (ImageButton) findViewById(R.id.button_quick_game1);
+        imageButton.setImageBitmap(fourPlayer);
+    }
+
+    public static void buttonEffect(View button, int ib, Bitmap press, Bitmap release){
+        final int i = ib;
+        final Bitmap pressed = press;
+        final Bitmap released = release;
+        button.setOnTouchListener(new OnTouchListener() {
+
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN: {
+                        ((ImageView)v.findViewById(i)).setImageBitmap(pressed);
+                        break;
+                    }
+                    case MotionEvent.ACTION_UP: {
+                        ((ImageView)v.findViewById(i)).setImageBitmap(released);
+                        break;
+                    }
+                }
+                return false;
+            }
+        });
     }
 
     @Override
@@ -154,27 +231,6 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
                 mSignInClicked = true;
                 mGoogleApiClient.connect();
                 break;
-//            case R.id.button_sign_out:
-//                // user wants to sign out
-//                // sign out.
-//                Log.d(TAG, "Sign-out button clicked");
-//                mSignInClicked = false;
-//                Games.signOut(mGoogleApiClient);
-//                mGoogleApiClient.disconnect();
-//                switchToScreen(R.id.screen_sign_in);
-//                break;
-//            case R.id.button_invite_players:
-//                // show list of invitable players
-//                intent = Games.RealTimeMultiplayer.getSelectOpponentsIntent(mGoogleApiClient, 1, 3);
-//                switchToScreen(R.id.screen_wait);
-//                startActivityForResult(intent, RC_SELECT_PLAYERS);
-//                break;
-//            case R.id.button_see_invitations:
-//                // show list of pending invitations
-//                intent = Games.Invitations.getInvitationInboxIntent(mGoogleApiClient);
-//                switchToScreen(R.id.screen_wait);
-//                startActivityForResult(intent, RC_INVITATION_INBOX);
-//                break;
             case R.id.button_accept_popup_invitation:
                 // user wants to accept the invitation shown on the invitation popup
                 // (the one we got through the OnInvitationReceivedListener).
@@ -200,19 +256,6 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
         Bundle autoMatchCriteria = RoomConfig.createAutoMatchCriteria(MIN_OPPONENTS,
                 MAX_OPPONENTS, 0);
         numPlayers = player;
-//        if(!shootyWootyCreated){
-//            shootyWooty = new main(this);
-//            gameView = initializeForView(shootyWooty,new AndroidApplicationConfiguration());
-//            LinearLayout linearLayout = (LinearLayout) findViewById(R.id.screen_game);
-//            linearLayout.addView(gameView,new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT));
-//            shootyWootyCreated = true;
-//        }
-//        if(!shootyWootyCreated) {
-//            mGoogleApiClient.reconnect();
-//            shootyWooty.reCreate();
-//            shootyWootyCreated=true;
-//            Log.d(TAG, "Created again");
-//        }
 
         RoomConfig.Builder rtmConfigBuilder = RoomConfig.builder(this);
         rtmConfigBuilder.setMessageReceivedListener(this);
@@ -220,7 +263,8 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
         rtmConfigBuilder.setAutoMatchCriteria(autoMatchCriteria);
         switchToScreen(R.id.screen_wait);
         keepScreenOn();
-        // resetGameVars();
+        if(!checkNewLib)
+            resetLibGdxVars();
 
         Games.RealTimeMultiplayer.create(mGoogleApiClient, rtmConfigBuilder.build());
     }
@@ -270,11 +314,11 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
             case REQUEST_ACHIEVEMENTS:
                 Log.w(TAG, "Response from achievements");
                 linearLayout.removeView(achievements);
-               // achieve = true;
+                // achieve = true;
                 break;
 
-                //    if (responseCode = RESULT_RECONNECT_REQUIRED);
-                //Adding achievements here
+            //    if (responseCode = RESULT_RECONNECT_REQUIRED);
+            //Adding achievements here
         }
         super.onActivityResult(requestCode, responseCode, intent);
     }
@@ -418,7 +462,7 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
 
         stopKeepingScreenOn();
         if(!getMultiplayer()){
-           // resetLibGdxnVars();
+            // resetLibGdxnVars();
             resetGameVars();
 
         }
@@ -439,7 +483,7 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
 //        }
 
 
-            switchToMainScreen();
+        switchToMainScreen();
 //        reset = true;
 
     }
@@ -557,12 +601,13 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
     public void onLeftRoom(int statusCode, String roomId) {
         // we have left the room; return to main screen.
         Log.d(TAG, "onLeftRoom, code " + statusCode);
+        exitGame = true;
         if (mRoomId !=null) {
 //            if(endGame) {
 //
 //                startActivityForResult(Games.Achievements.getAchievementsIntent(mGoogleApiClient), REQUEST_ACHIEVEMENTS);
 //            }
-             switchToMainScreen();
+            switchToMainScreen();
 
 //            BaseGameUtil.makeSimpleDialog(this, "Game Notification", "You have quit the game.").show();
         }
@@ -575,14 +620,13 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
         */
 
     }
-//    void resetLibGdxnVars(){
-//        linearLayout.removeViewAt(0);
-//        oldShootyWooty = shootyWooty;
-//        shootyWooty = new main(this);
-//        gameView = initializeForView(shootyWooty,config);
-//        linearLayout.addView(gameView, 0, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
-//        checkNewLib = true;
-//    }
+
+    void resetLibGdxVars(){
+        linearLayout.removeViewAt(0);
+        shootyWooty = new main(this);
+        gameView = initializeForView(shootyWooty,config);
+        linearLayout.addView(gameView, 0, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
+    }
     // Reset game variables in preparation for a new game.
     void resetGameVars() {
         checkDead = new HashMap<>();
@@ -596,16 +640,12 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
         mParticipants = null;
         mMyId = null;
         imMoves = new HashMap<>();
-
+        if(bitmap!=null) {
+            bitmap.recycle();
+        }
+        checkNewLib = false;
         leftPlayers = new ArrayList<Integer>();
         idToNum = new HashMap<>();
-        linearLayout.removeViewAt(0);
-        linearLayout = (LinearLayout) findViewById(R.id.screen_game);
-        shootyWooty.dispose();
-        //oldShootyWooty = shootyWooty;
-        shootyWooty = new main(this);
-        gameView = initializeForView(shootyWooty,config);
-        linearLayout.addView(gameView, 0, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
 
     }
     // Called when we get disconnected from the room. We return to the main screen.
@@ -809,8 +849,10 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
     public int getNumDeadPlayers(){
         int d = 0;
         for(int i=0; i<4; i++){
-            if(checkDead.get(i))
-                d++;
+            if(checkDead!=null) {
+                if (checkDead.get(i))
+                    d++;
+            }
         }
         return d;
     }
@@ -1083,6 +1125,12 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
     }
     public void gameDecided(String s ) throws InterruptedException {
         final String check = s;
+        final View.OnClickListener listener1= new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                leaveRoom();
+            }
+        };
 
         Thread thread = new Thread(){
             @Override
@@ -1094,23 +1142,25 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
                         try {
                             //resetLibGdxnVars();
 
-
+                            InputStream is;
                             String uri;
-                            if(check!="draw")
-                                uri = "@drawable/"+check+Integer.toString(myIDNum+1);
-                            else
-                                uri = "@drawable/draw";
-
-                            int imageResource = getResources().getIdentifier(uri,"drawable", getPackageName());
-                            Log.d(TAG, "FOUND IMAGE URI");
+                            if(check!="draw") {
+                                //  uri = "@drawable/"+check+Integer.toString(myIDNum+1);
+                                is = getAssets().open("EndScreens/"+check+Integer.toString(myIDNum+1)+".png");
+                            }
+                            else {
+                                is = getAssets().open("EndScreens/"+check+".png");
+                                // uri = "@drawable/draw";
+                            }
+                            //int imageResource = getResources().getIdentifier(uri,"drawable", getPackageName());
+                            Log.d(TAG, "FOUND IMAGE URI" + check);
+                            bitmap = BitmapFactory.decodeStream(is);
                             ImageView imageView = (ImageView)findViewById(R.id.EndImage);
-                            Drawable res = getResources().getDrawable(imageResource);
-                            imageView.setImageDrawable(res);
+                            imageView.setImageBitmap(bitmap);
                             Log.d(TAG, "SET IMAGE");
-                            switchToScreen(R.id.GameDecided);
-//                            achievements = initializeForView(getApplicationListener());
-//                            linearLayout.addView(achievements,new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT));
 
+                            switchToScreen(R.id.GameDecided);
+                            imageView.setOnClickListener(listener1);
                             keepScreenOn();
 
                         }

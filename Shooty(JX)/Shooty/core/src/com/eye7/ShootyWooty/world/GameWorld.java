@@ -1,5 +1,6 @@
 package com.eye7.ShootyWooty.world;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.eye7.ShootyWooty.helper.ActionResolver;
@@ -30,13 +31,15 @@ public class GameWorld implements Observer {
     private TurnHandler th;
     private ActionResolver actionResolver;
 
-    public GameWorld(Stage stage, ActionResolver actionResolver) {
+    private Game game;
+    public GameWorld(Stage stage, ActionResolver actionResolver, Game game) {
+        this.game = game;
         GameConstants.subscribeTurnStart(this);
         GameConstants.subscribeTurnEnd(this);
         this.stage = stage;
         this.actionResolver = actionResolver;
 
-        input = new ActionMenu(actionResolver);
+        input = new ActionMenu(actionResolver,game);
         stage.addActor(input);
 
         gameState = gameState.DECIDING;

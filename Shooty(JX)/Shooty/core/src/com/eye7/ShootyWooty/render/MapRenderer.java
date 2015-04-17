@@ -7,6 +7,7 @@ package com.eye7.ShootyWooty.render;
  * DisplayMap -> MapRenderer
  */
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -90,6 +91,7 @@ public class MapRenderer extends OrthogonalTiledMapRenderer {
         endRender();
     }
     public void dispose(){
+        Gdx.app.log("disposing","In mapRenderer dispose");
         colliderRender.dispose();
     }
 }
