@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="20" height="15" tilewidth="64" tileheight="64" nextobjectid="52">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="20" height="15" tilewidth="64" tileheight="64" nextobjectid="53">
  <tileset firstgid="1" name="desert_object" tilewidth="64" tileheight="64">
   <image source="desert_object.png" width="1280" height="640"/>
  </tileset>
@@ -56,6 +56,7 @@
   <object id="48" name="Rock" x="512" y="320" width="64" height="64"/>
   <object id="49" name="Rock" x="512" y="576" width="64" height="64"/>
   <object id="50" name="Rock" x="704" y="576" width="64" height="64"/>
+  <object id="52" name="Rock" x="640" y="384" width="64" height="64"/>
  </objectgroup>
  <objectgroup name="Water">
   <object id="51" name="Water" x="576" y="448" width="128" height="64"/>

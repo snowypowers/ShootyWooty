@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="20" height="20" tilewidth="64" tileheight="64" nextobjectid="64">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="20" height="20" tilewidth="64" tileheight="64" nextobjectid="107">
  <tileset firstgid="1" name="desert_object" tilewidth="64" tileheight="64">
   <image source="desert_object.png" width="1280" height="640"/>
  </tileset>
@@ -13,7 +13,7 @@
  </layer>
  <layer name="Ground" width="20" height="20">
   <data encoding="base64" compression="zlib">
-   eJxjYBi5QAiJrYzEZkZiKyCxZWnqGvoAZH/yILGR/caPxEYOi6EEOJHYyH5QA+J+KBZHE4cB5HAhFvSToYfaANkPuOITV5ofqoCYfIscLshxPgooBwDQ6AQG
+   eJzV00cLwjAYxvG6cE9w4Z7gPOjZedCz82v1K/sXU3gRujQefOBH37RNmqStYbwSRsRwThoZl3usVFB1uaeDrsfxfpGCqHuiDom6LeqGOo4wxkTTPFZYY6PaCSS/GO+EMy6q3URL1XKdKVE3RJ0VtdyLf0pc1HINQ5hK+e28FbkvXmN+0Ed35Brs3qfdN7/AUuNcDjhiihnmmsbdYoe9anv5b+W+yHf+zBU33PVM76MEEPTZJ4qYzbUiSm/ncsg7jFdD3cfz+xjgAWIHCzc=
   </data>
  </layer>
  <objectgroup name="Rocks">
@@ -43,6 +43,49 @@
   <object id="56" name="Rock" x="640" y="960" width="64" height="64"/>
   <object id="57" name="Rock" x="448" y="960" width="64" height="64"/>
   <object id="58" name="Rock" x="256" y="960" width="64" height="64"/>
+  <object id="64" name="Rock" x="1088" y="192" width="64" height="64"/>
+  <object id="65" name="Rock" x="1088" y="256" width="64" height="64"/>
+  <object id="66" name="Rock" x="1088" y="320" width="64" height="64"/>
+  <object id="67" name="Rock" x="1152" y="320" width="64" height="64"/>
+  <object id="68" name="Rock" x="1216" y="320" width="64" height="64"/>
+  <object id="69" name="Rock" x="1152" y="192" width="64" height="64"/>
+  <object id="70" name="Rock" x="1216" y="192" width="64" height="64"/>
+  <object id="71" name="Rock" x="1152" y="768" width="64" height="64"/>
+  <object id="72" name="Rock" x="1152" y="832" width="64" height="64"/>
+  <object id="73" name="Rock" x="1216" y="832" width="64" height="64"/>
+  <object id="74" name="Rock" x="1216" y="768" width="64" height="64"/>
+  <object id="75" name="Rock" x="1216" y="1152" width="64" height="64"/>
+  <object id="76" name="Rock" x="1152" y="1152" width="64" height="64"/>
+  <object id="77" name="Rock" x="1152" y="1216" width="64" height="64"/>
+  <object id="78" name="Rock" x="1216" y="1216" width="64" height="64"/>
+  <object id="79" name="Rock" x="896" y="1088" width="64" height="64"/>
+  <object id="80" name="Rock" x="832" y="1088" width="64" height="64"/>
+  <object id="81" name="Rock" x="832" y="1152" width="64" height="64"/>
+  <object id="82" name="Rock" x="896" y="1152" width="64" height="64"/>
+  <object id="83" name="Rock" x="384" y="1152" width="64" height="64"/>
+  <object id="84" name="Rock" x="448" y="1152" width="64" height="64"/>
+  <object id="85" name="Rock" x="448" y="1216" width="64" height="64"/>
+  <object id="86" name="Rock" x="384" y="1216" width="64" height="64"/>
+  <object id="87" name="Rock" x="0" y="896" width="64" height="64"/>
+  <object id="88" name="Rock" x="64" y="896" width="64" height="64"/>
+  <object id="89" name="Rock" x="128" y="896" width="64" height="64"/>
+  <object id="90" name="Rock" x="128" y="960" width="64" height="64"/>
+  <object id="91" name="Rock" x="128" y="1024" width="64" height="64"/>
+  <object id="92" name="Rock" x="64" y="1024" width="64" height="64"/>
+  <object id="93" name="Rock" x="0" y="1024" width="64" height="64"/>
+  <object id="94" name="Rock" x="64" y="320" width="64" height="64"/>
+  <object id="95" name="Rock" x="128" y="320" width="64" height="64"/>
+  <object id="96" name="Rock" x="128" y="384" width="64" height="64"/>
+  <object id="97" name="Rock" x="64" y="384" width="64" height="64"/>
+  <object id="98" name="Rock" x="128" y="0" width="64" height="64"/>
+  <object id="99" name="Rock" x="192" y="0" width="64" height="64"/>
+  <object id="100" name="Rock" x="192" y="64" width="64" height="64"/>
+  <object id="101" name="Rock" x="128" y="64" width="64" height="64"/>
+  <object id="102" name="Rock" x="704" y="0" width="64" height="64"/>
+  <object id="103" name="Rock" x="768" y="0" width="64" height="64"/>
+  <object id="104" name="Rock" x="768" y="64" width="64" height="64"/>
+  <object id="105" name="Rock" x="704" y="64" width="64" height="64"/>
+  <object id="106" name="Rock" x="640" y="512" width="64" height="64"/>
  </objectgroup>
  <objectgroup name="Water">
   <object id="1" name="Water" x="576" y="576" width="128" height="64"/>

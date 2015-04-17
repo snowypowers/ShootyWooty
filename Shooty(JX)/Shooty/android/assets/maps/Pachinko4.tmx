@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="16" height="16" tilewidth="64" tileheight="64" nextobjectid="91">
+ <tileset firstgid="1" name="desert_object" tilewidth="64" tileheight="64">
+  <image source="desert_object.png" width="1280" height="640"/>
+ </tileset>
+ <layer name="Background" width="16" height="16">
+  <data encoding="base64" compression="zlib">
+   eJyFklEKhDAMRHtZYa+g9Ao2ewX1omahhWF4YT8eWnQyyaRba20kh+Dnik+yF3qqEXb+Jqf8H4LrA/R96gM89azaYf574bveo6jpespvNO7N53e9eiuu79C/aymHxfKnb7QT32P/o6dMtJb60/yeu/ey8qe7qTNUWXbwr/KiHZKeZvVefP90zylzuv9XcifPfBL+7Zn8aryR+4Zy
+  </data>
+ </layer>
+ <layer name="Ground" width="16" height="16">
+  <data encoding="base64" compression="zlib">
+   eJzTZGBg0AJibQYIYAdiDgJsTSQ9tkBsB8T2UDlpIJYhwEbWEwjEQUAcTIL96HqQATH2Ewt4gZiPCHUCQCyIRVwRiJWwiLMAMSsSXwWIVUmwXwKIJXG4RRyP/eIM1AcKRLgDl70wvTxk2IuuB5c78NlLyExi1RgBsTER7oDJcQExN5K4GxC7E7ADWUwOiOXxORIIZHGw0QEAHXkKQw==
+  </data>
+ </layer>
+ <objectgroup name="Rocks">
+  <object id="19" name="Rock" x="576" y="960" width="64" height="64"/>
+  <object id="20" name="Rock" x="384" y="960" width="64" height="64"/>
+  <object id="21" name="Rock" x="256" y="448" width="64" height="64"/>
+  <object id="22" name="Rock" x="384" y="576" width="64" height="64"/>
+  <object id="23" name="Rock" x="576" y="576" width="64" height="64"/>
+  <object id="24" name="Rock" x="704" y="448" width="64" height="64"/>
+  <object id="25" name="Rock" x="256" y="0" width="64" height="64"/>
+  <object id="26" name="Rock" x="320" y="0" width="64" height="64"/>
+  <object id="27" name="Rock" x="320" y="64" width="64" height="64"/>
+  <object id="28" name="Rock" x="256" y="64" width="64" height="64"/>
+  <object id="29" name="Rock" x="256" y="128" width="64" height="64"/>
+  <object id="30" name="Rock" x="320" y="128" width="64" height="64"/>
+  <object id="31" name="Rock" x="320" y="192" width="64" height="64"/>
+  <object id="32" name="Rock" x="256" y="192" width="64" height="64"/>
+  <object id="33" name="Rock" x="448" y="0" width="64" height="64"/>
+  <object id="34" name="Rock" x="512" y="0" width="64" height="64"/>
+  <object id="35" name="Rock" x="512" y="64" width="64" height="64"/>
+  <object id="36" name="Rock" x="448" y="64" width="64" height="64"/>
+  <object id="37" name="Rock" x="448" y="128" width="64" height="64"/>
+  <object id="39" name="Rock" x="512" y="128" width="64" height="64"/>
+  <object id="40" name="Rock" x="512" y="192" width="64" height="64"/>
+  <object id="41" name="Rock" x="448" y="192" width="64" height="64"/>
+  <object id="42" name="Rock" x="448" y="256" width="64" height="64"/>
+  <object id="43" name="Rock" x="512" y="256" width="64" height="64"/>
+  <object id="44" name="Rock" x="512" y="320" width="64" height="64"/>
+  <object id="45" name="Rock" x="448" y="320" width="64" height="64"/>
+  <object id="46" name="Rock" x="448" y="384" width="64" height="64"/>
+  <object id="47" name="Rock" x="512" y="384" width="64" height="64"/>
+  <object id="48" name="Rock" x="512" y="448" width="64" height="64"/>
+  <object id="49" name="Rock" x="448" y="448" width="64" height="64"/>
+  <object id="50" name="Rock" x="640" y="192" width="64" height="64"/>
+  <object id="51" name="Rock" x="704" y="192" width="64" height="64"/>
+  <object id="52" name="Rock" x="704" y="128" width="64" height="64"/>
+  <object id="53" name="Rock" x="640" y="128" width="64" height="64"/>
+  <object id="54" name="Rock" x="640" y="64" width="64" height="64"/>
+  <object id="55" name="Rock" x="704" y="64" width="64" height="64"/>
+  <object id="56" name="Rock" x="704" y="0" width="64" height="64"/>
+  <object id="57" name="Rock" x="640" y="0" width="64" height="64"/>
+  <object id="58" name="Rock" x="832" y="0" width="64" height="64"/>
+  <object id="59" name="Rock" x="832" y="64" width="64" height="64"/>
+  <object id="60" name="Rock" x="832" y="128" width="64" height="64"/>
+  <object id="61" name="Rock" x="896" y="128" width="64" height="64"/>
+  <object id="62" name="Rock" x="960" y="128" width="64" height="64"/>
+  <object id="63" name="Rock" x="128" y="0" width="64" height="64"/>
+  <object id="64" name="Rock" x="128" y="64" width="64" height="64"/>
+  <object id="65" name="Rock" x="128" y="128" width="64" height="64"/>
+  <object id="66" name="Rock" x="64" y="128" width="64" height="64"/>
+  <object id="67" name="Rock" x="0" y="128" width="64" height="64"/>
+  <object id="68" name="Rock" x="64" y="320" width="64" height="64"/>
+  <object id="69" name="Rock" x="128" y="320" width="64" height="64"/>
+  <object id="70" name="Rock" x="128" y="384" width="64" height="64"/>
+  <object id="71" name="Rock" x="64" y="384" width="64" height="64"/>
+  <object id="72" name="Rock" x="832" y="320" width="64" height="64"/>
+  <object id="73" name="Rock" x="832" y="384" width="64" height="64"/>
+  <object id="74" name="Rock" x="896" y="384" width="64" height="64"/>
+  <object id="75" name="Rock" x="896" y="320" width="64" height="64"/>
+  <object id="77" name="Rock" x="960" y="576" width="64" height="64"/>
+  <object id="78" name="Rock" x="896" y="640" width="64" height="64"/>
+  <object id="79" name="Rock" x="832" y="704" width="64" height="64"/>
+  <object id="80" name="Rock" x="768" y="768" width="64" height="64"/>
+  <object id="81" name="Rock" x="704" y="832" width="64" height="64"/>
+  <object id="82" name="Rock" x="640" y="896" width="64" height="64"/>
+  <object id="83" name="Rock" x="320" y="896" width="64" height="64"/>
+  <object id="84" name="Rock" x="256" y="832" width="64" height="64"/>
+  <object id="85" name="Rock" x="192" y="768" width="64" height="64"/>
+  <object id="86" name="Rock" x="128" y="704" width="64" height="64"/>
+  <object id="87" name="Rock" x="64" y="640" width="64" height="64"/>
+  <object id="88" name="Rock" x="0" y="576" width="64" height="64"/>
+  <object id="89" name="Rock" x="512" y="768" width="64" height="64"/>
+  <object id="90" name="Rock" x="448" y="768" width="64" height="64"/>
+ </objectgroup>
+ <objectgroup name="Water">
+  <object id="76" name="Water" x="448" y="832" width="128" height="64"/>
+ </objectgroup>
+ <objectgroup name="Spawns">
+  <object id="15" name="Spawn1" x="192" y="0" width="64" height="64">
+   <properties>
+    <property name="direction" value="180"/>
+   </properties>
+   <ellipse/>
+  </object>
+  <object id="16" name="Spawn2" x="384" y="0" width="64" height="64">
+   <properties>
+    <property name="direction" value="180"/>
+   </properties>
+   <ellipse/>
+  </object>
+  <object id="17" name="Spawn3" x="576" y="0" width="64" height="64">
+   <properties>
+    <property name="direction" value="180"/>
+   </properties>
+   <ellipse/>
+  </object>
+  <object id="18" name="Spawn4" x="768" y="0" width="64" height="64">
+   <properties>
+    <property name="direction" value="180"/>
+   </properties>
+   <ellipse/>
+  </object>
+ </objectgroup>
+</map>
