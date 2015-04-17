@@ -102,34 +102,42 @@ public class MoveHandler extends Thread{
                     // move along x axis
                     if (movement[0] > 0f) {
                         collider.getCircle().setPosition((collider.getCircle().x + movement[2]), collider.getCircle().y);
-                        if (!checkPlayerHit()) {
-                            player.incrementX(movement[2]);
-                            movement[0] -= PLAYER_INCREMENT;
-                            bulletl.incrementX(movement[2]); // move bullet with player
-                            bulletr.incrementX(movement[2]);
+                        try {
+                            if (!checkPlayerHit()) {
+                                player.incrementX(movement[2]);
+                                movement[0] -= PLAYER_INCREMENT;
+                                bulletl.incrementX(movement[2]); // move bullet with player
+                                bulletr.incrementX(movement[2]);
 
 
-                        } else {
-                            collider.getCircle().setPosition((collider.getCircle().x - movement[2]), collider.getCircle().y);
-                            movement[0] = oldMove[0] - movement[0];
-                            movement[2] = movement[2] * -1;
+                            } else {
+                                collider.getCircle().setPosition((collider.getCircle().x - movement[2]), collider.getCircle().y);
+                                movement[0] = oldMove[0] - movement[0];
+                                movement[2] = movement[2] * -1;
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
                     }
 
                     // move along Y axis
                     if (movement[1] > 0f) {
                         collider.getCircle().setPosition(collider.getCircle().x, (collider.getCircle().y + movement[2]));
-                        if (!checkPlayerHit()) {
-                            player.incrementY(movement[2]);
-                            movement[1] -= PLAYER_INCREMENT;
-                            bulletl.incrementY(movement[2]);
-                            bulletr.incrementY(movement[2]);
+                        try {
+                            if (!checkPlayerHit()) {
+                                player.incrementY(movement[2]);
+                                movement[1] -= PLAYER_INCREMENT;
+                                bulletl.incrementY(movement[2]);
+                                bulletr.incrementY(movement[2]);
 
 
-                        } else {
-                            collider.getCircle().setPosition(collider.getCircle().x, (collider.getCircle().y - movement[2]));
-                            movement[1] = oldMove[1] - movement[1];
-                            movement[2] = movement[2] * -1;
+                            } else {
+                                collider.getCircle().setPosition(collider.getCircle().x, (collider.getCircle().y - movement[2]));
+                                movement[1] = oldMove[1] - movement[1];
+                                movement[2] = movement[2] * -1;
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
                     }
 
@@ -423,7 +431,7 @@ public class MoveHandler extends Thread{
     }
 
     // Method to check for player hitting stuff
-    public boolean checkPlayerHit(){
+    public boolean checkPlayerHit() throws Exception{
         //Collision with rocks
         for (int i = 0; i < GameConstants.ROCKS.size;i++) {
             if (Intersector.overlaps(player.getCollider().getCircle(), GameConstants.ROCKS.get(i))) {
@@ -462,6 +470,9 @@ public class MoveHandler extends Thread{
         return false;
     }
     public void decideWin() throws InterruptedException {
+        if(actionResolver.getQuitGame()){
+            return;
+        }
         ArrayList<Integer> recentDead = new ArrayList<Integer>();
         ArrayList<Integer> playersLeft = actionResolver.getLeftPlayers();
         if(playersLeft.size()!=0){

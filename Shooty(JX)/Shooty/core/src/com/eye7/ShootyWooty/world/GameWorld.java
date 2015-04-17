@@ -70,7 +70,6 @@ public class GameWorld implements Observer {
                         actionResolver.sendContMessage(Integer.toString(numMoves));
 
                     }
-//                    Gdx.app.log("GameWorld Cont Moves", allPlayerMoves);
 
 
                 break;
@@ -83,6 +82,17 @@ public class GameWorld implements Observer {
 
     //Observer Methods for TurnStart & TurnEnd
     public void observerUpdate(int i) {
+        if(actionResolver.getQuitGame()){
+            Gdx.app.log("GameWorld", "DISPOSE SIGNAL");
+            if(th!=null) {
+                if (th.isAlive()) {
+                    th.interrupt();
+                }
+            }
+            game.dispose();
+            return;
+        }
+
         if (i == 0) { // Turn Start
             Gdx.app.log("GameWorld", "Creating TurnHandler");
             th = new TurnHandler(actionResolver);

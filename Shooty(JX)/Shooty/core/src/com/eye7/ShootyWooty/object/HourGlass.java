@@ -136,6 +136,9 @@ public class HourGlass extends Actor implements Observer {
     public void dispose(){
         hourglassSkin.dispose();
         timer.gameEnd();
+        if(timer.isAlive()){
+            timer.interrupt();
+        }
 
     }
 

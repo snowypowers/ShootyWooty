@@ -56,7 +56,7 @@ public class DisplayMap implements InputProcessor {
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 960 / zoom, 540 / zoom);
         camera.update();
-        tiledMap = new TmxMapLoader().load("maps/CorridorOfDeath.tmx");
+        tiledMap = new TmxMapLoader().load("maps/"+actionResolver.getMapDecided()+".tmx");
         tiledMapRenderer = new MapRenderer(tiledMap, mapBatch);
 
         mp = tiledMap.getProperties();

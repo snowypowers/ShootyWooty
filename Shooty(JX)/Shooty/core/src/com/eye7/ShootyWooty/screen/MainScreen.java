@@ -46,6 +46,7 @@ public class MainScreen implements Screen {
         if(actionResolver.getMultiplayer()) {
             GameConstants.NUM_PLAYERS = actionResolver.getNumPlayers();
             GameConstants.myID = actionResolver.getMyID();
+            Gdx.app.log("GameScreen", Integer.toString(GameConstants.myID));
         }
         else{
             GameConstants.NUM_PLAYERS =2;
@@ -54,7 +55,9 @@ public class MainScreen implements Screen {
         stage = new Stage(new StretchViewport(960, 540)); // contain buttons and display
         world = new GameWorld(stage, actionResolver,game); // contains game objects
         renderer = new GameRenderer(world);    // animate game objects
-
+        while(!actionResolver.mapDecided()){
+            Gdx.app.log("GameScreen", "Map yet to be decided");
+        }
         map = new DisplayMap(actionResolver);
     }
 
@@ -63,7 +66,6 @@ public class MainScreen implements Screen {
         //Background Color
         Gdx.gl.glClearColor(229/255.0f, 214/255.0f, 136/255.0f, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
         //Render the map
         map.render(delta);
 

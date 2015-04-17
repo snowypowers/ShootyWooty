@@ -67,8 +67,8 @@
                     >
                     <ImageButton android:id="@+id/button_single_player_2" style="@style/MainScreenButton"
                         android:background="@null"
-                        android:layout_width="165dp"
-                        android:layout_height="55dp"
+                        android:layout_width="152dp"
+                        android:layout_height="50dp"
                         android:scaleType="fitXY"/>
                 </LinearLayout>
 
@@ -79,14 +79,14 @@
                     >
                     <ImageButton android:id="@+id/button_quick_game" style="@style/MainScreenButton"
                         android:background="@null"
-                        android:layout_width="165dp"
-                        android:layout_height="55dp"
+                        android:layout_width="152dp"
+                        android:layout_height="50dp"
                         android:scaleType="fitXY"/>
 
                     <ImageButton android:id="@+id/button_quick_game1" style="@style/MainScreenButton"
                         android:background="@null"
-                        android:layout_width="165dp"
-                        android:layout_height="55dp"
+                        android:layout_width="152dp"
+                        android:layout_height="50dp"
                         android:scaleType="fitXY"/>
                 </LinearLayout>
 

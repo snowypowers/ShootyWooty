@@ -17,7 +17,18 @@
             android:value="@integer/google_play_services_version" />
 
         <meta-data android:name="com.google.android.gms.games.APP_ID" android:value="@string/app_id" />
+        <!-- Splash screen -->
+        <activity
+            android:name="com.eye7.ShootyWooty.android.SplashScreen"
+            android:label="@string/app_name"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.Black.NoTitleBar" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name="com.eye7.ShootyWooty.android.AndroidLauncher"
             android:label="@string/app_name"
