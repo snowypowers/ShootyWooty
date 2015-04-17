@@ -193,7 +193,6 @@ public class DisplayMap implements InputProcessor {
     }
     public void dispose(){
         mapBatch.dispose();
-        shapeRenderer.dispose();
         tiledMapRenderer.dispose();
         tiledMap.dispose();
     }

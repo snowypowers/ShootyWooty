@@ -52,9 +52,12 @@ public class main extends Game {
     @Override
     public void dispose(){
         Gdx.app.log("disposing","In main dispose");
-        myScreen.dispose();
+        if(myScreen!=null){
+            myScreen.dispose();
+        }
         MainLoader.dispose();
         GameConstants.dispose();
+        CactusLoader.dispose();
     }
 
     @Override

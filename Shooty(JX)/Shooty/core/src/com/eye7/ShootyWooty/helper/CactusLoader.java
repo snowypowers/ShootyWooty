@@ -176,5 +176,13 @@ public class CactusLoader {
         loader("Cactus4.lose",3,0.2f,cactus4_animations);
         loader("Cactus4.emote",5,0.4f,cactus4_animations);
     }
+    public static void dispose(){
+        cactus1Skin.dispose();
+        cactus2Skin.dispose();
+        cactus3Skin.dispose();
+        cactus4Skin.dispose();
+        sound_walking.dispose();
+        sound_damaged.dispose();
 
+    }
 }

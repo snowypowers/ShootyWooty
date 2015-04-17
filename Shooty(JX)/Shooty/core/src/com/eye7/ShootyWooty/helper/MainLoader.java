@@ -62,9 +62,24 @@ public class MainLoader {
 
     //Call when leaving game to unload all resources
     public static void dispose() {
-        atlas.dispose();
-        skin.dispose();
-        bgMusic.dispose();
+        //bgMusic.stop();
+        if(white!=null){
+            white.dispose();
+        }
+        if(green!=null){
+            green.dispose();
+        }
+        if(atlas!=null){
+            atlas.dispose();
+        }
+        if(skin!=null){
+            skin.dispose();
+        }
+        //disposes the background music
+        if(bgMusic!=null){
+            bgMusic.dispose();
+        }
+
     }
 
 
