@@ -95,7 +95,7 @@ public class GameWorld implements Observer {
 
         if (i == 0) { // Turn Start
             Gdx.app.log("GameWorld", "Creating TurnHandler");
-            th = new TurnHandler(actionResolver);
+            th = new TurnHandler(actionResolver,game);
 
             if (actionResolver.getMultiplayer()) {
                 String myMove = moves[0] + " " + moves[1] + " " + moves[2] + " " + moves[3];

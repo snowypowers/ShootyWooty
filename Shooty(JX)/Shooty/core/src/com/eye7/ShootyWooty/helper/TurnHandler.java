@@ -1,5 +1,6 @@
 package com.eye7.ShootyWooty.helper;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.eye7.ShootyWooty.model.GameConstants;
 
@@ -19,11 +20,12 @@ public class TurnHandler extends Thread {
     private ActionResolver actionResolver;
     private MoveHandler[] moveHandlers = null;
     private CyclicBarrier cyclicBarrier = null;
-
+    private Game game;
     public boolean executing = false;
 
-    public TurnHandler (ActionResolver ar) {
+    public TurnHandler (ActionResolver ar, Game game) {
         actionResolver = ar;
+        this.game = game;
         /*
         Phaser has a total of 12 phases, with each turn consisting of 3 phases. Phases are : movement, shooting, misc
          */
@@ -41,11 +43,10 @@ public class TurnHandler extends Thread {
     public void run() {
         if (actionResolver.getMultiplayer()) {
             while (!actionResolver.getValid()) {
-//                try {
-//                    actionResolver.wait();
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
+                if(actionResolver.getQuitGame()){
+                    game.dispose();
+                    return;
+                }
                 continue;
             }
             String moves = actionResolver.getMoves();
