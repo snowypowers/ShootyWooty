@@ -45,13 +45,24 @@ public class CactusLoader {
     public static Sound sound_walking;
     public static Sound sound_damaged;
 
+    //add these
+    public static Sound sound_shoot;
+    public static Sound sound_water_collected;
+    public static Sound sound_point_scored;
+    public static Sound sound_dead;
+
+
 
 
     public static void load(int NUM_PLAYERS){
 
         //Sound effects
-        sound_walking = Gdx.audio.newSound(Gdx.files.internal("sounds/cactiWalking.mp3"));
-        sound_damaged = Gdx.audio.newSound(Gdx.files.internal("sounds/damaged.mp3"));
+        sound_walking = Gdx.audio.newSound(Gdx.files.internal("sounds/Cacti/cactiWalking.mp3"));
+        sound_damaged = Gdx.audio.newSound(Gdx.files.internal("sounds/Cacti/cactiDamaged.mp3"));
+        sound_shoot = Gdx.audio.newSound(Gdx.files.internal("sounds/Cacti/cactiShoot.mp3"));
+        sound_water_collected = Gdx.audio.newSound(Gdx.files.internal("sounds/Cacti/cactiWaterCollected.mp3"));
+        sound_point_scored = Gdx.audio.newSound(Gdx.files.internal("sounds/Cacti/cactiPointScored.mp3"));
+        sound_dead = Gdx.audio.newSound(Gdx.files.internal("sounds/Cacti/cactiDead.mp3"));
 
         cactus1Skin = new Skin(new TextureAtlas(Gdx.files.internal("players/Cactus1.pack")));
         cactus2Skin = new Skin(new TextureAtlas(Gdx.files.internal("players/Cactus2.pack")));
@@ -183,6 +194,10 @@ public class CactusLoader {
         cactus4Skin.dispose();
         sound_walking.dispose();
         sound_damaged.dispose();
+        sound_shoot.dispose();
+        sound_water_collected.dispose();
+        sound_point_scored.dispose();
+        sound_dead.dispose();
 
     }
 }

@@ -164,6 +164,7 @@ class ButtonRow extends Table {
                 if (!lock) { // record input when not locked
                     mBPointer = (mBPointer + 1) % movements.length; // Get the next Style
                     mB.setStyle(mBStyles.get(mBPointer)); // Set the next Style
+                    MainLoader.actionBarButtonMove.play(0.025f);
                 }
 
             }
@@ -172,7 +173,7 @@ class ButtonRow extends Table {
         lB.addListener(new ChangeListener(){
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-
+                MainLoader.actionBarButtonBullet.play(0.025f);
             }
 
         });
@@ -180,7 +181,7 @@ class ButtonRow extends Table {
         rB.addListener(new ChangeListener(){
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-
+                MainLoader.actionBarButtonBullet.play(0.025f);
             }
 
         });
@@ -227,6 +228,8 @@ class ButtonRow extends Table {
         mB.setStyle(mBStyles.get(mBPointer));
         lB.setChecked(false);
         rB.setChecked(false);
+        MainLoader.actionBarButtonBullet.stop();
+        MainLoader.actionBarButtonMove.stop();
     }
 
 }

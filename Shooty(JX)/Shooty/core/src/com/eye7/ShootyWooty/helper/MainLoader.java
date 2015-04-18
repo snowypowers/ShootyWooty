@@ -11,7 +11,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
-
+import com.badlogic.gdx.audio.Sound;
 /**
  * Loader to load all assets required by the game. Player assets are loaded in CactusLoader.
  */
@@ -32,6 +32,19 @@ public class MainLoader {
     //add the sounds here
     public static Music bgMusic;
 
+    // add these
+    public static Music bgYouLose;
+    public static Music bgYouWin;
+    public static Music bgEndGame;
+
+    public static Sound actionBarButtonMove;
+    public static Sound actionBarButtonBullet;
+    public static Sound youDraw;
+    public static Sound youLose;
+    public static Sound hourglass_bling;
+
+
+
     public static void load() {
         white = new BitmapFont(Gdx.files.internal("fonts/white.fnt"),false); // white font
         green = new BitmapFont(Gdx.files.internal("fonts/green.fnt"),false); // green font
@@ -47,6 +60,15 @@ public class MainLoader {
 
         //Background music
         bgMusic = Gdx.audio.newMusic(Gdx.files.internal("sounds/bgMusic.mp3"));
+        bgYouWin = Gdx.audio.newMusic(Gdx.files.internal("sounds/bgYouWin.mp3"));
+        bgEndGame = Gdx.audio.newMusic(Gdx.files.internal("sounds/bgEndGame.mp3"));
+
+        //UI Sounds
+        actionBarButtonMove = Gdx.audio.newSound(Gdx.files.internal("sounds/actionBarButtonMove.mp3"));
+        actionBarButtonBullet = Gdx.audio.newSound(Gdx.files.internal("sounds/actionBarButtonBullet.mp3"));
+        youDraw = Gdx.audio.newSound(Gdx.files.internal("sounds/youDraw.mp3"));
+        youLose = Gdx.audio.newSound(Gdx.files.internal("sounds/youLose.mp3"));
+        hourglass_bling = Gdx.audio.newSound(Gdx.files.internal("sounds/hourglass_bling.mp3"));
 
 
         //Faucet Sprites
@@ -79,7 +101,27 @@ public class MainLoader {
         if(bgMusic!=null){
             bgMusic.dispose();
         }
-
+        if(bgEndGame!=null){
+            bgEndGame.dispose();
+        }
+        if(bgYouWin!=null){
+            bgYouWin.dispose();
+        }
+        if(actionBarButtonMove!=null){
+            actionBarButtonMove.dispose();
+        }
+        if(actionBarButtonBullet!=null){
+            actionBarButtonBullet.dispose();
+        }
+        if(youLose!=null){
+            youLose.dispose();
+        }
+        if(youDraw!=null){
+            youDraw.dispose();
+        }
+        if(hourglass_bling!=null){
+            hourglass_bling.dispose();
+        }
     }
 
 
