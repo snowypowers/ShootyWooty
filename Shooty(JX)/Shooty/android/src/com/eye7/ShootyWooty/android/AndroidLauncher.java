@@ -911,7 +911,7 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
         }
         if(s.charAt(0)=='!'){
             moves.put(sender,s);
-            if (moves.size()==mParticipants.size()){
+            if (moves.size()==(numPlayers-numPlayersdisc)){
                 readyToSend();
             }
         }
@@ -947,7 +947,7 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
             return;
         if (x.equals("!")){
             moves.put(mMyId,"!"+s);
-            if (moves.size()==mParticipants.size()){
+            if (moves.size()==(numPlayers-numPlayersdisc)){
                 readyToSend();
             }
         }
