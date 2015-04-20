@@ -485,18 +485,20 @@ public class MoveHandler extends Thread{
         int numScoreFull = 0;
         boolean meFull = false;
         for(int i=0; i<GameConstants.NUM_PLAYERS; i++){
-            if((GameConstants.PLAYERS.get(i+1).dead == true)){
-                recentDead.add(i);
-                actionResolver.markDead(i);
-                Gdx.app.log(TAG, "Sent dead message" + i);
-                if(i==GameConstants.myID)
-                    GameConstants.gameStateFlag = "dead";
-            }
-            if(GameConstants.PLAYERS.get(i+1).getScore()>=3){
-                if(i==GameConstants.myID){
-                    meFull = true;
+            if(!actionResolver.prevDead().get(i)) {
+                if ((GameConstants.PLAYERS.get(i + 1).dead == true)) {
+                    recentDead.add(i);
+                    actionResolver.markDead(i);
+                    Gdx.app.log(TAG, "Sent dead message" + i);
+                    if (i == GameConstants.myID)
+                        GameConstants.gameStateFlag = "dead";
                 }
-                numScoreFull++;
+                if (GameConstants.PLAYERS.get(i + 1).getScore() >= 3) {
+                    if (i == GameConstants.myID) {
+                        meFull = true;
+                    }
+                    numScoreFull++;
+                }
             }
         }
         if(meFull){
@@ -532,7 +534,12 @@ public class MoveHandler extends Thread{
         }
         if(actionResolver.getNumDeadPlayers()==GameConstants.NUM_PLAYERS){
             Gdx.app.log(TAG, "In check draw");
-            checkDraw(recentDead);
+//            for(int i: recentDead){
+//                if(i==GameConstants.myID)
+//                    checkDraw(recentDead);
+//            }
+            if(recentDead.contains(GameConstants.myID))
+                checkDraw(recentDead);
             //actionResolver.gameDecided(state, GameConstants.PLAYERS.get(GameConstants.myID + 1).getAchievments());
         }
     }

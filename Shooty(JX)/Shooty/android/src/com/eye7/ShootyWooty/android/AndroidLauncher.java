@@ -101,6 +101,7 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
     private int numPlayersdisc = 0;
     // Are we playing in multiplayer mode?
     boolean mMultiplayer = false;
+    int curPage = 1;
 
     // The participants in the currently active game
     ArrayList<Participant> mParticipants = null;
@@ -167,7 +168,8 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
 
             case R.id.button_single_player_2:
                 // play a single-player game
-                startGame(false);
+                bgHome.stop();
+                tutorial();
                 break;
             case R.id.button_sign_in:
                 // user wants to sign in
@@ -241,11 +243,11 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
                 if (responseCode == Activity.RESULT_OK) {
                     // ready to start playing
                     Log.d(TAG, "Starting game (waiting room returned OK).");
-                        sortParticipants();
-                        if (mParticipants.get(0).getParticipantId().equals(mMyId)) {
-                            Log.d(TAG, "Choosing Map");
-                            chooseMap();
-                        }
+                    sortParticipants();
+                    if (mParticipants.get(0).getParticipantId().equals(mMyId)) {
+                        Log.d(TAG, "Choosing Map");
+                        chooseMap();
+                    }
                     startGame(true);
                 } else if (responseCode == GamesActivityResultCodes.RESULT_LEFT_ROOM) {
                     // player indicated that they want to leave the room
@@ -347,6 +349,7 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
         Log.d(TAG, "**** got onStop");
 
         // if we're in a room, leave it.
+        bgHome.stop();
         leaveRoom();
 
         // stop trying to keep the screen on
@@ -412,7 +415,7 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
 
         }
 
-       //. switchToMainScreen();
+        //. switchToMainScreen();
 
 
     }
@@ -717,17 +720,21 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
 
     void updateRoom2(Room room, List<String> peers){
         Log.d(TAG, "In UPDATE ROOM2");
-        numPlayersdisc+=peers.size();
+
         if(room!=null) {
             for(String peer:peers){
                 leftPlayers.add(idToNum.get(peer));
-                checkDead.put(idToNum.get(peer),true);
+                if(!checkDead.get(idToNum.get(peer))) {
+                    numPlayersdisc++;
+                    checkDead.put(idToNum.get(peer), true);
+                }
             }
-            mParticipants = room.getParticipants();
+//            mParticipants = room.getParticipants();
         }
         if (((numPlayers-numPlayersdisc)<=1||room==null)&&!endGame){
             switchToScreen(R.id.screen_wait);
             Log.d(TAG, "In check indicating everyone LEFT");
+            toastShow=true;
             leaveRoom();
 
         }
@@ -786,6 +793,7 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
             i=0;
             for(Participant p: mParticipants){
                 idToNum.put(p.getParticipantId(),i);
+                Log.d(TAG,"MOVES TO SEND " + p.getParticipantId()+Integer.toString(i));
                 i++;
             }
         }
@@ -870,9 +878,15 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
         String movestoSend = "";
         int i=0;
         for(Participant p:mParticipants){
-            if(!checkDead.get(idToNum.get(p.getParticipantId())))
+            Log.d(TAG, "4 PLAYER DEBUG" + String.valueOf(checkDead.get(idToNum.get(p.getParticipantId())))+Integer.toString(idToNum.get(p.getParticipantId()))+ p.getParticipantId() );
+            if(!checkDead.get(idToNum.get(p.getParticipantId()))) {
                 movestoSend += moves.get(p.getParticipantId());
+            }
+            else {
+                movestoSend += "!0B0 0B0 0B0 0B0";
+            }
         }
+        Log.d(TAG, "MOVES TO SEND" + movestoSend);
         curMoves = movestoSend;
         validMoves = true;
         moves = new HashMap<>();
@@ -911,6 +925,8 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
         }
         if(s.charAt(0)=='!'){
             moves.put(sender,s);
+            Log.d(TAG, "4 PLAYER DEBUG "+ sender + s);
+            Log.d(TAG, "4 PLAYER DEBUG "+ Integer.toString(numPlayers-numPlayersdisc));
             if (moves.size()==(numPlayers-numPlayersdisc)){
                 readyToSend();
             }
@@ -938,7 +954,13 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
     //Marks the player as dead in the checkDead list
     public void markDead(int i){
         Log.d(TAG, "Player marked dead " + Integer.toString(i));
-        checkDead.put(i,true);
+        if(!checkDead.get(i)) {
+            checkDead.put(i, true);
+            numPlayersdisc++;
+        }
+    }
+    public HashMap<Integer,Boolean> prevDead(){
+        return checkDead;
     }
 
     //Sends message to all players
@@ -1081,7 +1103,7 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
     // This array lists all the individual screens our game has.
     final static int[] SCREENS = {
             R.id.screen_game, R.id.screen_main, R.id.screen_sign_in,
-            R.id.screen_wait, R.id.GameDecided
+            R.id.screen_wait, R.id.GameDecided, R.id.TutorialMainScreen
     };
     int mCurScreen = -1;
 
@@ -1197,7 +1219,65 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
             }
         });
     }
+    public void tutorial(){
+        switchToScreen(R.id.TutorialMainScreen);
+        final ImageView imageView, buttonView;
+        final Bitmap pageOne,pageThree,pageTwo,next,play;
+        try {
+            InputStream is = getAssets().open("Tutorial/tutorial1.png");
+            pageOne = BitmapFactory.decodeStream(is);
+            is = getAssets().open("Tutorial/tutorial2.png");
+            pageTwo = BitmapFactory.decodeStream(is);
+            is = getAssets().open("Tutorial/tutorial3.png");
+            pageThree = BitmapFactory.decodeStream(is);
+            is = getAssets().open("Tutorial/next.png");
+            next = BitmapFactory.decodeStream(is);
+            is = getAssets().open("Tutorial/play.png");
+            play = BitmapFactory.decodeStream(is);
+            imageView = (ImageView) findViewById(R.id.tutorialScreen);
+            imageView.setImageBitmap(pageOne);
+            buttonView = (ImageView) findViewById(R.id.navigate);
+            buttonView.setImageBitmap(next);
 
+            buttonView.setOnTouchListener(new View.OnTouchListener() {
+
+                public boolean onTouch(View v, MotionEvent event) {
+                    switch (event.getAction()) {
+                        case MotionEvent.ACTION_DOWN: {
+                            if(curPage==1){
+                                imageView.setImageBitmap(pageTwo);
+                                curPage++;
+                            }
+                            else if(curPage==2){
+                                imageView.setImageBitmap(pageThree);
+                                buttonView.setImageBitmap(play);
+                                curPage++;
+                            }
+                            else{
+                                curPage = 1;
+                                switchToMainScreen();
+                                pageOne.recycle();
+                                pageTwo.recycle();
+                                pageThree.recycle();
+                                next.recycle();
+                                play.recycle();
+
+
+                            }
+
+                            break;
+                        }
+                    }
+                    return false;
+                }
+            });
+        }
+        catch(Exception e){
+
+        }
+
+
+    }
     // Sets the flag to keep this screen on. It's recommended to do that during
     // the
     // handshake when setting up a game, because if the screen turns off, the
