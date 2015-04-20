@@ -33,6 +33,7 @@ public class GameOverMenu extends Table {
     private Label label;
     private Button exitButton;
     private Game game;
+
     public GameOverMenu(ActionResolver a, final Game game) {
         actionResolver = a;
         this.game = game;
@@ -41,12 +42,11 @@ public class GameOverMenu extends Table {
         player = GameConstants.PLAYERS.get(GameConstants.myID+1);
         achievements = player.getAchievments();
         pointer = new LinkedList<String>();
+
         for (String s: achievements.keySet()) {
             pointer.add(s);
         }
-        for (String s: achievements.keySet()) {
-            pointer.add(s);
-        }
+
         a.displayAchievements(achievements);
 
         //Setup Menu
