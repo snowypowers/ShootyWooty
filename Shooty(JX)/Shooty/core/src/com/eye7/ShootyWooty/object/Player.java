@@ -117,9 +117,6 @@ public class Player implements Observer{
         cactiWalking = CactusLoader.sound_walking;
         soundDamaged = CactusLoader.sound_damaged;
 
-        //Starts walkingSound and pauses it. Resume when needed instead of calling a new instance each time.
-        walkingSound = cactiWalking.loop(0.7f);
-        cactiWalking.pause(walkingSound);
 
         //Set up player position & stats
         //Coordinates are the middle of the circle
@@ -576,14 +573,14 @@ public class Player implements Observer{
                     stateDelta = 0f;
                     statusLock.notifyAll();
                     if (newState == PlayerState.MOVING) {
-                        cactiWalking.resume(walkingSound);
+                        cactiWalking.loop(0.5f);
                     }
                     if (newState == PlayerState.DAMAGED) {
-                        cactiWalking.pause(walkingSound);
+                        cactiWalking.stop();
                         soundDamaged.play();
                     }
                     if (newState == PlayerState.IDLE) {
-                        cactiWalking.pause(walkingSound);
+                        cactiWalking.stop();
                     }
                 }
             }
