@@ -60,6 +60,17 @@ public class GameWorld implements Observer {
 
         switch (gameState) {
             case DECIDING:
+//                if(actionResolver.getQuitGame()){
+//                    Gdx.app.log("GameWorld", "DISPOSE SIGNAL");
+//                    if(th!=null) {
+//                        if (th.isAlive()) {
+//                            th.interrupt();
+//                        }
+//                    }
+//                    hourGlass.dispose();
+//                    game.dispose();
+//                    return;
+//                }
                     if(actionResolver.getMultiplayer() && actionResolver.getActive()!=null) {
                         int numMoves = 0;
                         for(int i =0; i<4; i++){
@@ -74,6 +85,16 @@ public class GameWorld implements Observer {
 
                 break;
             case WAITING:
+//                if(actionResolver.getQuitGame()){
+//                    Gdx.app.log("GameWorld", "DISPOSE SIGNAL");
+//                    if(th!=null) {
+//                        if (th.isAlive()) {
+//                            th.interrupt();
+//                        }
+//                    }
+//                    game.dispose();
+//                    return;
+//                }
                 break;
         }
 
@@ -102,7 +123,9 @@ public class GameWorld implements Observer {
                 if (GameConstants.PLAYERS.get(GameConstants.myID + 1).dead) {
                     myMove = "0B0 0B0 0B0 0B0";
                 }
-                actionResolver.sendMessageAll("!", myMove);
+                if(!GameConstants.PLAYERS.get(GameConstants.myID+1).isDead()) {
+                    actionResolver.sendMessageAll("!", myMove);
+                }
                 Gdx.app.log(TAG, "Sending move: " + myMove);
             } else {
                 //Code to add turns to TurnHandler here (SINGLE PLAYER)
@@ -133,7 +156,9 @@ public class GameWorld implements Observer {
         return stage;
     }
     public void dispose(){
-        hourGlass.dispose();
+        if(hourGlass!=null) {
+            hourGlass.dispose();
+        }
 
     }
 

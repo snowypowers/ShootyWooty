@@ -35,6 +35,7 @@ public class GameOverMenu extends Table {
     private Label label;
     private Button exitButton;
     private Game game;
+
     public GameOverMenu(ActionResolver a, final Game game) {
         actionResolver = a;
         this.game = game;
@@ -44,6 +45,7 @@ public class GameOverMenu extends Table {
         achievements = player.getAchievments();
 
         Label.LabelStyle style = new Label.LabelStyle(MainLoader.green, Color.valueOf("452f04"));
+
 
         a.displayAchievements(achievements);
         MainLoader.bgMusic.stop();

@@ -18,7 +18,7 @@ import java.io.InputStream;
 public class SplashScreen extends Activity {
 
     // Splash screen timer
-    private static int SPLASH = 1000;
+    private static int SPLASH = 2000;
     MediaPlayer mpSplash;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
