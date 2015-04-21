@@ -133,6 +133,7 @@ public class ActionMenu extends Table implements Observer{
     }
 
     public void observerUpdate(int i) { // Turn End or Game End
+
         if (!transitionFlag) { // If menu has not been swapped yet
             if (!GameConstants.gameStateFlag.contains("U")) {
                 //this.clearChildren();
@@ -147,7 +148,13 @@ public class ActionMenu extends Table implements Observer{
 
                 c.setActor(gameOverMenu);    //Replace it with GameOverMenu
                 transitionFlag = true;
+
+                MainLoader.bgEndGame.setLooping(true);
+                MainLoader.bgEndGame.setVolume(0.4f);
+                MainLoader.bgEndGame.play();
+
             }
+
         }
 
 

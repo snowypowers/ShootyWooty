@@ -16,6 +16,8 @@ import com.eye7.ShootyWooty.model.GameConstants;
 import java.util.HashMap;
 import java.util.LinkedList;
 
+import sun.applet.Main;
+
 /**
  * GameOverMenu displayed when the game ends, replacing InputButtons
  *
@@ -40,18 +42,14 @@ public class GameOverMenu extends Table {
         a.setEndGame();
         player = GameConstants.PLAYERS.get(GameConstants.myID+1);
         achievements = player.getAchievments();
-        pointer = new LinkedList<String>();
-        for (String s: achievements.keySet()) {
-            pointer.add(s);
-        }
-        for (String s: achievements.keySet()) {
-            pointer.add(s);
-        }
+
+        Label.LabelStyle style = new Label.LabelStyle(MainLoader.green, Color.valueOf("452f04"));
+
         a.displayAchievements(achievements);
+        MainLoader.bgMusic.stop();
 
         //Setup Menu
-        Label.LabelStyle style = new Label.LabelStyle(MainLoader.green, Color.valueOf("452f04"));
-//        header = new Label("Game Over!", style);
+
         label = new Label(null, style);
         label.setAlignment(Align.center, Align.center);
 
@@ -67,17 +65,21 @@ public class GameOverMenu extends Table {
         if (GameConstants.gameStateFlag.contains("dead")) {
             label.setText("You died!");
         }
+
+        this.row();
+        this.add(label).center().padBottom(10);
+
+        for (String s: achievements.keySet()) {
+            Label ac = new Label(null, style);
+            ac.setText(s + ":" + String.valueOf(achievements.get(s)));
+            ac.setFontScale(0.5f);
+            this.row();
+            this.add(ac).left().padBottom(5);
+
+        }
+
         Drawable buttonImage = MainLoader.homeButtonImg;
         exitButton = new Button(buttonImage);
-
-
-        label.addListener(new ClickListener() {
-
-            public void clicked(InputEvent event, float x,float y) {
-                changeText();
-            }
-        });
-
         exitButton.addListener(new ClickListener() {
 
             public void clicked(InputEvent event, float x,float y) {
@@ -100,7 +102,7 @@ public class GameOverMenu extends Table {
                     else
                         actionResolver.gameDecided("lose");
                     exitGame.start();
-
+                    MainLoader.bgEndGame.stop();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -118,16 +120,8 @@ public class GameOverMenu extends Table {
         this.setWidth(300);
         this.setBackground(MainLoader.exitmenuBG);
 
-//        this.add(header).center().padBottom(50).padTop(25);
-        this.row();
-        this.add(label).center().padBottom(175);
         this.row();
         this.add(exitButton).center().padBottom(25);
     }
 
-    public void changeText() {
-        String output = pointer.poll();
-        label.setText(output + "\n\n" + String.valueOf(achievements.get(output)));
-        pointer.add(output);
-    }
 }
