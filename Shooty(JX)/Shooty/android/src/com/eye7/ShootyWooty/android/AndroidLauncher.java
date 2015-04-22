@@ -84,11 +84,12 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
     Bitmap fourPlayerpress;
 
     //All Audio Files Used
-    private MediaPlayer bgHome;
-    private MediaPlayer drawMusic;
-    private MediaPlayer winMusic;
-    private MediaPlayer loseMusic;
-    private MediaPlayer bgTutorial;
+    private MediaPlayer mp;
+//    private MediaPlayer bgHome;
+//    private MediaPlayer drawMusic;
+//    private MediaPlayer winMusic;
+//    private MediaPlayer loseMusic;
+//    private MediaPlayer bgTutorial;
     private static MediaPlayer buttonPress;
 
     // Set to true to automatically start the sign in flow when the Activity starts.
@@ -151,7 +152,10 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
             findViewById(id).setOnClickListener(this);
         }
         setUpScreen();
-        bgHome.start();
+        mp = MediaPlayer.create(this,R.raw.bghome);
+        mp.setLooping(true);
+        mp.start();
+        //bgHome.start();
         shootyWooty = new main(this);
         config = new AndroidApplicationConfiguration();
         gameView = initializeForView(shootyWooty,config);
@@ -170,7 +174,8 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
 
             case R.id.button_single_player_2:
                 // play a single-player game
-                bgHome.stop();
+               // bgHome.stop();
+                mp.stop();
                 tutorial();
                 break;
             case R.id.button_sign_in:
@@ -344,17 +349,21 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
         keepScreenOn();
         Games.RealTimeMultiplayer.join(mGoogleApiClient, roomConfigBuilder.build());
     }
-
+    @Override
+    public void onPause() {
+        super.onPause();
+        mp.stop();
+    }
     // Activity is going to the background. We have to leave the current room.
     @Override
     public void onStop() {
+        mp.stop();
         Log.d(TAG, "**** got onStop");
 
         // if we're in a room, leave it.
-        bgHome.stop();
-        if(bgTutorial.isPlaying()){
-            bgTutorial.stop();
-        }
+//        if(bgTutorial.isPlaying()){
+//            bgTutorial.stop();
+//        }
         leaveRoom();
 
         // stop trying to keep the screen on
@@ -396,14 +405,19 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
             leaveRoom();
         }
         else {
-            bgHome.stop();
+            mp.stop();
             super.onBackPressed();
         }
     }
 
     // Leave the room.
     public void leaveRoom() {
-        quitGame=true;
+        if(!endGame) {
+            quitGame = true;
+        }
+        else{
+            Log.d(TAG, "LEAVE ROOM END GAME ");
+        }
         Log.d(TAG, "Leaving room.");
         stopKeepingScreenOn();
         if(!getMultiplayer()){
@@ -590,6 +604,7 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
     @Override
     public void onDisconnectedFromRoom(Room room) {
         if(!endGame) {
+            Log.w(TAG, "Left from disconnected");
             quitGame=true;
             stopKeepingScreenOn();
             switchToScreen(R.id.screen_wait);
@@ -664,14 +679,7 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
 
     @Override
     public void onP2PDisconnected(String participant) {
-        Log.d(TAG, "In P2P");
-        mParticipants.remove(participant);
-        sortParticipants();
-        if ((mParticipants.size()<=1)&&!endGame){
-            Log.d(TAG, "In check indicating everyone LEFT");
-            leaveRoom();
 
-        }
 
     }
 
@@ -743,9 +751,9 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
             leaveRoom();
 
         }
-        else {
-            sortParticipants();
-        }
+//        else {
+//            sortParticipants();
+//        }
 
     }
 
@@ -819,7 +827,7 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
         for(int i=0; i<4; i++){
             checkDead.put(i,false);
         }//Initialises the list of dead players
-        bgHome.stop();
+        mp.stop();
         switchToScreen(R.id.screen_game);
 
 
@@ -884,12 +892,8 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
         int i=0;
         for(Participant p:mParticipants){
             Log.d(TAG, "4 PLAYER DEBUG" + String.valueOf(checkDead.get(idToNum.get(p.getParticipantId())))+Integer.toString(idToNum.get(p.getParticipantId()))+ p.getParticipantId() );
-            if(!checkDead.get(idToNum.get(p.getParticipantId()))) {
-                movestoSend += moves.get(p.getParticipantId());
-            }
-            else {
-                movestoSend += "!0B0 0B0 0B0 0B0";
-            }
+
+            movestoSend += moves.get(p.getParticipantId());
         }
         Log.d(TAG, "MOVES TO SEND" + movestoSend);
         curMoves = movestoSend;
@@ -918,7 +922,16 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
         return gameMap;
     }
 
-
+//    public boolean notDeadPlayerMsg(){
+//        int i=0;
+//        for(Participant p:mParticipants){
+//            if(checkDead.get(i)){
+//                if(moves.get(i)!=null)
+//                    return false;
+//            }
+//        }
+//        return true;
+//    }
     //Method to process incoming messages
     @Override
     public void onRealTimeMessageReceived(RealTimeMessage rtm) {
@@ -932,7 +945,7 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
             moves.put(sender,s);
             Log.d(TAG, "4 PLAYER DEBUG "+ sender + s);
             Log.d(TAG, "4 PLAYER DEBUG "+ Integer.toString(numPlayers-numPlayersdisc));
-            if (moves.size()==(numPlayers-numPlayersdisc)){
+            if (moves.size()==numPlayers){
                 readyToSend();
             }
         }
@@ -967,14 +980,23 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
     public HashMap<Integer,Boolean> prevDead(){
         return checkDead;
     }
-
+    public void addDeadPlayermsg(){
+        int i=0;
+        for(Participant p:mParticipants){
+            if(checkDead.get(i)){
+                moves.put(p.getParticipantId(),"!0B0 0B0 0B0 0B0");
+            }
+            i++;
+        }
+    }
     //Sends message to all players
     public void sendMessageAll(String x, String s){
         if(!mMultiplayer)
             return;
         if (x.equals("!")){
             moves.put(mMyId,"!"+s);
-            if (moves.size()==(numPlayers-numPlayersdisc)){
+            addDeadPlayermsg();
+            if (moves.size()==numPlayers){
                 readyToSend();
             }
         }
@@ -1051,15 +1073,23 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
             @Override
             public void onClick(View v) {
                 leaveRoom();
-                if(drawMusic.isPlaying())
-                    drawMusic.stop();
-                if(winMusic.isPlaying())
-                    winMusic.stop();
-                if(loseMusic.isPlaying())
-                    loseMusic.stop();
+                mp.stop();
+//                if(drawMusic.isPlaying())
+//                    drawMusic.stop();
+//                if(winMusic.isPlaying())
+//                    winMusic.stop();
+//
+//                loseMusic.stop();
             }
         };
-
+        if (check.equals("draw")){
+            mp = MediaPlayer.create(this,R.raw.youdraw);
+        }
+        else if (check.equals("lose"))
+            mp = MediaPlayer.create(this,R.raw.youlose);
+        else if (check.equals("win"))
+            mp = MediaPlayer.create(this,R.raw.youwin);
+        mp.start();
         Thread thread = new Thread(){
             @Override
             public void run() {
@@ -1073,7 +1103,9 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
                                 is = getAssets().open("EndScreens/"+check+Integer.toString(myIDNum+1)+".png");
                             }
                             else {
-                                drawMusic.start();
+                                //drawMusic.start();
+
+
                                 is = getAssets().open("EndScreens/"+check+".png");
                             }
                             Log.d(TAG, "FOUND IMAGE URI" + check);
@@ -1081,12 +1113,6 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
                             ImageView imageView = (ImageView)findViewById(R.id.EndImage);
                             imageView.setImageBitmap(bitmap);
                             Log.d(TAG, "SET IMAGE");
-                            if(check.equals("win")){
-                                winMusic.start();
-                            }
-                            else{
-                                loseMusic.start();
-                            }
                             switchToScreen(R.id.GameDecided);
                             imageView.setOnClickListener(listener1);
                             keepScreenOn();
@@ -1136,7 +1162,17 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
     }
 
     void switchToMainScreen() {
-        bgHome.start();
+        mp.stop();
+        mp = MediaPlayer.create(this,R.raw.bghome);
+        mp.setLooping(true);
+        mp.start();
+
+//        if(drawMusic.isPlaying())
+//            drawMusic.stop();
+//        if(winMusic.isPlaying())
+//            winMusic.stop();
+//        if(loseMusic.isPlaying())
+//            loseMusic.stop();
         if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
             switchToScreen(R.id.screen_main);
         }
@@ -1189,16 +1225,17 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
         imageButton.setImageBitmap(doublePlayer);
         imageButton = (ImageButton) findViewById(R.id.button_quick_game1);
         imageButton.setImageBitmap(fourPlayer);
-        bgHome = MediaPlayer.create(this,R.raw.bghome);
-        drawMusic = MediaPlayer.create(this,R.raw.youdraw);
-        winMusic = MediaPlayer.create(this,R.raw.youwin);
-        loseMusic = MediaPlayer.create(this,R.raw.youlose);
+
+//        bgHome = MediaPlayer.create(this,R.raw.bghome);
+//        drawMusic = MediaPlayer.create(this,R.raw.youdraw);
+//        winMusic = MediaPlayer.create(this,R.raw.youwin);
+//        loseMusic = MediaPlayer.create(this,R.raw.youlose);
         buttonPress = MediaPlayer.create(this,R.raw.homebuttonpressed);
-        bgTutorial = MediaPlayer.create(this,R.raw.bgtutorial);
-        bgHome.setLooping(true);
-        drawMusic.setLooping(true);
-        winMusic.setLooping(true);
-        loseMusic.setLooping(true);
+//        bgTutorial = MediaPlayer.create(this,R.raw.bgtutorial);
+//        bgHome.setLooping(true);
+//        drawMusic.setLooping(true);
+//        winMusic.setLooping(true);
+//        loseMusic.setLooping(true);
 
 
     }
@@ -1208,6 +1245,7 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
         final Bitmap pressed = press;
         final Bitmap released = release;
 
+        
         button.setOnTouchListener(new OnTouchListener() {
 
             public boolean onTouch(View v, MotionEvent event) {
@@ -1228,7 +1266,8 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
         });
     }
     public void tutorial(){
-        bgTutorial.start();
+        mp = MediaPlayer.create(this,R.raw.bgtutorial);
+        mp.start();
         switchToScreen(R.id.TutorialMainScreen);
         final ImageView imageView, buttonView;
         final Bitmap pageOne,pageThree,pageTwo,next,play;
@@ -1264,7 +1303,8 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
                             }
                             else{
                                 curPage = 1;
-                                bgTutorial.stop();
+                               // bgTutorial.stop();
+                                mp.stop();
                                 switchToMainScreen();
                                 pageOne.recycle();
                                 pageTwo.recycle();

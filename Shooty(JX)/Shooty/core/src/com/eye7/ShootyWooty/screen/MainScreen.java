@@ -113,11 +113,14 @@ public class MainScreen implements Screen {
 
     @Override
     public void dispose() {
+
         Gdx.app.log("disposing","In mainScreen dispose");
-        renderer.dispose();
-        world.dispose();
-        map.dispose();
-        stage.dispose();
+        if(!GameConstants.DISPOSED) {
+            renderer.dispose();
+            world.dispose();
+            map.dispose();
+            stage.dispose();
+        }
     }
 
 

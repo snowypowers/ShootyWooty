@@ -1,6 +1,7 @@
 package com.eye7.ShootyWooty.object;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
@@ -15,8 +16,6 @@ import com.eye7.ShootyWooty.model.GameConstants;
 
 import java.util.HashMap;
 import java.util.LinkedList;
-
-import sun.applet.Main;
 
 /**
  * GameOverMenu displayed when the game ends, replacing InputButtons
@@ -93,6 +92,7 @@ public class GameOverMenu extends Table {
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
                             }
+                            Gdx.app.log("GameOVERMENU", "DISPOSE SIGNAL");
                             game.dispose();
                         }
                     };

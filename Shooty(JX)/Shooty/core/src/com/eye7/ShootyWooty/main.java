@@ -44,6 +44,7 @@ public class main extends Game {
         myScreen = new MainScreen(this, actionResolver);
         setScreen(myScreen);
         GameConstants.gameStateFlag = "U";
+        GameConstants.DISPOSED = false;
         Gdx.app.log("Screen Reso:", "Width: " + String.valueOf(Gdx.graphics.getWidth()));
         Gdx.app.log("Screen Reso:", "Height: " + String.valueOf(Gdx.graphics.getHeight()));
         Gdx.app.log("ScaleX", String.valueOf(GameConstants.SCALE_X));
@@ -58,6 +59,7 @@ public class main extends Game {
         MainLoader.dispose();
         GameConstants.dispose();
         CactusLoader.dispose();
+        GameConstants.DISPOSED = true;
     }
 
     @Override

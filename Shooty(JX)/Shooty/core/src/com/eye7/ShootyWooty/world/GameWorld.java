@@ -154,8 +154,15 @@ public class GameWorld implements Observer {
         return stage;
     }
     public void dispose(){
-        if(hourGlass!=null) {
-            hourGlass.dispose();
+        if(th!=null) {
+            if (th.isExecuting()) {
+                th.interrupt();
+            }
+        }
+        if(!GameConstants.DISPOSED) {
+            if (hourGlass != null) {
+                hourGlass.dispose();
+            }
         }
 
     }

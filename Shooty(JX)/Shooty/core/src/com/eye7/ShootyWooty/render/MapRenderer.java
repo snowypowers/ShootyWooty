@@ -98,7 +98,9 @@ public class MapRenderer extends OrthogonalTiledMapRenderer {
     }
     public void dispose(){
         Gdx.app.log("disposing","In mapRenderer dispose");
-        colliderRender.dispose();
+        if(!GameConstants.DISPOSED) {
+            colliderRender.dispose();
+        }
     }
 }
 

@@ -25,6 +25,7 @@ import java.util.HashMap;
 public class GameConstants {
     private static final String TAG = "GameConstants";
     public static boolean DEBUG = false;
+    public static boolean DISPOSED = false;
 
     //Screen Size
     public static float SCALE_X;
@@ -103,11 +104,13 @@ public class GameConstants {
     }
 
     public static void dispose() {
-    observersTurnStart.clear();
-    observersTurnEnd.clear();
-    observersGameEnd.clear();
-    ROCKS.clear();
-    WATER.clear();
-    PLAYERS = new HashMap<Integer, Player>();
+        if(!GameConstants.DISPOSED) {
+            observersTurnStart.clear();
+            observersTurnEnd.clear();
+            observersGameEnd.clear();
+            ROCKS.clear();
+            WATER.clear();
+            PLAYERS = new HashMap<Integer, Player>();
+        }
     }
 }

@@ -12,6 +12,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.audio.Sound;
+import com.eye7.ShootyWooty.model.GameConstants;
+
 /**
  * Loader to load all assets required by the game. Player assets are loaded in CactusLoader.
  */
@@ -77,34 +79,36 @@ public class MainLoader {
 
     //Call when leaving game to unload all resources
     public static void dispose() {
-        //bgMusic.stop();
-        if(white!=null){
-            white.dispose();
-        }
-        if(green!=null){
-            green.dispose();
-        }
-        if(atlas!=null){
-            atlas.dispose();
-        }
-        if(skin!=null){
-            skin.dispose();
-        }
-        //disposes the background music
-        if(bgMusic!=null){
-            bgMusic.dispose();
-        }
-        if(bgEndGame!=null){
-            bgEndGame.dispose();
-        }
-        if(actionBarButtonMove!=null){
-            actionBarButtonMove.dispose();
-        }
-        if(actionBarButtonBullet!=null){
-            actionBarButtonBullet.dispose();
-        }
-        if(hourglass_bling!=null){
-            hourglass_bling.dispose();
+        if(!GameConstants.DISPOSED) {
+            //bgMusic.stop();
+            if (white != null) {
+                white.dispose();
+            }
+            if (green != null) {
+                green.dispose();
+            }
+            if (atlas != null) {
+                atlas.dispose();
+            }
+            if (skin != null) {
+                skin.dispose();
+            }
+            //disposes the background music
+            if (bgMusic != null) {
+                bgMusic.dispose();
+            }
+            if (bgEndGame != null) {
+                bgEndGame.dispose();
+            }
+            if (actionBarButtonMove != null) {
+                actionBarButtonMove.dispose();
+            }
+            if (actionBarButtonBullet != null) {
+                actionBarButtonBullet.dispose();
+            }
+            if (hourglass_bling != null) {
+                hourglass_bling.dispose();
+            }
         }
     }
 

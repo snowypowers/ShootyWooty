@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Array;
+import com.eye7.ShootyWooty.model.GameConstants;
 
 import java.util.HashMap;
 
@@ -199,16 +200,18 @@ public class CactusLoader {
         loader("Cactus4.emote",5,0.4f,cactus4_animations);
     }
     public static void dispose(){
-        cactus1Skin.dispose();
-        cactus2Skin.dispose();
-        cactus3Skin.dispose();
-        cactus4Skin.dispose();
-        sound_walking.dispose();
-        sound_damaged.dispose();
-        sound_shoot.dispose();
-        sound_water_collected.dispose();
-        sound_point_scored.dispose();
-        sound_dead.dispose();
+        if(!GameConstants.DISPOSED) {
+            cactus1Skin.dispose();
+            cactus2Skin.dispose();
+            cactus3Skin.dispose();
+            cactus4Skin.dispose();
+            sound_walking.dispose();
+            sound_damaged.dispose();
+            sound_shoot.dispose();
+            sound_water_collected.dispose();
+            sound_point_scored.dispose();
+            sound_dead.dispose();
+        }
 
     }
 }
