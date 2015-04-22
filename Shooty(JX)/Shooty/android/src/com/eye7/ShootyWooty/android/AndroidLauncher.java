@@ -88,6 +88,7 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
     private MediaPlayer drawMusic;
     private MediaPlayer winMusic;
     private MediaPlayer loseMusic;
+    private MediaPlayer bgTutorial;
     private static MediaPlayer buttonPress;
 
     // Set to true to automatically start the sign in flow when the Activity starts.
@@ -350,6 +351,9 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
 
         // if we're in a room, leave it.
         bgHome.stop();
+        if(bgTutorial.isPlaying()){
+            bgTutorial.stop();
+        }
         leaveRoom();
 
         // stop trying to keep the screen on
@@ -814,7 +818,7 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
         for(int i=0; i<4; i++){
             checkDead.put(i,false);
         }//Initialises the list of dead players
-        bgHome.pause();
+        bgHome.stop();
         switchToScreen(R.id.screen_game);
 
 
@@ -1189,6 +1193,7 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
         winMusic = MediaPlayer.create(this,R.raw.youwin);
         loseMusic = MediaPlayer.create(this,R.raw.youlose);
         buttonPress = MediaPlayer.create(this,R.raw.homebuttonpressed);
+        bgTutorial = MediaPlayer.create(this,R.raw.bgtutorial);
         bgHome.setLooping(true);
         drawMusic.setLooping(true);
         winMusic.setLooping(true);
@@ -1220,6 +1225,7 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
         });
     }
     public void tutorial(){
+        bgTutorial.start();
         switchToScreen(R.id.TutorialMainScreen);
         final ImageView imageView, buttonView;
         final Bitmap pageOne,pageThree,pageTwo,next,play;
@@ -1255,12 +1261,14 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
                             }
                             else{
                                 curPage = 1;
+                                bgTutorial.stop();
                                 switchToMainScreen();
                                 pageOne.recycle();
                                 pageTwo.recycle();
                                 pageThree.recycle();
                                 next.recycle();
                                 play.recycle();
+
 
 
                             }

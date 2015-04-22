@@ -67,6 +67,11 @@
                         android:layout_width="152dp"
                         android:layout_height="50dp"
                         android:scaleType="fitXY"/>
+                    <!--<ImageButton android:id="@+id/button_invite_players" style="@style/MainScreenButton"-->
+                        <!--android:background="@null"-->
+                        <!--android:layout_width="152dp"-->
+                        <!--android:layout_height="50dp"-->
+                        <!--android:scaleType="fitXY"/>-->
                 </LinearLayout>
 
                 <LinearLayout

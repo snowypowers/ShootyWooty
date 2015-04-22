@@ -120,13 +120,11 @@ public class GameWorld implements Observer {
 
             if (actionResolver.getMultiplayer()) {
                 String myMove = moves[0] + " " + moves[1] + " " + moves[2] + " " + moves[3];
-                if (GameConstants.PLAYERS.get(GameConstants.myID + 1).dead) {
-                    myMove = "0B0 0B0 0B0 0B0";
-                }
-                if(!GameConstants.PLAYERS.get(GameConstants.myID+1).isDead()) {
+                if(!GameConstants.PLAYERS.get(GameConstants.myID+1).dead) {
+                    Gdx.app.log(TAG, "Sending move: " + myMove);
                     actionResolver.sendMessageAll("!", myMove);
                 }
-                Gdx.app.log(TAG, "Sending move: " + myMove);
+
             } else {
                 //Code to add turns to TurnHandler here (SINGLE PLAYER)
                 for (int l = 1; l <= GameConstants.NUM_PLAYERS; l++) {
