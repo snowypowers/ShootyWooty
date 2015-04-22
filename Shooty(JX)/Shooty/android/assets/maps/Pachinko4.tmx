@@ -83,7 +83,6 @@
   <object id="87" name="Rock" x="64" y="640" width="64" height="64"/>
   <object id="88" name="Rock" x="0" y="576" width="64" height="64"/>
   <object id="89" name="Rock" x="512" y="768" width="64" height="64"/>
-  <object id="90" name="Rock" x="448" y="768" width="64" height="64"/>
  </objectgroup>
  <objectgroup name="Water">
   <object id="76" name="Water" x="448" y="832" width="128" height="64"/>
