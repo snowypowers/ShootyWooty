@@ -67,6 +67,8 @@ public class DisplayMap implements InputProcessor {
         gameMap = new GameMap(tiledMap, actionResolver);
         gameMap.setUpPlayers(GameConstants.NUM_PLAYERS);
 
+
+
         if(GameConstants.DEBUG) {
             shapeRenderer = new ShapeRenderer();
             shapeRenderer.setProjectionMatrix(camera.combined);
@@ -95,6 +97,10 @@ public class DisplayMap implements InputProcessor {
         screenHeight = (int) (540 * scaleHFactor);
         Gdx.app.log(TAG, "Resized to " + String.valueOf(screenWidth) + " by " + String.valueOf(screenHeight));
         camera.setToOrtho(false,screenWidth / zoom, screenHeight / zoom);
+        //Set camera at your player
+        camera.position.x = GameConstants.PLAYERS.get(GameConstants.myID+1).getX();
+        camera.position.y = GameConstants.PLAYERS.get(GameConstants.myID+1).getY();
+        GameConstants.PLAYERS.get(GameConstants.myID+1).emote();
         camera.update();
     }
 

@@ -84,8 +84,15 @@ public class GameMap {
         sb.enableBlending();
         sb.begin();
 
-        for (Player p: GameConstants.PLAYERS.values()) {
-            p.draw(sb, delta);
+        for (Player p: GameConstants.PLAYERS.values()) { // Draw dead players below
+            if (p.isDead()) {
+                p.draw(sb, delta);
+            }
+        }
+        for (Player p: GameConstants.PLAYERS.values()) { //Draw remaining alive players
+            if (!p.isDead()) {
+                p.draw(sb, delta);
+            }
         }
         sb.end();
     }

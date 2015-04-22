@@ -36,11 +36,13 @@ public class CactusLoader {
     public static Skin cactus2Skin;
     public static Skin cactus3Skin;
     public static Skin cactus4Skin;
+    public static Skin deathSkin;
 
     public static HashMap<String, Animation> cactus1_animations;
     public static HashMap<String, Animation> cactus2_animations;
     public static HashMap<String, Animation> cactus3_animations;
     public static HashMap<String, Animation> cactus4_animations;
+    public static Animation death_animation;
 
     public static Sound sound_walking;
     public static Sound sound_damaged;
@@ -64,13 +66,22 @@ public class CactusLoader {
         sound_point_scored = Gdx.audio.newSound(Gdx.files.internal("sounds/Cacti/cactiPointScored.mp3"));
         sound_dead = Gdx.audio.newSound(Gdx.files.internal("sounds/Cacti/cactiDead.mp3"));
 
+        //Animations
         cactus1Skin = new Skin(new TextureAtlas(Gdx.files.internal("players/Cactus1.pack")));
         cactus2Skin = new Skin(new TextureAtlas(Gdx.files.internal("players/Cactus2.pack")));
+        deathSkin = new Skin(new TextureAtlas(Gdx.files.internal("players/death_animation.pack")));
 
         cactus1_animations = new HashMap<String, Animation>();
         cactus2_animations = new HashMap<String, Animation>();
 
 
+        //Construct death animation
+        Array<TextureRegion> frames = new Array<TextureRegion>();
+        for (int i = 1; i < 11; i++) {
+            frames.add(new TextureRegion(deathSkin.getRegion("death_animation" + String.valueOf(i))));
+        }
+
+        death_animation = new Animation(0.2f,frames, Animation.PlayMode.NORMAL);
 
         if(NUM_PLAYERS==2){
             loadC1();

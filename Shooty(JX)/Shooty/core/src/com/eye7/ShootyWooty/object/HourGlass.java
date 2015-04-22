@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.eye7.ShootyWooty.helper.MainLoader;
 import com.eye7.ShootyWooty.model.GameConstants;
 
 /**
@@ -177,6 +178,7 @@ class Timer extends Thread {
                         this.wait();
                     }
                     time = 0f;
+                    MainLoader.hourglass_bling.play();
                 } catch (InterruptedException e1) {
                     e1.printStackTrace();
                 }
