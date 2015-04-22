@@ -582,6 +582,9 @@ public class Player implements Observer{
     //Damaged animation will handle the transition back to what it should be in when damaged animation runs to the end.
     private void changeAnimation(PlayerState newState) {
         synchronized (statusLock) {
+            if (playerState == PlayerState.DEAD ||  playerState == PlayerState.LOSE) {
+                return; // DONT DO ANYTHING WHEN DEAD
+            }
             if (playerState != PlayerState.DEAD || playerState != PlayerState.LOSE) {
                 if (playerState == PlayerState.DAMAGED) { //Check if not dead
                     previousState = newState; // Allows damaged animation to run finish
@@ -633,7 +636,7 @@ public class Player implements Observer{
             }
             if (!isDead()) { // HouseKeeping Actions
                 bulletCount += 3; // Add 3 more bullets
-                if (bulletCount > 12) { //Set max bullets that can be stored
+                if (bulletCount > 10) { //Set max bullets that can be stored
                     bulletCount = 10;
                 }
             }
