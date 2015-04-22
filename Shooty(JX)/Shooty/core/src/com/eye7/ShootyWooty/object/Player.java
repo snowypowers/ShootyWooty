@@ -582,11 +582,10 @@ public class Player implements Observer{
     //Damaged animation will handle the transition back to what it should be in when damaged animation runs to the end.
     private void changeAnimation(PlayerState newState) {
         synchronized (statusLock) {
-            if (playerState == PlayerState.DEAD ||  playerState == PlayerState.LOSE) {
+            if (playerState == PlayerState.DEAD ||  playerState == PlayerState.LOSE) {//Check if dead
                 return; // DONT DO ANYTHING WHEN DEAD
-            }
-            if (playerState != PlayerState.DEAD || playerState != PlayerState.LOSE) {
-                if (playerState == PlayerState.DAMAGED) { //Check if not dead
+            } else { //Not dead
+                if (playerState == PlayerState.DAMAGED && newState != PlayerState.DAMAGED) {
                     previousState = newState; // Allows damaged animation to run finish
                 } else if (playerState != newState) {
                     previousState = PlayerState.getState(playerState);
