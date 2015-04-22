@@ -82,6 +82,9 @@ public class Player implements Observer{
 
     //add sounds for collision
     private Sound cactiWalking;
+    private Sound cactiShoot;
+    private Sound cactiDead;
+    private Sound cactiWaterCollected;
     private Sound soundDamaged;
     private long walkingSound;
 
@@ -115,7 +118,11 @@ public class Player implements Observer{
 
         //Setup Sounds
         cactiWalking = CactusLoader.sound_walking;
+        cactiShoot = CactusLoader.sound_shoot;
+        cactiDead = CactusLoader.sound_dead;
+        cactiWaterCollected = CactusLoader.sound_water_collected;
         soundDamaged = CactusLoader.sound_damaged;
+
 
 
         //Set up player position & stats
@@ -181,13 +188,18 @@ public class Player implements Observer{
             //Gdx.app.log(TAG, "Rendering");
             while (s == null) {
                 if (playerState == PlayerState.DEAD) {
+                        s = new Sprite(CactusLoader.death_animation.getKeyFrame(stateDelta));
+                        stateDelta += delta;
+                    if (stateDelta > CactusLoader.death_animation.getAnimationDuration()) {
+                        stateDelta = CactusLoader.death_animation.getFrameDuration() * 2;
+                    }
+                } else if (playerState == PlayerState.LOSE) {
                     if (stateDelta <= animations.get("lose").getAnimationDuration()) {
                         s = new Sprite(animations.get("lose").getKeyFrame(stateDelta));
                         stateDelta += delta;
                     } else {
                         s = new Sprite(animations.get("lose").getKeyFrame(animations.get("lose").getAnimationDuration()));
                     }
-
                 } else if (playerState == PlayerState.IDLE) {
                     stateDelta += delta;
                     s = new Sprite(animations.get(getdirection() + ".idle").getKeyFrame(stateDelta));
@@ -232,6 +244,9 @@ public class Player implements Observer{
                         s = new Sprite(animations.get("emote").getKeyFrame(stateDelta));
                         stateDelta += delta;
                     }
+                } else if (playerState == PlayerState.WIN) {
+                    s = new Sprite(animations.get("emote").getKeyFrame(stateDelta));
+                    stateDelta += delta;
                 }
             }
         }
@@ -395,6 +410,7 @@ public class Player implements Observer{
     public synchronized void collectWater() {
         if (!isDead() && previousState != PlayerState.DAMAGED) { //Must not be dead or damaged this turn
             water += 1;
+            cactiWaterCollected.play(); // Play sound
             lifeTimeWater += 1;
             if (water == 3) {
                 score += 1;
@@ -443,6 +459,7 @@ public class Player implements Observer{
         shootLeft = true;
         bulletCount -= 1;
         lifeTimeShotsFired += 1;
+        cactiShoot.play();
     }
 
     //Starts player shooting right
@@ -450,6 +467,7 @@ public class Player implements Observer{
         shootRight = true;
         bulletCount -= 1;
         lifeTimeShotsFired += 1;
+        cactiShoot.play();
     }
 
     //Ends player shooting left
@@ -564,7 +582,7 @@ public class Player implements Observer{
     //Damaged animation will handle the transition back to what it should be in when damaged animation runs to the end.
     private void changeAnimation(PlayerState newState) {
         synchronized (statusLock) {
-            if (playerState != PlayerState.DEAD) {
+            if (playerState != PlayerState.DEAD || playerState != PlayerState.LOSE) {
                 if (playerState == PlayerState.DAMAGED) { //Check if not dead
                     previousState = newState; // Allows damaged animation to run finish
                 } else if (playerState != newState) {
@@ -573,14 +591,17 @@ public class Player implements Observer{
                     stateDelta = 0f;
                     statusLock.notifyAll();
                     if (newState == PlayerState.MOVING) {
-                        cactiWalking.loop(0.5f);
+                        walkingSound = cactiWalking.loop(0.5f);
                     }
                     if (newState == PlayerState.DAMAGED) {
-                        cactiWalking.stop();
+                        cactiWalking.stop(walkingSound);
                         soundDamaged.play();
                     }
                     if (newState == PlayerState.IDLE) {
-                        cactiWalking.stop();
+                        cactiWalking.stop(walkingSound);
+                    }
+                    if (newState == PlayerState.DEAD) {
+                        cactiDead.play();
                     }
                 }
             }
@@ -620,17 +641,29 @@ public class Player implements Observer{
         if (i == 2) { // Game End
             if (health <= 0 && !isDead()) { //Actions upon DEATH
                 changeAnimation(PlayerState.DEAD);
-                collider.getCircle().setPosition(-100,100); // Move colliders out so other players cannot collide with it anymore
+                collider.getCircle().setPosition(-100,-100); // Move colliders out so other players cannot collide with it anymore
                 bulletl.setReturn(-100,-100);
                 bulletr.setReturn(-100,-100);
                 bulletl.getReturn();
                 bulletr.getReturn();
             }
-            if (GameConstants.gameStateFlag.contains("L")) { //Lose
-                changeAnimation(PlayerState.DEAD);
-            }
-            if (GameConstants.gameStateFlag.contains("W")) { // Win
-                changeAnimation(PlayerState.COLLECTING_WATER);
+
+            if ((GameConstants.myID + 1) == playerID) { // If this character is the client's character
+                if (GameConstants.gameStateFlag.equals("L") && !isDead()) { //Lose
+                    changeAnimation(PlayerState.LOSE);
+                } else if (GameConstants.gameStateFlag.equals("W") && !isDead()) { // Win
+                    changeAnimation(PlayerState.WIN);
+                } else if (GameConstants.gameStateFlag.equals("D") && !isDead()){ // Draw
+                    changeAnimation(PlayerState.EMOTE);
+                }
+            } else { // Character is others
+                if (GameConstants.gameStateFlag.equals("L") && !isDead()) { //Other player win
+                    changeAnimation(PlayerState.WIN);
+                } else if (GameConstants.gameStateFlag.equals("W") && !isDead()) { // Other player loses
+                    changeAnimation(PlayerState.LOSE);
+                } else if (GameConstants.gameStateFlag.equals("D") && !isDead()){ // Draw
+                    changeAnimation(PlayerState.EMOTE);
+                }
             }
         }
     }
@@ -656,6 +689,8 @@ enum PlayerState {
     MOVING,
     DAMAGED,
     COLLECTING_WATER,
+    LOSE,
+    WIN,
     DEAD;
 
     static PlayerState getState(PlayerState e) {
@@ -665,6 +700,8 @@ enum PlayerState {
             case MOVING: return MOVING;
             case DAMAGED: return DAMAGED;
             case COLLECTING_WATER: return COLLECTING_WATER;
+            case LOSE: return LOSE;
+            case WIN: return WIN;
             case DEAD: return DEAD;
             default: return null;
         }
@@ -678,6 +715,8 @@ enum PlayerState {
             case DAMAGED: return "DAMAGED";
             case COLLECTING_WATER: return "COLLECTING_WATER";
             case DEAD: return "DEAD";
+            case LOSE: return "LOSE";
+            case WIN: return "WIN";
             default: return "null";
         }
     }

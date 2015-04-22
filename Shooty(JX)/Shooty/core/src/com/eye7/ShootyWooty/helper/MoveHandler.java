@@ -159,13 +159,7 @@ public class MoveHandler extends Thread{
                         e.printStackTrace();
                     }
                 }
-
                 player.snapInGrid(); // make sure the player is aligned to a grid
-                try {
-                    decideWin(); //
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
             }
 
             try {
@@ -254,6 +248,11 @@ public class MoveHandler extends Thread{
         } // End of For Loop
 
         /////////////////////////////////////////END OF TURN///////////////////////////////////////
+        try {
+            decideWin(); //
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         if (GameConstants.DEBUG) {
             Gdx.app.log("MoveHandler", "End!");
         }

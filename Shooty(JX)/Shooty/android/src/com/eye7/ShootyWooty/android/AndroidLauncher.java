@@ -161,6 +161,7 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
     }
 
 
+
     @Override
     public void onClick(View v) {
         Intent intent;
@@ -1198,6 +1199,8 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
         drawMusic.setLooping(true);
         winMusic.setLooping(true);
         loseMusic.setLooping(true);
+
+
     }
 
     public static void buttonEffect(View button, int ib, Bitmap press, Bitmap release){
