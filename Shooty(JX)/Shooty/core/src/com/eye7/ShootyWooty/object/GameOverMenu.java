@@ -46,7 +46,7 @@ public class GameOverMenu extends Table {
         Label.LabelStyle style = new Label.LabelStyle(MainLoader.green, Color.valueOf("452f04"));
 
 
-        a.displayAchievements(achievements);
+
         MainLoader.bgMusic.stop();
 
         //Setup Menu
@@ -87,6 +87,7 @@ public class GameOverMenu extends Table {
                 try {
                     Thread exitGame = new Thread(){
                         public void run(){
+
                             try {
                                 Thread.sleep(1000);
                             } catch (InterruptedException e) {
@@ -96,6 +97,7 @@ public class GameOverMenu extends Table {
                             game.dispose();
                         }
                     };
+                    actionResolver.displayAchievements(achievements);
                     if(GameConstants.gameStateFlag.equals("W")){
                         actionResolver.gameDecided("win");
                     }
