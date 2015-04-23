@@ -40,6 +40,15 @@ public class main extends Game {
         GameConstants.SCALE_X = Gdx.graphics.getWidth() / 960.0f;
         GameConstants.SCALE_Y = Gdx.graphics.getHeight() / 540.0f;
         MainLoader.load();
+        if(actionResolver.getMultiplayer()) {
+            GameConstants.NUM_PLAYERS = actionResolver.getNumPlayers();
+            GameConstants.myID = actionResolver.getMyID();
+            Gdx.app.log("MAIN", Integer.toString(GameConstants.myID));
+        }
+        else{
+            GameConstants.NUM_PLAYERS =2;
+            GameConstants.myID = 0;
+        }
         CactusLoader.load(GameConstants.NUM_PLAYERS);
         myScreen = new MainScreen(this, actionResolver);
         setScreen(myScreen);
@@ -57,6 +66,7 @@ public class main extends Game {
             GameConstants.DISPOSED = true;
             if (myScreen != null) {
                 myScreen.dispose();
+                myScreen = null;
             }
             MainLoader.dispose();
             GameConstants.dispose();

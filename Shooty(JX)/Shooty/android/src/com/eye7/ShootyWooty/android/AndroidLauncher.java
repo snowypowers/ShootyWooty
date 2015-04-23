@@ -128,7 +128,7 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
     private boolean toastShow = false;
 
     private String[] twoPlayerMaps = new String[]{"CorridorOfDeath","SandPit","CongoLine","L"}; //List of 2 player maps
-    private String[] fourPlayerMaps = new String[]{"CheckMate4","CorridorOfDeath4","Pachinko4"}; //List of 4 player maps
+    private String[] fourPlayerMaps = new String[]{"Pachinko4","CheckMate4","CorridorOfDeath4"}; //List of 4 player maps
     private String gameMap = "";
 
     private AndroidApplicationConfiguration config;

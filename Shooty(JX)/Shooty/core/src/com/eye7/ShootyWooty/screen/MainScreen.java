@@ -43,15 +43,7 @@ public class MainScreen implements Screen {
         this.actionResolver = actionResolver;
         Gdx.app.log("GameScreen", "Attached");
         Gdx.gl.glViewport(0,0,Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        if(actionResolver.getMultiplayer()) {
-            GameConstants.NUM_PLAYERS = actionResolver.getNumPlayers();
-            GameConstants.myID = actionResolver.getMyID();
-            Gdx.app.log("GameScreen", Integer.toString(GameConstants.myID));
-        }
-        else{
-            GameConstants.NUM_PLAYERS =2;
-            GameConstants.myID = 0;
-        }
+
         stage = new Stage(new StretchViewport(960, 540)); // contain buttons and display
         world = new GameWorld(stage, actionResolver,game); // contains game objects
         renderer = new GameRenderer(world);    // animate game objects
