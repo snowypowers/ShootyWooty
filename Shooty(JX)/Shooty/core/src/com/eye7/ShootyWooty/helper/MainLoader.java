@@ -2,6 +2,7 @@ package com.eye7.ShootyWooty.helper;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -11,8 +12,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
-import com.badlogic.gdx.audio.Sound;
-import com.eye7.ShootyWooty.model.GameConstants;
 
 /**
  * Loader to load all assets required by the game. Player assets are loaded in CactusLoader.
@@ -79,7 +78,6 @@ public class MainLoader {
 
     //Call when leaving game to unload all resources
     public static void dispose() {
-        if(!GameConstants.DISPOSED) {
             //bgMusic.stop();
             if (white != null) {
                 white.dispose();
@@ -109,7 +107,6 @@ public class MainLoader {
             if (hourglass_bling != null) {
                 hourglass_bling.dispose();
             }
-        }
     }
 
 

@@ -3,7 +3,6 @@ package com.eye7.ShootyWooty.render;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.eye7.ShootyWooty.model.GameConstants;
 import com.eye7.ShootyWooty.world.GameWorld;
 
 /**
@@ -36,11 +35,9 @@ public class GameRenderer {
 
     }
     public void dispose(){
-        if(!GameConstants.DISPOSED) {
             if (shapeRenderer != null) {
                 shapeRenderer.dispose();
             }
-        }
     }
 
 }

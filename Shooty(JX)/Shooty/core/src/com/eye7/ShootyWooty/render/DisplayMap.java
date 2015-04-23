@@ -198,11 +198,9 @@ public class DisplayMap implements InputProcessor {
         }
     }
     public void dispose(){
-        if(!GameConstants.DISPOSED) {
             mapBatch.dispose();
             tiledMapRenderer.dispose();
             tiledMap.dispose();
-        }
     }
 }
 

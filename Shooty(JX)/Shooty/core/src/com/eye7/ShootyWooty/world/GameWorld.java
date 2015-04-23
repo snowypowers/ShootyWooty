@@ -159,9 +159,12 @@ public class GameWorld implements Observer {
                 th.interrupt();
             }
         }
-        if(!GameConstants.DISPOSED) {
             if (hourGlass != null) {
                 hourGlass.dispose();
+            }
+        if(th!=null) {
+            if (th.isExecuting()) {
+                th.interrupt();
             }
         }
 

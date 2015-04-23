@@ -104,13 +104,11 @@ public class GameConstants {
     }
 
     public static void dispose() {
-        if(!GameConstants.DISPOSED) {
             observersTurnStart.clear();
             observersTurnEnd.clear();
             observersGameEnd.clear();
             ROCKS.clear();
             WATER.clear();
             PLAYERS = new HashMap<Integer, Player>();
-        }
     }
 }
