@@ -42,13 +42,13 @@ public class TurnHandler extends Thread {
 
     public void run() {
         if (actionResolver.getMultiplayer()) {
-//            while (!actionResolver.getValid()) {
+            while (!actionResolver.getValid()) {
 //                if(actionResolver.getQuitGame()){
 //                    game.dispose();
 //                    return;
 //                }
-//                continue;
-//            }
+                continue;
+            }
             String moves = actionResolver.getMoves();
             Gdx.app.log(TAG, moves);
             String[] moveArray = moves.split("!");
