@@ -85,11 +85,6 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
 
     //All Audio Files Used
     private MediaPlayer mp;
-//    private MediaPlayer bgHome;
-//    private MediaPlayer drawMusic;
-//    private MediaPlayer winMusic;
-//    private MediaPlayer loseMusic;
-//    private MediaPlayer bgTutorial;
     private static MediaPlayer buttonPress;
 
     // Set to true to automatically start the sign in flow when the Activity starts.
@@ -128,7 +123,7 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
     private boolean toastShow = false;
 
     private String[] twoPlayerMaps = new String[]{"CorridorOfDeath","SandPit","CongoLine","L"}; //List of 2 player maps
-    private String[] fourPlayerMaps = new String[]{"Pachinko4","CheckMate4","CorridorOfDeath4"}; //List of 4 player maps
+    private String[] fourPlayerMaps = new String[]{"Pachinko4","CorridorOfDeath4","CheckMate4"}; //List of 4 player maps
     private String gameMap = "";
 
     private AndroidApplicationConfiguration config;
@@ -360,10 +355,6 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
         mp.stop();
         Log.d(TAG, "**** got onStop");
 
-        // if we're in a room, leave it.
-//        if(bgTutorial.isPlaying()){
-//            bgTutorial.stop();
-//        }
         leaveRoom();
 
         // stop trying to keep the screen on
@@ -742,7 +733,6 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
                     checkDead.put(idToNum.get(peer), true);
                 }
             }
-//            mParticipants = room.getParticipants();
         }
         if (((numPlayers-numPlayersdisc)<=1||room==null)&&!endGame){
             switchToScreen(R.id.screen_wait);
@@ -751,9 +741,6 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
             leaveRoom();
 
         }
-//        else {
-//            sortParticipants();
-//        }
 
     }
 
@@ -876,7 +863,7 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
         Random rnd = new Random(System.nanoTime());
         String s;
         if(mParticipants.size()==4){
-            s = fourPlayerMaps[rnd.nextInt(fourPlayerMaps.length)];
+            s = fourPlayerMaps[rnd.nextInt(3)];
         }
         else {
             s = twoPlayerMaps[rnd.nextInt(twoPlayerMaps.length)];
@@ -922,17 +909,7 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
         return gameMap;
     }
 
-//    public boolean notDeadPlayerMsg(){
-//        int i=0;
-//        for(Participant p:mParticipants){
-//            if(checkDead.get(i)){
-//                if(moves.get(i)!=null)
-//                    return false;
-//            }
-//        }
-//        return true;
-//    }
-    //Method to process incoming messages
+//Google Play Services callBack API for receiving messages sent by other players in the room
     @Override
     public void onRealTimeMessageReceived(RealTimeMessage rtm) {
         byte[] buf = rtm.getMessageData();
@@ -954,6 +931,7 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
         }
     }
 
+//Sends message of immediate moves locked by the player
 
     public void sendContMessage(String s){
         byte[] bytes = ("^"+s).getBytes();
@@ -980,6 +958,8 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
     public HashMap<Integer,Boolean> prevDead(){
         return checkDead;
     }
+
+    //Fills in the default values for players who have quit or are dead
     public void addDeadPlayermsg(){
         int i=0;
         for(Participant p:mParticipants){
@@ -1103,7 +1083,6 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
                                 is = getAssets().open("EndScreens/"+check+Integer.toString(myIDNum+1)+".png");
                             }
                             else {
-                                //drawMusic.start();
 
 
                                 is = getAssets().open("EndScreens/"+check+".png");
@@ -1166,13 +1145,6 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
         mp = MediaPlayer.create(this,R.raw.bghome);
         mp.setLooping(true);
         mp.start();
-
-//        if(drawMusic.isPlaying())
-//            drawMusic.stop();
-//        if(winMusic.isPlaying())
-//            winMusic.stop();
-//        if(loseMusic.isPlaying())
-//            loseMusic.stop();
         if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
             switchToScreen(R.id.screen_main);
         }
@@ -1225,17 +1197,8 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
         imageButton.setImageBitmap(doublePlayer);
         imageButton = (ImageButton) findViewById(R.id.button_quick_game1);
         imageButton.setImageBitmap(fourPlayer);
-
-//        bgHome = MediaPlayer.create(this,R.raw.bghome);
-//        drawMusic = MediaPlayer.create(this,R.raw.youdraw);
-//        winMusic = MediaPlayer.create(this,R.raw.youwin);
-//        loseMusic = MediaPlayer.create(this,R.raw.youlose);
         buttonPress = MediaPlayer.create(this,R.raw.homebuttonpressed);
-//        bgTutorial = MediaPlayer.create(this,R.raw.bgtutorial);
-//        bgHome.setLooping(true);
-//        drawMusic.setLooping(true);
-//        winMusic.setLooping(true);
-//        loseMusic.setLooping(true);
+
 
 
     }

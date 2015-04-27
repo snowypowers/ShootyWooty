@@ -60,17 +60,6 @@ public class GameWorld implements Observer {
 
         switch (gameState) {
             case DECIDING:
-//                if(actionResolver.getQuitGame()){
-//                    Gdx.app.log("GameWorld", "DISPOSE SIGNAL");
-//                    if(th!=null) {
-//                        if (th.isAlive()) {
-//                            th.interrupt();
-//                        }
-//                    }
-//                    hourGlass.dispose();
-//                    game.dispose();
-//                    return;
-//                }
                     if(actionResolver.getMultiplayer() && actionResolver.getActive()!=null) {
                         int numMoves = 0;
                         for(int i =0; i<4; i++){
@@ -85,16 +74,6 @@ public class GameWorld implements Observer {
 
                 break;
             case WAITING:
-//                if(actionResolver.getQuitGame()){
-//                    Gdx.app.log("GameWorld", "DISPOSE SIGNAL");
-//                    if(th!=null) {
-//                        if (th.isAlive()) {
-//                            th.interrupt();
-//                        }
-//                    }
-//                    game.dispose();
-//                    return;
-//                }
                 break;
         }
 
